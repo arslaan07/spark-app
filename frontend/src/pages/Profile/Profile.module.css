@@ -1,0 +1,309 @@
+/* Update the CSS in Profile.module.css */
+
+.profileContainer {
+    margin: 0 auto;
+    background-color: #F3F3F1;
+    padding: 36px;
+    display: grid;
+    grid-template-columns: 40% 50%;
+    justify-content: space-between;
+    position: relative; /* Add this */
+  }
+  
+  .leftSection {
+    position: fixed;
+    width: calc(40% - 36px); /* Adjust based on your container padding */
+  }
+  
+  .rightSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: auto; 
+    width: 100%; 
+    grid-column: 2; /* forces right section to stay in second column */
+  }
+ 
+  .profileSettings, .bannerSection, .addSection {
+    background: white;
+    padding: 24px;
+    border-radius: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+  }
+  .addSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .profileSettings {
+    padding-bottom: 0;
+  }
+  .bannerSection {
+    margin-bottom: 0px;
+  }
+  .imageUpload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .profileImagePreview {
+    /* width: 80px;
+    height: 80px; */
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .profileBtns {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .uploadButton {
+    background: #28A263;
+    color: white;
+    border-radius: 64px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 0px;
+  }
+  .uploadButton:hover {
+    background-color: #28A253;
+  }
+  .removeButton {
+    color: #A8AAA2;
+    border-radius: 64px;
+    border: 1px solid #E0E2D9;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    padding: 10px 0px;
+    background-color: #fff;
+  }
+  .removeButton:hover {
+    background-color: #E0E2D9;
+  }
+  .formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .formGroup input,
+  .formGroup textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .charCount {
+    display: block;
+    text-align: right;
+    color: #666;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .charLimit {
+    color: red;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 12px;
+  }
+  .buttons {
+    background-color: #C9C9C9;
+    width: 50%;
+    border-radius: 24px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 40px;
+    padding: 24px 5px;
+  }
+  
+  .button {
+    flex: 1;
+    text-align: center;
+    border-radius: 100px;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .active {
+    background-color: #28A263; /* Highlight color */
+    color: white; /* Change text color for contrast */
+  }
+  
+  .button:not(.active) {
+    background-color: transparent;
+    color: #595959;
+    font-weight: 500;
+  }
+  .addLink, .addShop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+  }
+  
+  .addButton {
+    width: 100%;
+    background: #28A263;
+    color: white;
+    border: none;
+    border-radius: 64px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 0px;
+    gap: 4px;
+  }
+  .plus {
+    font-size: 24px;
+  }
+  .addButton:hover {
+    background-color: #28A253;
+  }
+  .socialLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .socialLink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #F8F8F8;
+    border-radius: 8px;
+  }
+  
+  .linkInfo {
+    flex: 1;
+  }
+  
+  .clickStats {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  
+  .bannerPreview {
+    background: #333;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    color: white;
+  }
+  
+  .bannerContent {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .colorPicker {
+    margin-bottom: 24px;
+  }
+  
+  .colorOptions {
+    display: flex;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  
+  .colorOption {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #E5E5E5;
+    cursor: pointer;
+  }
+  
+  .colorInput input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+  }
+  
+  .saveButton {
+    width: 100%;
+    padding: 12px;
+    background: #37B34A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* Toggle Switch Styles */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #37B34A;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }

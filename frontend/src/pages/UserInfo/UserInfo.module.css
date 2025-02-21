@@ -1,0 +1,207 @@
+.container {
+    display: flex;
+    height: 100vh;
+    font-family: "Poppins", "Manrope", "Sans-serif";
+  }
+  
+  .formSection {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .logo {
+    align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 24px;
+  }
+  .logoImg {
+    position: relative;
+    display: flex;
+    align-items: end;
+  }
+  .dot {
+    position: absolute;
+    top: 50%;
+    left: 36%;
+    transform: translate(-50%, -50%);
+    width: 9px;
+    height: 9px;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce 2s ease infinite;
+  }
+  .sparktext sup {
+    font-size: 0.6rem;
+    position: relative;
+    top: -0.5em;
+    font-weight: 400;
+  }
+  .formContent {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .heading {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subheading {
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  
+  .formGroup input {
+    width: 100%;
+    height: 48px;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e4e4e4;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    background-color: #F6F7F5;
+  }
+  
+  .categorySection {
+    margin-bottom: 2rem;
+  }
+  
+  .categoryLabel {
+    /* margin-bottom: 0.7rem; */
+    font-weight: 500;
+  }
+  
+  .categoriesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .categoryButton {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.3rem;
+    padding: 10px 8px;
+    border: 1px solid #e4e4e4;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .categoryButton:hover {
+    border-color: #27AE63;
+  }
+  
+  .categoryButton.selected {
+    background: #27AE63;
+    color: white;
+    border-color: #27AE63;
+  }
+  
+  .continueButton {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 64px;
+    font-size: 1rem;
+    background-color: #27AE63;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .continueButton:hover {
+    background-color: #219653;
+  }
+  
+  .continueButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .heroImg {
+    width: 35vw;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .heroImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  .logo img {
+    width: 32px;
+    height: 38px;
+    animation: bounce 2s ease infinite;
+  }
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .heroImg {
+      display: none;
+    }
+  
+    .formSection {
+      padding: 1rem;
+    }
+  
+    .heading {
+      font-size: 28px;
+      text-align: start;
+      margin-bottom: 0rem;
+    }
+    .subheading {
+        font-size: 12px;
+        margin-bottom: 1rem;
+      }
+    .categoriesGrid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    .formGroup input {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 14px;
+    }
+    .categoryButton {
+      gap: 0.3rem;
+      padding: 6px 8px;
+    }
+    .categoryLabel {
+      font-size: 14px;
+    }
+    .logo {
+        font-size: 20px;
+      }
+    
+      .logo img {
+          width: 28px;
+          height: 34px;
+        }
+        .dot {
+          width: 7px;
+          height: 7px;
+        }
+  }

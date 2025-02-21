@@ -1,0 +1,310 @@
+.container {
+    display: flex;
+    height: 100vh;
+    font-family: "Poppins", "Manrope", "Sans-serif";
+  }
+  
+  .heroImg {
+    width: 35vw;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .signinImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .heroSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .logo {
+    align-self: start;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 24px;
+  }
+  .logoImg {
+    position: relative;
+    display: flex;
+    align-items: end;
+  }
+  .dot {
+    position: absolute;
+    top: 50%;
+    left: 36%;
+    transform: translate(-50%, -50%);
+    width: 9px;
+    height: 9px;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce 2s ease infinite;
+  }
+  .sparktext sup {
+    font-size: 0.6rem;
+    position: relative;
+    top: -0.5em;
+    font-weight: 400;
+  }
+  .signupLink,
+  .loginLink {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .signupLink {
+    padding: 10px 14px;
+    font-size: 16px;
+    color: #3B3C51;
+    font-weight: 600;
+  }
+  .loginLink {
+    background: #1B48DA;
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    color: white;
+  }
+  .heading {
+    color: #000;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  
+  .form {
+    /* background-color: red; */
+    padding: 1.5rem;
+    padding-left: 2rem;
+    padding-top: 0;
+    border-radius: 8px;
+    width: 80%;
+    height: 80%;
+  }
+  .continueWith {
+    padding: 1.5rem;
+    padding-left: 2rem;
+    padding-top: 0;
+    border-radius: 8px;
+    width: 80%;
+    height: 80%;
+  }
+  ::placeholder {
+    color: #B3B3B3;
+    font-size: 20px;
+  }
+  .formGroup {
+    margin-bottom: 1.5rem;
+  }
+
+  .formGroup input {
+    width: 100%;
+    height: 48px;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e4e4e4;
+    font-size: 1rem;
+    outline: none;
+  }
+  .formGroup label {
+    color: #666666;
+}
+  .errorLabel {
+    color: red;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 64px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #27AE63;
+    color: white;
+  }
+  .btn:hover {
+    background-color: #219653;
+  }
+
+  .registerLink {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 16px;
+  }
+  
+  .registerLink a {
+    color: #27AE63;
+    text-decoration: none;
+  }
+  .registerLink a:hover {
+    color: #219633;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .tnc {
+    color: #676B5F;
+  }
+  .tnc a {
+    color: #676B5F;
+  }
+  .tnc a:hover {
+    cursor: pointer;
+  }
+  
+  .eye {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .welcome {
+    color: #2ea463;
+    margin-top: 0.4rem;
+    margin-bottom: 0.7rem;
+    text-align: center;
+  }
+  .googleBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .gap {
+    width: 20px;
+    height: 2px;
+  }
+  .emailBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  .logo img {
+    width: 32px;
+    height: 38px;
+    animation: bounce 2s ease infinite;
+  }
+
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .heroImg {
+      display: none; 
+    }
+  
+    .heroSection {
+      width: 100%;
+      padding: 0.8rem;
+      justify-content: flex-start;
+      gap: 2rem;
+      position: relative;
+    }
+  
+    .form {
+      width: 100%;
+      padding: 1rem;
+      height: auto;
+    }
+    .continueWith {
+        width: 100%;
+        padding: 1rem;
+        height: auto;
+      }
+    
+    .heading {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+  
+    .logo {
+      font-size: 20px;
+    }
+  
+    .logo img {
+        width: 28px;
+        height: 34px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+      }
+  
+    .formGroup input {
+      height: 48px;
+      font-size: 16px;
+    }
+   
+  
+    ::placeholder {
+      font-size: 16px;
+    }
+  
+    .btn {
+      padding: 0.6rem;
+    }
+  
+    .registerLink {
+      font-size: 14px;
+    }
+  
+    
+  .tnc {
+    font-size: 12px;
+    position: absolute; /* Position TNC */
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    text-align: center;
+  }
+  .welcome {
+    margin-top: 0rem;
+    margin-bottom: 0.7rem;
+    text-align: center;
+  }
+  }
+  
+  @media screen and (max-width: 375px) {
+    .heading {
+      font-size: 28px;
+    }
+  
+    .form {
+      padding: 0.5rem;
+    }
+  
+    .formGroup input {
+      height: 44px;
+    }
+  }

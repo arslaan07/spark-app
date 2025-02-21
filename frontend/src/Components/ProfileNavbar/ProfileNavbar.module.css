@@ -1,0 +1,49 @@
+/* components/ProfileNavbar/ProfileNavbar.module.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background-color: #F3F3F1;
+    /* border-bottom: 1px solid #e5e7eb; */
+  }
+  
+  .userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .greeting {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .subtext {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .saveButton {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .saveButton:hover {
+    background-color: #45a049;
+  }
+  .name {
+    font-weight: 400;
+  }

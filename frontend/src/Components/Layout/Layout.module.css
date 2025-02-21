@@ -1,0 +1,13 @@
+/* components/Layout/Layout.module.css */
+.container {
+    display: flex;
+  }
+  
+  .mainContent {
+    flex: 1;
+    margin-left: 240px; /* Width of sidebar */
+  }
+  
+  .pageContent {
+    /* padding: 20px; */
+  }

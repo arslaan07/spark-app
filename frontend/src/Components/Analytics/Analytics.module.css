@@ -1,0 +1,99 @@
+
+.analyticsSection {
+    padding: 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  
+  .metricsDisplay {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: #fff;
+    padding: 48px 40px;
+    border-radius: 32px;
+  }
+ 
+  .metricsCaption {
+    font-size: 1.125rem;
+    color: #4A4A4A;
+  }
+  
+  .analyticsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1A1A1A;
+    line-height: 1.2;
+  }
+  
+  .description {
+    font-size: 1.125rem;
+    color: #4A4A4A;
+    line-height: 1.5;
+  }
+  .mobileAnalyticsContent {
+    display: none;
+  }
+  /* Mobile Styles */
+@media (max-width: 768px) {
+  .analyticsSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align everything to the left */
+    text-align: left;
+    padding: 1rem 2rem;
+    gap: 1rem;
+  }
+
+  .analyticsContent {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .metricsDisplay {
+    width: 100%;
+    padding: 32px 24px; /* Adjust padding for better spacing */
+    border-radius: 24px;
+    margin-top: 2rem;
+  }
+
+  .metricsCaption {
+    font-size: 1rem;
+  }
+
+  .analyticsImage {
+    width: 100%;
+    max-width: 400px; /* Keeps image from becoming too large */
+  }
+
+  .analyticsImage img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .mobileAnalyticsContent {
+    display: block;
+  }
+  .mobileAnalyticsContent h2 {
+    margin-bottom: 1rem;
+  }
+  .mobileAnalyticsContent p {
+    margin-bottom: -1rem;
+  }
+}

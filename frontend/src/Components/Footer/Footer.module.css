@@ -1,0 +1,153 @@
+
+.footer {
+    padding: 2rem 4rem;
+    background-color: #fff;
+    width: 90%;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: 0 0 10px 12px rgba(40, 162, 99, 0.1);
+    bottom: 2rem;
+    transform: translateY(-4rem);
+  }
+  
+  .footerWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .loginBtn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #eff0ec;
+    cursor: pointer;
+  }
+  .loginBtn:hover {
+    background: #fff;
+  }
+  .signupBtn {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 99px;
+    background: #27AE60;
+    color: white;
+    cursor: pointer;
+  }
+  .signupBtn:hover {
+    background: #219653;
+  }
+  .footerGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .column h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .column li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .column a {
+    text-decoration: none;
+    font-size: 0.875rem;
+    color: #000;
+    font-weight: 700;
+  }
+  
+  .column a:hover {
+    color: #27AE60;
+  }
+  
+  .socialLinks {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: end;
+  }
+  
+  /* Social media icons styling */
+  .socialLinks img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .socialLinks img:hover {
+    scale: 1.05;
+  }
+  .info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+  }
+  .disclaimer {
+    font-size: 0.7rem;
+  }
+  .spark {
+    color: #219653;
+  }
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .footerGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0rem;
+    text-align: left;
+    padding-left: 1rem;
+  }
+
+  /* Ensure Action Buttons appear BELOW the last column (Trust Center) */
+  .actionButtons {
+    flex-direction: column;
+    width: 100%;
+    align-items: left;
+    margin-top: 1.5rem; /* Adds spacing after the last column */
+    margin-bottom: 1.5rem;
+    max-width: 160px;
+  }
+
+  .loginBtn, .signupBtn {
+    width: 90%;
+    text-align: center;
+  }
+
+  /* Make info section stack row by row */
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+  .disclaimer {
+    font-size: 0.5rem;
+  }
+  .socialLinks {
+    justify-content: center;
+    width: 100%;
+  }
+  .footer {
+    transform: translateY(-6rem);
+    padding: 2rem 2rem;
+  }
+}
