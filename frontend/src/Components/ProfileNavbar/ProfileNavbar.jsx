@@ -1,4 +1,5 @@
 // components/ProfileNavbar/ProfileNavbar.jsx
+import { MdOutlineShare } from "react-icons/md";
 import styles from './ProfileNavbar.module.css';
 
 function ProfileNavbar() {
@@ -9,8 +10,7 @@ function ProfileNavbar() {
         <p className={styles.subtext}>Organize and manage your smart pages in one click</p>
       </div>
       <div className={styles.actionButtons}>
-        <button className={styles.saveButton}>Save</button>
-        {/* Add any other action buttons if needed */}
+        <button className={styles.shareButton}><MdOutlineShare />Share</button>    
       </div>
       
     </div>

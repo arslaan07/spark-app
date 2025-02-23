@@ -7,12 +7,12 @@
     display: grid;
     grid-template-columns: 40% 50%;
     justify-content: space-between;
-    position: relative; /* Add this */
+    position: relative;
   }
   
   .leftSection {
     position: fixed;
-    width: calc(40% - 36px); /* Adjust based on your container padding */
+    width: calc(40% - 36px); 
   }
   
   .rightSection {
@@ -41,6 +41,7 @@
   }
   .bannerSection {
     margin-bottom: 0px;
+    padding-bottom: 0px;
   }
   .imageUpload {
     display: flex;
@@ -50,13 +51,18 @@
   }
   
   .profileImagePreview {
-    /* width: 80px;
-    height: 80px; */
     border-radius: 50%;
     background: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+  }
+  .profileImage {
+    width: 100px;
+    height: auto;
+    object-fit: contain;
+   
   }
   .profileBtns {
     width: 100%;
@@ -96,7 +102,7 @@
   
   .formGroup label {
     display: block;
-    margin-bottom: 8px;
+    /* margin-bottom: 8px; */
     color: #333;
   }
   
@@ -132,7 +138,7 @@
     justify-content: start;
     align-items: center;
     height: 40px;
-    padding: 24px 5px;
+    padding: 25px 5px;
   }
   
   .button {
@@ -142,6 +148,10 @@
     padding: 8px 0;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
   
   .active {
@@ -153,6 +163,9 @@
     background-color: transparent;
     color: #595959;
     font-weight: 500;
+  }
+  .active path {
+    stroke: #fff !important;
   }
   .addLink, .addShop {
     display: flex;
@@ -189,40 +202,90 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    color: #575757;
+
   }
   
   .socialLink {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
-    background: #F8F8F8;
-    border-radius: 8px;
+    padding: 24px 12px;
+    background: #F3F3F1;
+    border-radius: 24px;
   }
-  
+  .dragIcon {
+    padding-right: 10px;
+  }
+  .dragIcon:hover {
+    cursor: pointer;
+    color: #28A253;
+  }
   .linkInfo {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
-  
+  .titleContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .titleContainer img {
+    width: 15px;
+    height: 20px;
+  }
+  .linkContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    padding-right: 8px;
+    line-height: 18px;
+  }
+  .editIcon:hover {
+    cursor: pointer;
+    color: #28A253;
+  }
+  .linkTitle {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .clickCount {
+    padding-left: 6px;
+  }
   .clickStats {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 4px;
     color: #666;
     font-size: 12px;
     margin-top: 4px;
+    font-weight: 500;
+    width: 100%;
   }
-  
+  .userLink {
+    font-size: 13.5px;
+    word-break: break-word;
+  }
   .bannerPreview {
-    background: #333;
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
     color: white;
+    height: 270px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 34px;
+    background-color: #000;
   }
   
   .bannerContent {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 16px;
   }
@@ -240,28 +303,76 @@
   .colorOption {
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: 50%;
     border: 1px solid #E5E5E5;
     cursor: pointer;
   }
-  
-  .colorInput input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #E5E5E5;
-    border-radius: 8px;
+  .colorOption:hover {
+    cursor: pointer;
   }
-  
+  .customColorOption {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+  }
+  .colorInput {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .colorInput input {
+    width: 230px;
+    height: 50px;
+    padding: 8px;
+    border: none;
+    background-color: #F6F7F5;
+    border-radius: 9px;
+    font-weight: 500;
+  }
+  .colorInput input::placeholder {
+    font-size: 16px;
+    padding-left: 3px;
+    
+  }
+  .saveButtonContainer {
+    padding-top: 32px;
+    display: flex;
+    justify-content: end;
+  }
   .saveButton {
-    width: 100%;
-    padding: 12px;
-    background: #37B34A;
+    /* width: 100%; */
+    padding: 14px 74px;
+    background: #29A263;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    
   }
-  
+  .saveButton:hover {
+    background-color: #28A253;
+  }
+  .rightLinkContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: end;
+    align-items: end;
+    height: 100%;
+    
+  }
+  .deleteIcon {
+    cursor: pointer;
+  }
+  .deleteIcon:hover {
+    cursor: pointer;
+    color: red;
+  }
   /* Toggle Switch Styles */
   .switch {
     position: relative;
@@ -301,9 +412,472 @@
   }
   
   input:checked + .slider {
-    background-color: #37B34A;
+    background-color: #006E18;
   }
   
   input:checked + .slider:before {
     transform: translateX(22px);
+  }
+  @media screen and (max-width: 1240px) {
+    .buttons {
+        background-color: #C9C9C9;
+        width: 70%;
+        border-radius: 24px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        height: 35px;
+        padding: 12px 5px;
+      }
+      
+      .button {
+        flex: 1;
+        text-align: center;
+        border-radius: 100px;
+        padding: 6px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      
+      .active {
+        background-color: #28A263; /* Highlight color */
+        color: white; /* Change text color for contrast */
+      }
+      
+      .button:not(.active) {
+        background-color: transparent;
+        color: #595959;
+        font-weight: 500;
+      }
+      .active path {
+        stroke: #fff !important;
+      }
+      .addLink, .addShop {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 16px;
+        border: 1px solid #E5E5E5;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+      }
+      
+  }
+  @media screen and (max-width: 768px) {
+    .profileContainer {
+        margin: 0 auto;
+        background-color: #F3F3F1;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 100%;
+        justify-content: space-between;
+        position: relative;
+      }
+    .leftSection {
+        display: none;
+    }
+    .rightSection {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-left: auto; 
+        width: 100%; 
+        grid-column: 1; /* forces right section to stay in second column */
+      }
+      .profileSettings, .bannerSection, .addSection {
+        background: white;
+        padding: 18px;
+        border-radius: 24px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+      }
+      .formGroup label {
+        font-size: 14px;
+      }
+      .sectionTitle {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+      .addSection {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .profileSettings {
+        padding-bottom: 0;
+      }
+      .bannerSection {
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+      }
+      .imageUpload {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      
+      .profileImagePreview {
+        border-radius: 50%;
+        background: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      .profileImage {
+        width: 80px;
+        height: auto;
+        object-fit: contain;
+       
+      }
+      .profileBtns {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .uploadButton {
+        background: #28A263;
+        color: white;
+        border-radius: 64px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-size: 12px;
+        padding: 12px 0px;
+      }
+      .uploadButton:hover {
+        background-color: #28A253;
+      }
+      .removeButton {
+        color: #A8AAA2;
+        border-radius: 64px;
+        border: 1px solid #E0E2D9;
+        cursor: pointer;
+        width: 100%;
+        font-size: 12px;
+        padding: 10px 0px;
+        background-color: #fff;
+      }
+      .removeButton:hover {
+        background-color: #E0E2D9;
+      }
+      .formGroup {
+        margin-bottom: 20px;
+      }
+      
+      .formGroup label {
+        display: block;
+        /* margin-bottom: 8px; */
+        color: #333;
+      }
+      
+      .formGroup input,
+      .formGroup textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #E5E5E5;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+      
+      .charCount {
+        display: block;
+        text-align: right;
+        color: #666;
+        font-size: 9px;
+        margin-top: 4px;
+      }
+      .charLimit {
+        color: red;
+      }
+      
+      .actionButtons {
+        display: flex;
+        gap: 12px;
+      }
+      .buttons {
+        background-color: #C9C9C9;
+        width: 64%;
+        border-radius: 24px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        height: 40px;
+        padding: 8px 3px;
+        font-size: 11px;
+      }
+      .homeIcon {
+        transform: scale(0.8);
+      }
+      .button {
+        flex: 1;
+        text-align: center;
+        border-radius: 100px;
+        padding: 4px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      
+      .active {
+        background-color: #28A263; /* Highlight color */
+        color: white; /* Change text color for contrast */
+      }
+      
+      .button:not(.active) {
+        background-color: transparent;
+        color: #595959;
+        font-weight: 500;
+      }
+      .active path {
+        stroke: #fff !important;
+      }
+      .addLink, .addShop {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border: 1px solid #E5E5E5;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+      }
+      
+      .addButton {
+        font-size: 12px;
+      }
+      .plus {
+        font-size: 16px;
+      }
+      .addButton:hover {
+        background-color: #28A253;
+      }
+      .socialLinks {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        color: #575757;
+    
+      }
+      
+      .socialLink {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 12px;
+        background: #F3F3F1;
+        border-radius: 24px;
+      }
+      .dragIcon {
+        padding-right: 10px;
+      }
+      .dragIcon:hover {
+        cursor: pointer;
+        color: #28A253;
+      }
+      .linkInfo {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .titleContainer {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .titleContainer img {
+        width: 15px;
+        height: 20px;
+      }
+      .linkContainer {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .editIcon:hover {
+        cursor: pointer;
+        color: #28A253;
+      }
+      .linkTitle {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .clickCount {
+        padding-left: 6px;
+      }
+      .clickStats {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        color: #666;
+        font-size: 12px;
+        margin-top: 4px;
+        font-weight: 500;
+        width: 100%;
+      }
+      .userLink {
+        font-size: 13.5px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .bannerPreview {
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 24px;
+        color: white;
+        height: 230px;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        padding-bottom: 34px;
+        background-color: #000;
+      }
+      
+      .bannerContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      
+      .colorPicker {
+        margin-bottom: 24px;
+      }
+      
+      .colorOptions {
+        display: flex;
+        gap: 12px;
+        margin: 12px 0;
+      }
+      
+      .colorOption {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid #E5E5E5;
+        cursor: pointer;
+      }
+      .colorOption:hover {
+        cursor: pointer;
+      }
+      .customColorOption {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: #000;
+      }
+      .colorInput {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 16px;
+      }
+      .bgColortxt {
+        font-size: 14px;
+      }
+      .colorInput input {
+        width: 230px;
+        height: 30px;
+        padding: 8px;
+        border: none;
+        background-color: #F6F7F5;
+        border-radius: 9px;
+        font-weight: 500;
+      }
+      .colorInput input::placeholder {
+        font-size: 16px;
+        padding-left: 3px;
+        
+      }
+      .saveButtonContainer {
+        padding-top: 32px;
+        display: flex;
+        justify-content: end;
+        padding-bottom: 80px;
+      }
+      .saveButton {
+        /* width: 100%; */
+        padding: 8px 44px;
+        font-size: 14px;
+      }
+      .saveButton:hover {
+        background-color: #28A253;
+      }
+      .rightLinkContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        justify-content: end;
+        align-items: end;
+        height: 100%;
+        
+      }
+      .deleteIcon {
+        cursor: pointer;
+      }
+      .deleteIcon:hover {
+        cursor: pointer;
+        color: red;
+      }
+      /* Toggle Switch Styles */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+      }
+      
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+      }
+      
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      
+      input:checked + .slider {
+        background-color: #006E18;
+      }
+      
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
+    
   }

@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
+import { BiCart } from "react-icons/bi";
 import styles from './Iphone.module.css'
 
-const Iphone = () => {
+// const truncateUrl = (url) => {
+//     try {
+//         // Remove 'https://' or 'http://' and 'www.' if present
+//         let truncated = url.replace(/^(https?:\/\/)?(www\.)?/, '');
+//         // Remove any trailing slashes
+//         truncated = truncated.replace(/\/$/, '');
+//         return truncated.length > 23 ? `${truncated.substr(0, 23)} ...`: truncated;
+//     } catch (error) {
+//         console.error('Error truncating URL:', error);
+//         return url; // Return the original URL if something goes wrong
+//     }
+// };
+const Iphone = ({ backgroundColor, username, profileImage, links }) => {
     const [selectedBtn, setSelectedBtn] = useState('link')
-    const [profileImage, setProfileImage] = useState('/images/Iphone/default.png') 
   return (
     <div className={styles.phoneContainer}>
       <div className={styles.phone}>
-        <div className={styles.usercard}>
+        <div style={{ backgroundColor: backgroundColor }} className={styles.usercard}>
             <div className={styles.profileHeader}>
                 <div className={styles.avatar}>
                 <img 
@@ -16,7 +28,7 @@ const Iphone = () => {
               className={styles.profileImage}
             />
                 </div>
-            <h3 className={styles.username}>@peppo_08</h3>
+            <h3 className={styles.username}>{username}</h3>
           </div>
         </div>
         <div className={styles.dynamicIsland}></div>
@@ -36,7 +48,19 @@ const Iphone = () => {
           </span>
           </div>
           <div className={styles.links}>
-            <button className={styles.linkBtn}>
+            {
+                selectedBtn === 'link' && <>
+                {
+                    links.map((link, i) => (
+                        <button className={styles.linkBtn}>
+                <div className={styles.iconContainer}>
+                    <img src="/images/Links/youtube.png" alt="YouTube" />
+                </div>
+                {link.url}
+            </button>
+                    ))
+                }
+                {/* <button className={styles.linkBtn}>
                 <div className={styles.iconContainer}>
                     <img src="/images/Links/youtube.png" alt="YouTube" />
                 </div>
@@ -48,6 +72,48 @@ const Iphone = () => {
                 </div>
               Latest Instagram Post
             </button>
+            <button className={styles.linkBtn}>
+                <div className={styles.iconContainer}>
+                    <img src="/images/Links/youtube.png" alt="YouTube" />
+                </div>
+              Latest YouTube Video
+            </button> */}
+            </>           
+            }
+            {/* <div className={styles.shops}> */}
+            {
+                selectedBtn ==='shop' && <>
+                    <div className={styles.shopItem}>
+                        <span>magnetic-earbus-connector</span>
+                        <button className={styles.buyItem}>
+                            <span className={styles.cartIcon}><BiCart /></span>
+                            <span>Buy Now</span>
+                        </button>
+                    </div>
+                    <div className={styles.shopItem}>
+                        <span>magnetic-earbus-connector</span>
+                        <button className={styles.buyItem}>
+                            <span className={styles.cartIcon}><BiCart /></span>
+                            <span>Buy Now</span>
+                        </button>
+                    </div>
+                    <div className={styles.shopItem}>
+                        <span>magnetic-earbus-connector</span>
+                        <button className={styles.buyItem}>
+                            <span className={styles.cartIcon}><BiCart /></span>
+                            <span>Buy Now</span>
+                        </button>
+                    </div>
+                    <div className={styles.shopItem}>
+                        <span>magnetic-earbus-connector</span>
+                        <button className={styles.buyItem}>
+                            <span className={styles.cartIcon}><BiCart /></span>
+                            <span>Buy Now</span>
+                        </button>
+                    </div>
+                </>
+            }
+            {/* </div> */}
           </div>
         </div>
         <div className={styles.footer}>

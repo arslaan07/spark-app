@@ -9,6 +9,8 @@ import UserInfo from './pages/UserInfo/UserInfo';
 import Profile from './pages/Profile/Profile';
 import Layout from './Components/Layout/Layout';
 import Iphone from './Components/Iphone/Iphone';
+import Toolbar from './Components/ToolBar/Toolbar';
+import Settings from './pages/Settings/Settings';
 
 const App = () => {
   return (
@@ -19,10 +21,12 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/user-info" element={<UserInfo />} />
         <Route path="/profile" element={<Layout />}>
-          <Route path="/profile" element={<Profile />} />
-          {/* Add other routes here */}
-        </Route>
+    <Route index element={<Profile />} /> {/* Default child route */}
+    <Route path="settings" element={<Settings />} /> {/* Nested route */}
+    {/* Add other nested routes here */}
+  </Route>
         <Route path="/iphone" element={<Iphone />} />
+        <Route path="/toolbar" element={<Toolbar />} />
       </Routes>
       <MouseParticles g={1} color="white" cull="col,image-wrapper"/>
       <CustomCursor />

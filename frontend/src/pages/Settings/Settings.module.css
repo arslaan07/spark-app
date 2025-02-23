@@ -1,0 +1,219 @@
+.container {
+    display: flex;
+    font-family: "Poppins", "Manrope", "Sans-serif";
+    justify-content: center;
+    align-items: center;
+    padding: 36px;
+    background-color: #f3f3f1;
+  }
+  
+  .form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .heading {
+    color: #000;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .formGroup input {
+    width: 60%;
+    height: 42px;
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e4e4e4;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  
+  .formGroup input:focus {
+    border-color: #27AE63;
+  }
+  
+  .errorInput {
+    border: 2px solid red !important;
+    outline: none;
+  }
+  
+  .error {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    color: red;
+    font-size: 0.875rem;
+  }
+  
+  ::placeholder {
+    color: #B3B3B3;
+    font-size: 16px;
+  }
+  
+  .eye {
+    position: absolute;
+    right: calc(40% + 16px);
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #676B5F;
+  }
+/*   
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 64px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #27AE63;
+    color: white;
+    transition: background-color 0.2s ease;
+    margin-top: 2rem;
+  }
+  
+  .btn:hover {
+    background-color: #219653;
+  }
+  
+  .btn:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+  } */
+  .editProfileHeader {
+    margin-bottom: 32px;
+  }
+  
+  .editProfileHeader h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #219653;
+    margin-bottom: 8px;
+  }
+  .dividerContainer {
+    display: flex;
+    align-items: center;
+  }
+  .greenDivider {
+    height: 4px;
+    background-color: #27AE63;
+    width: 48px;
+    border-radius: 2px;
+  }
+  .grayDivider {
+    height: 2px;
+    background-color: #737373;
+    width: 90%;
+    border-radius: 2px;
+  }
+  .formGroup label {
+    display: block;
+    /* margin-bottom: 6px; */
+    font-size: 14px;
+    color: #000000;
+  }
+  .saveBtnContainer {
+    display: flex;
+    justify-content: end;
+  }
+  .btn {
+    /* width: 100%; */
+    padding: 14px 74px;
+    background: #29A263;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    
+  }
+  .btn:hover {
+    background-color: #28A253;
+  }
+  @media screen and (max-width: 768px) {
+    .container {
+      padding: 1rem;
+      height: calc(100vh - 104px);
+      align-items: start;
+    }
+  
+    .form {
+      padding: 1rem;
+    }
+  
+    .heading {
+      font-size: 18px;
+      margin-bottom: 0.3rem;
+    }
+  
+    .formGroup {
+      margin-bottom: 1rem;
+    }
+  
+    .formGroup input {
+      height: 44px;
+      font-size: 14px;
+      width: 100%;
+    }
+  
+    ::placeholder {
+      font-size: 14px;
+    }
+  
+    .btn {
+      padding: 0.6rem;
+    }
+    .eye {
+        right: 16px;
+    }
+    .editProfileHeader {
+        margin-bottom: 12px;
+      }
+      .saveBtnContainer {
+        display: flex;
+        justify-content: start;
+      }
+      .btn {
+        /* width: 100%; */
+        padding: 8px 44px;
+        background: #29A263;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        
+      }
+  }
+  
+  @media screen and (max-width: 375px) {
+    .container {
+      padding: 0.5rem;
+    }
+  
+    .form {
+      padding: 1rem;
+    }
+  
+    .heading {
+      font-size: 24px;
+      margin-bottom: 1rem;
+    }
+  
+    .formGroup input {
+      height: 40px;
+    }
+  }
