@@ -11,6 +11,7 @@ import Layout from './Components/Layout/Layout';
 import Iphone from './Components/Iphone/Iphone';
 import Toolbar from './Components/ToolBar/Toolbar';
 import Settings from './pages/Settings/Settings';
+import Appearance from './pages/Appearance/Appearance';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/profile" element={<Layout />}>
     <Route index element={<Profile />} /> {/* Default child route */}
     <Route path="settings" element={<Settings />} /> {/* Nested route */}
+    <Route path="appearance" element={<Appearance />} /> {/* Nested route */}
     {/* Add other nested routes here */}
   </Route>
         <Route path="/iphone" element={<Iphone />} />

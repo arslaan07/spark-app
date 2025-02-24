@@ -1,0 +1,234 @@
+/* Appearance.module.css */
+.appearanceContainer {
+    margin: 0 auto;
+    background-color: #F3F3F1;
+    padding: 36px;
+    display: grid;
+    grid-template-columns: 40% 50%;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  .section {
+    background: white;
+    padding: 24px;
+    border-radius: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+  }
+  
+  .layoutGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .layoutCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+  }
+  .leftSection {
+    position: fixed;
+    width: calc(40% - 36px); 
+  }
+  .rightSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: auto; 
+    width: 100%; 
+    grid-column: 2; /* forces right section to stay in second column */
+  }
+  .layoutCard.selected {
+    border-color: #000;
+    background-color: #F3F3F1;
+    border: 4px solid #fff;
+  }
+  .layoutIcon {
+    font-size: 40px;
+  }
+  .buttonStyles {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .buttonStyleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .buttonExamples {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .buttonExample {
+    height: 40px;
+    flex: 1;
+    border-radius: 8px;
+  }
+  
+  .fill {
+    background: black;
+    border: none;
+  }
+  
+  .outline {
+    background: transparent;
+    border: 1px solid black;
+  }
+  
+  .hardshadow {
+    background: white;
+    border: 1px solid black;
+    box-shadow: 4px 4px 0 black;
+  }
+  
+  .softshadow {
+    background: white;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .special {
+    background: black;
+    border: none;
+    border-radius: 20px;
+  }
+  
+  .colorPicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* margin-top: 8px; */
+    margin-bottom: 12px;
+  }
+  
+  .fontSelector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+    margin-top: 6px;
+  }
+  
+  .fontPreview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+  }
+  
+  .fontIcon {
+    font-size: 24px;
+    color: #666;
+  }
+  
+  .themeGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .themeCardContainer {
+    
+  }
+  .themeCard {
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .themeCard.selected {
+    border-color: #000;
+    border: 6px solid #fff;
+  }
+  
+  .themePreview {
+    height: 160px;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .saveButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+  }
+  
+  .saveButton {
+    padding: 14px 74px;
+    background: #28A263;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .specialStyles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 1.5rem;
+    margin-top: -12px;
+  }
+  .customColorOption {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: #000;
+  }
+  .buttonInputContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    background-color: #F6F7F5;
+    border-radius: 8px;
+    padding: 6px 8px;
+  }
+  .buttonInputContainer input {
+    background-color: #F6F7F5;
+    outline: none;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .buttonLabel {
+    margin-bottom: 1rem;
+  }
+  @media screen and (max-width: 768px) {
+    .appearanceContainer {
+      grid-template-columns: 100%;
+      padding: 18px;
+    }
+  
+    .leftSection {
+      display: none;
+    }
+  
+    .themeGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .layoutGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }

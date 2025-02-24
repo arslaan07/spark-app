@@ -1,0 +1,103 @@
+.wavyButton {
+    --s: .25em; /* control the wave size */
+    
+    padding: .4em .5em;
+    background-color: #000; /* Default background */
+    color: #fff;
+    
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.35s;
+    
+    --_s: calc(var(--s) * 4) 51% repeat-x;
+    --_r: calc(1.345 * var(--s)) at left 50%;
+    --_g1: #000 99%, #0000 101%;
+    --_g2: #0000 99%, #000 101%;
+    
+    --mask:
+      radial-gradient(var(--_r) top    calc(var(--s) * 1.9), var(--_g1)) 
+        calc(50% - 2 * var(--s) - var(--_i, 0px)) 0/var(--_s),
+      radial-gradient(var(--_r) top    calc(var(--s) * -0.9), var(--_g2)) 
+        calc(50% - var(--_i, 0px)) var(--s)/var(--_s),
+      radial-gradient(var(--_r) bottom calc(var(--s) * 1.9), var(--_g1)) 
+        calc(50% - 2 * var(--s) + var(--_i, 0px)) 100%/var(--_s),
+      radial-gradient(var(--_r) bottom calc(var(--s) * -0.9), var(--_g2)) 
+        calc(50% + var(--_i, 0px)) calc(100% - var(--s))/var(--_s);
+    
+    -webkit-mask: var(--mask);
+            mask: var(--mask);
+  }
+/*   
+  .wavyButton:hover {
+    --_i: calc(4 * var(--s));
+  } */
+  
+  .wavyButton:active {
+    background-image: linear-gradient(#0004 0 0);
+  }
+  
+  .wavyButton:focus-visible {
+    -webkit-mask: none;
+    outline-offset: .1em;
+    padding: .2em .5em;
+    margin: .2em 0;
+  }
+  
+  .tornButton {
+    font-weight: bold;
+    padding: 15px 40px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    background-color: black; /* Default color */
+    position: relative;
+    transition: 0.3s;
+    
+    /* Torn Edge Effect on Top and Bottom */
+    clip-path: polygon(
+      0% 10%, 5% 15%, 10% 5%, 15% 12%, 20% 8%, 25% 14%, 
+      30% 9%, 35% 16%, 40% 12%, 45% 17%, 50% 13%, 55% 19%, 
+      60% 14%, 65% 20%, 70% 16%, 75% 21%, 80% 18%, 85% 22%, 
+      90% 20%, 95% 23%, 100% 20%, 
+      100% 80%, 95% 85%, 90% 75%, 85% 82%, 80% 78%, 75% 84%,
+      70% 79%, 65% 86%, 60% 82%, 55% 87%, 50% 83%, 45% 89%,
+      40% 84%, 35% 90%, 30% 86%, 25% 91%, 20% 88%, 15% 92%,
+      10% 90%, 5% 93%, 0% 90%
+    );
+  
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Adds depth */
+  }
+  
+  /* Adding a rough border using pseudo-elements */
+  .tornButton::before, .tornButton::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    clip-path: inherit;
+    background: inherit;
+    opacity: 0.15;
+    filter: blur(2px);
+    z-index: -1;
+  }
+  
+
+  .rounded {
+    border-radius: 50px;
+    padding: .6em .5em;
+    background-color: #000;
+    cursor: pointer;
+  }
+ 
+  .halfRounded {
+    border-radius: 50px 0px 0px 50px;
+    padding: .6em .5em;
+    background-color: #000;
+    cursor: pointer;
+  }
+  .button {
+    height: 38px;
+  }
