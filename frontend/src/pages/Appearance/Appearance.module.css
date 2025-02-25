@@ -35,6 +35,12 @@
     background: white;
     cursor: pointer;
   }
+  .heading {
+    margin-bottom: 1rem;
+  }
+  .section{
+    margin-bottom: 2.5rem;
+  }
   .leftSection {
     position: fixed;
     width: calc(40% - 36px); 
@@ -214,6 +220,23 @@
   .buttonLabel {
     margin-bottom: 1rem;
   }
+  .buttonExampleContainer {
+  position: relative;
+  display: inline-flex;
+  margin-right: 12px;
+}
+
+.selectedButton {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.selectedIndicator {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 2;
+}
   @media screen and (max-width: 768px) {
     .appearanceContainer {
       grid-template-columns: 100%;
@@ -232,3 +255,267 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .appearanceContainer {
+        margin: 0 auto;
+        background-color: #F3F3F1;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 100%;
+        justify-content: space-between;
+        position: relative;
+        padding-top: 2.5rem;
+      }
+    .leftSection {
+        display: none;
+    }
+    .rightSection {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-left: auto; 
+        width: 100%; 
+        grid-column: 1; /* forces right section to stay in second column */
+      }
+    
+      
+      .saveButtonContainer {
+        padding-top: 32px;
+        display: flex;
+        justify-content: end;
+        padding-bottom: 80px;
+      }
+      .saveButton {
+        /* width: 100%; */
+        padding: 8px 44px;
+        font-size: 14px;
+      }
+      .saveButton:hover {
+        background-color: #28A253;
+      }
+      .section {
+        background: white;
+        padding: 24px;
+        border-radius: 24px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 24px;
+      }
+      
+      .layoutGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 8px;
+      }
+      
+      .layoutCard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid #E5E5E5;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+      }
+     .heading {
+        font-size: 16px;
+        margin-bottom: 14px;
+     }
+      .themeName {
+        font-size: 12px;
+      }
+      .layoutCard.selected {
+        border-color: #000;
+        background-color: #F3F3F1;
+        border: 4px solid #fff;
+      }
+      .layoutIcon {
+        font-size: 40px;
+      }
+      .buttonStyles {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      
+      .buttonStyleGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 0.5rem;
+      }
+      
+      .buttonExamples {
+        display: flex;
+        gap: 8px;
+      }
+      
+      .buttonExample {
+        height: 30px;
+        flex: 1;
+        border-radius: 8px;
+      }
+      
+      .fill {
+        background: black;
+        border: none;
+      }
+      
+      .outline {
+        background: transparent;
+        border: 1px solid black;
+      }
+      
+      .hardshadow {
+        background: white;
+        border: 1px solid black;
+        box-shadow: 4px 4px 0 black;
+      }
+      
+      .softshadow {
+        background: white;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .special {
+        background: black;
+        border: none;
+        border-radius: 20px;
+      }
+      
+      .colorPicker {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        /* margin-top: 8px; */
+        margin-bottom: 16px;
+      }
+      
+      .fontSelector {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+        margin-top: 6px;
+        font-size: 12px;
+      }
+      
+      .fontPreview {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        border: 1px solid #E5E5E5;
+        border-radius: 8px;
+      }
+      .fontPreview input {
+        width: 90%;
+      }
+      .fontIcon {
+        font-size: 20px;
+        color: #666;
+      }
+      
+      .themeGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .themeCardContainer {
+        
+      }
+      .themeCard {
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+      
+      .themeCard.selected {
+        border-color: #000;
+        border: 6px solid #fff;
+      }
+      
+      .themePreview {
+        height: 140px;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .saveButtonContainer {
+        display: flex;
+        justify-content: start;
+        margin-top: 2px;
+      }
+      
+      .saveButton {
+        padding: 14px 54px;
+        background: #28A263;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .specialStyles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+        margin-top: -12px;
+      }
+      .customColorOption {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: #000;
+      }
+      .buttonInputContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        background-color: #F6F7F5;
+        border-radius: 8px;
+        padding: 4px 8px;
+      }
+      .buttonInputContainer input {
+        background-color: #F6F7F5;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        font-size: 12px;
+      }
+      .buttonLabel {
+        margin-bottom: 0.8rem;
+      }
+      .buttonExampleContainer {
+      position: relative;
+      display: inline-flex;
+      margin-right: 12px;
+    }
+    
+    .selectedButton {
+      transform: scale(1.05);
+      transition: transform 0.2s ease;
+    }
+    
+    .selectedIndicator {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      z-index: 2;
+    }
+    
+  }
+
+  

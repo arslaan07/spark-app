@@ -115,6 +115,12 @@ function Appearance() {
   const [selectedFont, setSelectedFont] = useState('Poppins');
   const [fontColor, setFontColor] = useState('#000');
   const [selectedTheme, setSelectedTheme] = useState(-1);
+  const [selectedButtonRadius, setSelectedButtonRadius] = useState('0px');
+
+  const handleButtonStyleSelect = (style, radius) => {
+    setSelectedButtonStyle(style);
+    setSelectedButtonRadius(radius);
+  };
 
   return (
     <div className={styles.appearanceContainer}>
@@ -133,13 +139,14 @@ function Appearance() {
           selectedFont={selectedFont}
           fontColor={fontColor}
           selectedButtonStyle={selectedButtonStyle}
+          selectedButtonRadius={selectedButtonRadius}
         />
       </section>
 
       <section className={styles.rightSection}>
 
         {/* Layout Section */}
-        <h3>Layout</h3>
+        <h3 className={styles.heading}>Layout</h3>
         <div className={styles.section}>
           
           <div className={styles.layoutGrid}>
@@ -160,7 +167,7 @@ function Appearance() {
         </div>
 
         {/* Buttons Section */}
-        <h3>Buttons</h3>
+        <h3 className={styles.heading}>Buttons</h3>
         <div className={styles.section}>
           <div className={styles.buttonStyles}>
           {buttonStyles.map((style) => (
@@ -170,9 +177,17 @@ function Appearance() {
       {["0px", "10px", "30px"].map((radius) => (
         <button 
           key={radius}
-          style={{ borderRadius: radius }} 
+          style={{ 
+            borderRadius: radius,
+            // Add a subtle outline when selected (won't change existing styles much)
+            outline: selectedButtonStyle === style.name && selectedButtonRadius === radius 
+              ? "2px solid #28A263" 
+              : "none",
+            // Add some outline offset so it doesn't touch the button directly
+            outlineOffset: "3px"
+          }} 
           className={`${styles.buttonExample} ${styles[style.name.toLowerCase().replace(' ', '')]}`}
-          onClick={() => setSelectedButtonStyle(style.name)} // Add this line
+          onClick={() => handleButtonStyleSelect(style.name, radius)}
         ></button>
       ))}
     </div>
@@ -223,7 +238,7 @@ function Appearance() {
         </div>
 
         {/* Fonts Section */}
-          <h3>Fonts</h3>
+          <h3 className={styles.heading}>Fonts</h3>
         <div className={styles.section}>
             <div className={styles.buttonLabel}>Font</div>
           <div className={styles.fontSelector}>
@@ -262,7 +277,7 @@ function Appearance() {
         </div>
 
         {/* Themes Section */}
-          <h3>Themes</h3>
+          <h3 className={styles.heading}>Themes</h3>
         <div className={styles.section}>
           <div className={styles.themeGrid}>
             {themes.map((theme) => (

@@ -5,6 +5,7 @@ import ProfileNavbar from '../ProfileNavbar/ProfileNavbar'
 import MobileNavbar from '../MobileNavbar/MobileNavbar'
 import Profile from '../../pages/Profile/Profile'
 import Settings from '../../pages/Settings/Settings'
+import Appearance from '../../pages/Appearance/Appearance'
 const navItems = [
     {
         label: "Links",
@@ -47,7 +48,8 @@ const Toolbar = () => {
     <>
     <MobileNavbar />
     {/* <Profile /> */}
-    <Settings />
+    {/* <Settings /> */}
+    <Appearance />
     <div className={styles.toolbar}>
       <nav className={styles.nav}>
         <ul>
