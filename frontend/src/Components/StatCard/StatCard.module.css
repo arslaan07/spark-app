@@ -1,0 +1,52 @@
+.statCard {
+    padding: 30px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .green {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  .statTitle {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    font-weight: normal;
+  }
+  
+  .statValue {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .statCard {
+        padding: 20px 15px;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      .green {
+        background-color: #2ecc71;
+        color: white;
+      }
+      
+      .statTitle {
+        font-size: 12px;
+        margin: 0 0 10px 0;
+        font-weight: normal;
+      }
+      
+      .statValue {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+    
+  }

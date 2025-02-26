@@ -1,0 +1,116 @@
+.dashboardContainer {
+    margin: 0 auto;
+    background-color: #F3F3F1;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .dashboardTitle {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .statsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .chartContainer {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .lowerSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .barChartContainer, .pieChartContainer {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .barChartContainer h2, .pieChartContainer h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .linkChartContainer {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 60%;
+    overflow: hidden;
+  }
+  
+  .linkChartContainer h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  /* Tablet Responsiveness */
+  @media (max-width: 992px) {
+    .linkChartContainer {
+      max-width: 100%;
+    }
+  }
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .dashboardContainer {
+      padding: 20px;
+    }
+  
+    .statsContainer {
+      grid-template-columns: 1fr;
+    }
+    
+    .lowerSection {
+      grid-template-columns: 1fr;
+    }
+    .linkChartContainer {
+        /* padding-bottom: 2rem; */
+    }
+  }
+  
+  /* Small Mobile Devices */
+  @media (max-width: 480px) {
+    .dashboardContainer {
+      padding: 18px;
+      padding-bottom: 6rem;
+    }
+    
+    .dashboardTitle {
+      font-size: 16px;
+      padding-top: 1.2rem;
+      margin-bottom: 6px;
+    }
+    
+    .barChartContainer h2, 
+    .pieChartContainer h2,
+    .linkChartContainer h2 {
+      font-size: 14px;
+    }
+  }

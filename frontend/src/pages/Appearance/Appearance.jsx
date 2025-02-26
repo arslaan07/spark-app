@@ -285,7 +285,7 @@ function Appearance() {
               <div
                 key={theme.id}
                 className={`${styles.themeCard} ${
-                  selectedTheme === theme.id ? styles.selected : ""
+                  selectedTheme === theme.id - 1 ? styles.selected : ""
                 }`}
                 onClick={() => setSelectedTheme(theme.id - 1)}
               >

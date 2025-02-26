@@ -12,6 +12,7 @@ import Iphone from './Components/Iphone/Iphone';
 import Toolbar from './Components/ToolBar/Toolbar';
 import Settings from './pages/Settings/Settings';
 import Appearance from './pages/Appearance/Appearance';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
     <Route index element={<Profile />} /> {/* Default child route */}
     <Route path="settings" element={<Settings />} /> {/* Nested route */}
     <Route path="appearance" element={<Appearance />} /> {/* Nested route */}
+    <Route path="dash" element={<Dashboard />} /> {/* Nested route */}
     {/* Add other nested routes here */}
   </Route>
         <Route path="/iphone" element={<Iphone />} />

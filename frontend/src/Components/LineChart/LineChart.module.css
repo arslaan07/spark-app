@@ -1,0 +1,21 @@
+.lineChartContainer {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .lineChart {
+    width: 100%;
+    height: 100%;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .lineChartContainer {
+      width: 100%;
+      height: 200px;
+    }
+    
+    .lineChart {
+      width: 100%;
+      height: 100%;
+    }
+  }
