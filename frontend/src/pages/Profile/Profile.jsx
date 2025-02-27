@@ -120,9 +120,23 @@ function Profile() {
   return (
     <div className={styles.profileContainer}>
       <section className={styles.leftSection}>
-        <Iphone backgroundColor={bannerBackground} username={username}
-        profileImage={profileImage} links={links}
-        />
+      <Iphone 
+  backgroundColor={bannerBackground} 
+  username={username}
+  profileImage={profileImage} 
+  links={links}
+  shops={shops} // Add this
+  Layout="Stack" // Add a default layout
+  themes={[]} // Add empty themes array
+  selectedTheme={-1} // No theme selected by default
+  buttonColor="#28A263" // Default button color
+  buttonFontColor="#fff" // Default button font color
+  selectedFont="Poppins" // Default font
+  fontColor="#000" // Default font color
+  selectedButtonStyle="Fill" // Default button style
+  selectedButtonRadius="30px" // Default button radius
+  bio={bio}
+/>
       </section>
 
       <section className={styles.rightSection}>

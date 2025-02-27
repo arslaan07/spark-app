@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Navbar.module.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -15,7 +16,7 @@ const Navbar = () => {
           <span>Marketplace</span>
         </span>
       </div>
-      <button className={styles.signupButton}>Sign up free</button>
+      <Link to={'/sign-up'} className={styles.signupButton}>Sign up free</Link>
     </nav>
   );
 };

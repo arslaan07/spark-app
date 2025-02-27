@@ -105,3 +105,9 @@
     height: 38px;
     animation: bounce 2s ease infinite;
   }
+
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  }

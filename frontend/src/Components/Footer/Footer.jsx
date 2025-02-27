@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom'
 import styles from './Footer.module.css'
 
 const Footer = () => {
@@ -9,8 +10,8 @@ const Footer = () => {
         <div className={styles.footerGrid}>
         <div className={styles.column}>
         <div className={styles.actionButtons}>
-          <button className={styles.loginBtn}>Log in</button>
-          <button className={styles.signupBtn}>Sign up free</button>
+          <Link style={{ fontWeight: "600" }} to={'/sign-in'} className={styles.loginBtn}>Log in</Link>
+          <Link style={{ color: "#fff", fontWeight: "600" }} to={'/sign-up'} className={styles.signupBtn}>Sign up free</Link>
         </div>
         </div>
           <div className={styles.column}>

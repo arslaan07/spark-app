@@ -140,6 +140,7 @@ function Appearance() {
           fontColor={fontColor}
           selectedButtonStyle={selectedButtonStyle}
           selectedButtonRadius={selectedButtonRadius}
+          bio={""}
         />
       </section>
 
@@ -281,9 +282,9 @@ function Appearance() {
         <div className={styles.section}>
           <div className={styles.themeGrid}>
             {themes.map((theme) => (
-                <div className={styles.themeCardContainer}>
+                <div key={theme.id} className={styles.themeCardContainer}>
               <div
-                key={theme.id}
+                
                 className={`${styles.themeCard} ${
                   selectedTheme === theme.id - 1 ? styles.selected : ""
                 }`}

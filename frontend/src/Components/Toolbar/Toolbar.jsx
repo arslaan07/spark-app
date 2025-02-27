@@ -47,11 +47,11 @@ const Toolbar = () => {
     
   return (
     <>
-    <MobileNavbar />
+    {/* <MobileNavbar /> */}
     {/* <Profile /> */}
     {/* <Settings /> */}
     {/* <Appearance /> */}
-    <Dashboard />
+    {/* <Dashboard /> */}
     <div className={styles.toolbar}>
       <nav className={styles.nav}>
         <ul>

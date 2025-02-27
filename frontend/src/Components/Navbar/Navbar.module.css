@@ -40,6 +40,7 @@
     animation: bounce 2s ease infinite;
   }
   .signupButton {
+    all: unset;
     background-color: #27AE63;
     color: white;
     padding: 20px 29px;
@@ -106,5 +107,11 @@
   .signupButton {
     padding: 10px 20px;
     font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    display: none;
   }
 }

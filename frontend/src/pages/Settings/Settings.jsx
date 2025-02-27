@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import styles from "./Settings.module.css";
 import { FiEye } from "react-icons/fi";
 import { IoMdEyeOff } from "react-icons/io";
+import api from "../../../api";
+import { updateUser } from "../../store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import MyToast from "../../Components/MyToast/MyToast";
 
 const Settings = () => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch()
   // Password visibility states
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
   // Initial form data state with original user data
   const [formData, setFormData] = useState({
-    fname: "Jenny",
-    lname: "Wilson",
-    email: "JennyWilson08@gmail.com",
+    fname: user.firstName,
+    lname: user.lastName,
+    email: user.email,
     oldPassword: "",
     newPassword: "",
-    password: "", // For email change verification
   });
 
   // Track which fields have been modified
@@ -64,23 +69,30 @@ const Settings = () => {
           delete newErrors.oldPassword;
         }
         break;
-      case "newPassword":
-        if (value.trim()) {
-          if (value.length < 8) {
-            newErrors.newPassword = "Password must be at least 8 characters long";
-          } else if (!/[A-Z]/.test(value)) {
-            newErrors.newPassword = "Password must contain at least one uppercase letter";
-          } else if (!/[a-z]/.test(value)) {
-            newErrors.newPassword = "Password must contain at least one lowercase letter";
-          } else if (!/[0-9]/.test(value)) {
-            newErrors.newPassword = "Password must contain at least one number";
-          } else if (!/[^A-Za-z0-9]/.test(value)) {
-            newErrors.newPassword = "Password must contain at least one special character";
-          } else {
-            delete newErrors.newPassword;
+        case "newPassword":
+          if (value.trim()) {
+            if (!formData.oldPassword.trim()) {
+              newErrors.oldPassword = "Current password is required to set a new password";
+            } else {
+              delete newErrors.oldPassword;
+            }
+        
+            if (value.length < 8) {
+              newErrors.newPassword = "Password must be at least 8 characters long";
+            } else if (!/[A-Z]/.test(value)) {
+              newErrors.newPassword = "Password must contain at least one uppercase letter";
+            } else if (!/[a-z]/.test(value)) {
+              newErrors.newPassword = "Password must contain at least one lowercase letter";
+            } else if (!/[0-9]/.test(value)) {
+              newErrors.newPassword = "Password must contain at least one number";
+            } else if (!/[^A-Za-z0-9]/.test(value)) {
+              newErrors.newPassword = "Password must contain at least one special character";
+            } else {
+              delete newErrors.newPassword;
+            }
           }
-        }
-        break;
+          break;
+        
       default:
         break;
     }
@@ -111,7 +123,16 @@ const Settings = () => {
     });
 
     if (Object.keys(errors).length === 0) {
-      console.log("Profile updated successfully:", formData);
+      console.log("form submitted successfully:", formData);
+      try {
+        const response = await api.put('/api/auth/update-user', formData, { withCredentials: true })
+        console.log(response.data)
+        dispatch(updateUser(response.data.user))
+        MyToast("User profile updated successfully", "success")
+      } catch (error) {
+        console.error(error.message)
+        MyToast('User profile update failed', 'error')
+      }
     } else {
       console.log("Form has errors:", errors);
     }

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import styles from "./UserInfo.module.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import api from "../../../api";
+import { updateUser } from "../../store/slices/authSlice";
 
 const categories = [
   { id: 'business', label: 'Business', icon: '💼' },
@@ -19,11 +23,21 @@ const categories = [
 const UserInfo = () => {
   const [username, setUsername] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (username && selectedCategory) {
       console.log("Form submitted:", { username, selectedCategory });
+      try {
+        const response = await api.post('/api/auth/set-username', { username: username }, { withCredentials: true })
+        console.log(response.data)
+        dispatch(updateUser(response.data.user))
+        navigate('/profile')
+      } catch (error) {
+        console.log(error.message)
+      }
     }
   };
 
@@ -80,6 +94,7 @@ const UserInfo = () => {
               type="submit"
               className={styles.continueButton}
               disabled={!username || !selectedCategory}
+              onClick={handleSubmit}
             >
               Continue
             </button>

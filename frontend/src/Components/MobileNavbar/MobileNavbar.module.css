@@ -1,5 +1,6 @@
 .mobileNavbar {
     display: flex;
+    background-color: red;
     justify-content: space-between;
     align-items: center;
     /* background-color: brown; */
@@ -62,4 +63,10 @@
         height: auto;
         object-fit: contain;
        
+      }
+
+      @media screen and (min-width: 768px) {
+        .mobileNavbar {
+            display: none;
+        }
       }

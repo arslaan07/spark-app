@@ -106,7 +106,12 @@
     color: #595959;
     font-weight: 500;
   }
-  
+  .bio {
+    color: #fff;
+    font-size: 11px;
+    max-width: 240px;
+    word-break: break-all;
+  }
   /* Link styles - List view */
   .links {
     display: flex;

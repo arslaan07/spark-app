@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import styles from "./SignUp.module.css";
 import { FiEye } from "react-icons/fi";
 import { IoMdEyeOff } from "react-icons/io";
+import api from "../../../api";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   // Separate states for password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const [continueWithEmail, setContinueWithEmail] = useState(false)
+  const navigate = useNavigate()
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -124,6 +127,13 @@ const SignUp = () => {
 
     if (Object.keys(errors).length === 0) {
       console.log("Form submitted successfully:", formData);
+      try {
+        const response = await api.post('api/auth/signup', formData, { withCredentials: true })
+        console.log(response)
+        navigate('/getting-to-know')
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       console.log("Form has errors:", errors);
     }
@@ -143,12 +153,12 @@ const SignUp = () => {
             </span>
           </span>
         </div>
-
-        <div className={styles.form}>
+        {
+          continueWithEmail && <div className={styles.form}>
           <h1 className={styles.heading}>Sign up to your Spark</h1>
           <div className={styles.createHeading}>
             <h3 className={styles.createText}>Create an account</h3>
-            <a href="#">Sign in instead</a>
+            <a href="/sign-in">Sign in instead</a>
           </div>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
@@ -284,6 +294,28 @@ const SignUp = () => {
             </button>
           </form>
         </div>
+        }
+
+        {
+                    !continueWithEmail && <>
+                    <h1 className={`${styles.heading} ${styles.headingMobile}`}>Sign up to your Spark</h1>
+                    <div className={styles.continueWith}>
+                        
+                        <h1 className={styles.welcome}>Welcome to Spark</h1>
+                    <button type="submit" className={`${styles.btn} ${styles.googleBtn}`}>
+                        <img src="/images/SignIn/google.png" alt="" />
+                      Continue with Google
+                    </button>
+                    <button type="submit" className={`${styles.btn} ${styles.emailBtn}`} onClick={() => setContinueWithEmail(true)}>
+                      <div className={styles.gap}></div>
+                      Continue with Email
+                    </button>
+                    <p className={styles.registerLink}>
+                      Already have an account? <a href="/sign-in">Sign In</a>
+                    </p>
+                    </div>
+                    </>
+                }
         <p className={styles.tnc}>
           This site is protected by reCAPTCHA and the &nbsp;<a href="#">Google Privacy Policy</a> and &nbsp;<a href="#">Terms of Service</a> apply.
         </p>

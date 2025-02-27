@@ -3,6 +3,8 @@ import Home from './pages/Home/Home'
 import { Route, Routes } from 'react-router-dom'
 import MouseParticles from "react-mouse-particles";
 import CustomCursor from './Components/CustomCursor/CustomCursor';
+import { Toaster, toast } from 'sonner';
+
 import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 import UserInfo from './pages/UserInfo/UserInfo';
@@ -21,7 +23,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/user-info" element={<UserInfo />} />
+        <Route path="/getting-to-know" element={<UserInfo />} />
         <Route path="/profile" element={<Layout />}>
     <Route index element={<Profile />} /> {/* Default child route */}
     <Route path="settings" element={<Settings />} /> {/* Nested route */}
@@ -34,6 +36,7 @@ const App = () => {
       </Routes>
       <MouseParticles g={1} color="white" cull="col,image-wrapper"/>
       <CustomCursor />
+      <Toaster />
       </>
   )
 }

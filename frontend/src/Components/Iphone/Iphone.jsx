@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import styles from './Iphone.module.css'
 
 const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout, themes,
-    selectedTheme, buttonColor, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius }) => {
+    selectedTheme, buttonColor, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius, bio }) => {
     const [selectedBtn, setSelectedBtn] = useState('link');
     // Slider settings for carousel
     const sliderSettings = {
@@ -78,6 +78,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
                 />
                 </div>
                 <h3 className={styles.username}>{username}</h3>
+                <p className={styles.bio}>{bio.content}</p>
             </div>
         </div>
         <div className={styles.dynamicIsland}></div>

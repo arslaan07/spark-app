@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './Hero.module.css'
 
 const Hero = () => {
@@ -10,7 +11,7 @@ const Hero = () => {
         <p className={styles.description}>
           Help your followers discover everything you're sharing all over the internet, in one simple place. They'll thank you for it!
         </p>
-        <button className={styles.getStartedBtn}>Get your free Spark</button>
+        <Link to={'/sign-up'} className={styles.getStartedBtn}>Get your free Spark</Link>
       </div>
       
       <div className={styles.rightContent}>
