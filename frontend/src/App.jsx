@@ -14,7 +14,8 @@ import Iphone from './Components/Iphone/Iphone';
 import Toolbar from './Components/ToolBar/Toolbar';
 import Settings from './pages/Settings/Settings';
 import Appearance from './pages/Appearance/Appearance';
-import Dashboard from './pages/Dashboard/Dashboard';
+import Analytics from './pages/Analytics/Analytics';
+import Logout from './Components/Logout/Logout';
 
 const App = () => {
   return (
@@ -24,19 +25,17 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/getting-to-know" element={<UserInfo />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/profile" element={<Layout />}>
-    <Route index element={<Profile />} /> {/* Default child route */}
-    <Route path="settings" element={<Settings />} /> {/* Nested route */}
-    <Route path="appearance" element={<Appearance />} /> {/* Nested route */}
-    <Route path="dash" element={<Dashboard />} /> {/* Nested route */}
-    {/* Add other nested routes here */}
-  </Route>
-        <Route path="/iphone" element={<Iphone />} />
-        <Route path="/toolbar" element={<Toolbar />} />
+          <Route index element={<Profile />} /> 
+          <Route path="settings" element={<Settings />} /> 
+          <Route path="appearance" element={<Appearance />} /> 
+          <Route path="analytics" element={<Analytics />} /> 
+        </Route>
       </Routes>
       <MouseParticles g={1} color="white" cull="col,image-wrapper"/>
       <CustomCursor />
-      <Toaster />
+      <Toaster position="top-right" />
       </>
   )
 }

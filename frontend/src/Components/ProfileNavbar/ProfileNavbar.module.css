@@ -50,3 +50,9 @@
   .name {
     font-weight: 400;
   }
+
+  @media screen and (max-width: 768px) {
+    .navbar {
+      display: none;
+    }
+  }

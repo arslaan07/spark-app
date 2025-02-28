@@ -1,12 +1,14 @@
 // components/ProfileNavbar/ProfileNavbar.jsx
 import { MdOutlineShare } from "react-icons/md";
 import styles from './ProfileNavbar.module.css';
+import { useSelector } from "react-redux";
 
 function ProfileNavbar() {
+  const { user } = useSelector((state) => state.auth)
   return (
     <div className={styles.navbar}>
       <div className={styles.userInfo}>
-        <h1 className={styles.greeting}>Hi, <span className={styles.name}>Jenny Wilson</span>!</h1>
+        <h1 className={styles.greeting}>Hi, <span className={styles.name}>{user.firstName + " " + user.lastName}</span>!</h1>
         <p className={styles.subtext}>Organize and manage your smart pages in one click</p>
       </div>
       <div className={styles.actionButtons}>

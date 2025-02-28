@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const verifyToken = require('../middlewares/verifyToken')
+const upload = require('../middlewares/multer')
 // Signup Route
 router.post('/signup', async (req, res) => {
     try {
@@ -40,7 +41,6 @@ router.post('/signup', async (req, res) => {
             email,
             password: hashedPassword,
         });
-        console.log('hello')
         const token = jwt.sign(
             { id: user._id },
             process.env.JWT_SECRET,
@@ -63,6 +63,9 @@ router.post('/signup', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                profileImage: null,
+                bio: null, 
+                bannerBackground: null,
             }
         });
 
@@ -126,6 +129,9 @@ router.post('/signin', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                profileImage: user.profileImage,
+                bio: user.bio,
+                bannerBackground: user.bannerBackground,
             }
         });
 
@@ -251,6 +257,63 @@ router.put('/update-user', verifyToken, async (req, res) => {
         });
     }
 });
+
+router.put('/update-user-card', verifyToken, upload.single('profileImage'), async (req, res) => {
+    try {
+        const { username, bio, bannerBackground } = req.body 
+        const userId = req.user.id
+        const user = await User.findByIdAndUpdate(userId)
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+        let isUpdated = false; 
+        if (req.file){ 
+            // console.log("file received")
+            user.profileImage = `/images/uploads/${req.file.filename}`
+            isUpdated = true
+        }
+        if (username) {
+            user.username = username
+            isUpdated = true
+        }
+        if (bio) {
+            user.bio = bio
+            isUpdated = true
+        }
+        if (bannerBackground) {
+            user.bannerBackground = bannerBackground
+            isUpdated = true
+        } 
+        if (!isUpdated) {
+            return res.status(204). json({
+                success: false,
+                message: "No updates provided"
+            })
+        }
+        await user.save()
+        return res.status(200).json({
+            success: true,
+            message: "User card updated successfully",
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage,
+                bio: user.bio,
+                bannerBackground: user.bannerBackground
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "User card update failed",
+            error: error.message
+        })
+    }
+})
 router.get('/logout', verifyToken, (req, res) => {
     try {
         res.cookie('token', '', {

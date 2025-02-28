@@ -1,4 +1,4 @@
-.dashboardContainer {
+.analyticsContainer {
     margin: 0 auto;
     background-color: #F3F3F1;
     padding: 36px;
@@ -9,7 +9,7 @@
     box-sizing: border-box;
   }
   
-  .dashboardTitle {
+  .analyticsTitle {
     font-size: 18px;
     margin-bottom: 20px;
     color: #333;
@@ -79,7 +79,7 @@
   
   /* Mobile Responsiveness */
   @media (max-width: 768px) {
-    .dashboardContainer {
+    .analyticsContainer {
       padding: 20px;
     }
   
@@ -97,12 +97,12 @@
   
   /* Small Mobile Devices */
   @media (max-width: 480px) {
-    .dashboardContainer {
+    .analyticsContainer {
       padding: 18px;
       padding-bottom: 6rem;
     }
     
-    .dashboardTitle {
+    .analyticsTitle {
       font-size: 16px;
       padding-top: 1.2rem;
       margin-bottom: 6px;

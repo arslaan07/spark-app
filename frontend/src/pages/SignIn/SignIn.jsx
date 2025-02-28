@@ -6,13 +6,11 @@ import { IoMdEyeOff } from "react-icons/io";
 import api from "../../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/slices/authSlice";
+import MyToast from '../../Components/MyToast/MyToast';
 
 const SignIn = () => {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
-  if(user?.username === null) {
-    navigate('/getting-to-know')
-  }
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -65,36 +63,47 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validate input fields
+    const newErrors = {};
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+    }
+  
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+  
+    setErrors(newErrors);
+  
+    // If there are validation errors, stop form submission
+    if (Object.keys(newErrors).length > 0) return;
+  
     try {
-      const newErrors = {};
-      if (!formData.email.trim()) {
-        newErrors.email = "Email is required";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        newErrors.email = "Invalid email address";
+      const response = await api.post("api/auth/signin", formData, { withCredentials: true });
+      console.log("Login successful:", response.data);
+  
+      dispatch(
+        login({
+          user: response.data.user,
+        })
+      );
+  
+      // Redirect based on user data
+      if (response.data.user?.username === null) {
+        navigate("/getting-to-know");
+      } else {
+        navigate("/profile");
       }
-      if (!formData.password.trim()) {
-        newErrors.password = "Password is required";
-      } 
-
-      setErrors(newErrors);
-
-      if (Object.keys(newErrors).length === 0) {
-        console.log("Form submitted successfully:", formData);
-        try {
-          const response = await api.post('api/auth/signin', formData, { withCredentials: true})
-          console.log(response.data)
-          dispatch(login({
-            user: response.data.user,
-          }))
-        } catch (error) {
-          console.log(error)
-        }
-      }
+      MyToast("You are welcome in Spark", "success");
     } catch (error) {
-      console.log(error);
+      console.error("Login failed:", error);
+      MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.heroSection}>

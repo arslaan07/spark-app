@@ -3,13 +3,13 @@ import { CheckCircle, TriangleAlert } from "lucide-react";
 
 const MyToast = (message, type) => {
   if (type === "success") {
-    toast.success(message, {
+    toast.success(`😀 ${message}`, {
       theme: "colored",
       style: { backgroundColor: "#05a763", color: "#fff", fontSize: "16px" },
       icon:<CheckCircle size={22} color="white" /> 
     });
   } else {
-    toast.info(message, {
+    toast.info(`😔 ${message}`, {
       theme: "colored",
       style: { backgroundColor: "#ff003d", color: "#fff", fontSize: "16px" },
       icon: <TriangleAlert size={22} color="white" />

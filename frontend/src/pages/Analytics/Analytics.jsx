@@ -1,14 +1,14 @@
 import React from 'react';
-import styles from './Dashboard.module.css';
+import styles from './Analytics.module.css';
 import StatCard from '../../Components/StatCard/StatCard';
 import LineChart from '../../Components/LineChart/LineChart';
 import BarChart from '../../Components/BarChart/BarChart';
 import PieChart from '../../Components/PieChart/PieChart';
 
-function Dashboard() {
+function Analytics() {
   return (
-    <div className={styles.dashboardContainer}>
-      <h1 className={styles.dashboardTitle}>Overview</h1>
+    <div className={styles.analyticsContainer}>
+      <h1 className={styles.analyticsTitle}>Overview</h1>
       
       <div className={styles.statsContainer}>
         <StatCard title="Clicks on Links" value="2,318" color="#22D679" fontColor="#fff" />
@@ -66,4 +66,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Analytics;

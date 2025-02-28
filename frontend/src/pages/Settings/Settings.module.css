@@ -217,3 +217,18 @@
       height: 40px;
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .error {
+      font-size: 0.75rem; /* Smaller font size for mobile */
+      bottom: -18px; /* Slightly reduce spacing */
+      line-height: 1.2; /* Improve readability */
+    }
+  }
+  
+  @media screen and (max-width: 375px) {
+    .error {
+      font-size: 0.7rem; /* Even smaller for very small screens */
+      bottom: -16px;
+    }
+  }

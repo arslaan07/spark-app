@@ -7,6 +7,10 @@ import { MdOutlineDragIndicator } from "react-icons/md";
 import styles from "./Profile.module.css";
 import LinkModal from "../../Components/LinkModal/LinkModal";
 import ShopModal from "../../Components/ShopModal/ShopModal";
+import { useDispatch, useSelector } from "react-redux";
+import api from "../../../api";
+import MyToast from "../../Components/MyToast/MyToast";
+import { updateUser } from "../../store/slices/authSlice";
 
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
 const links = [
@@ -56,16 +60,18 @@ const links = [
       clicks: 0,
     },
   ];
- 
+
 function Profile() {
-  const [profileImage, setProfileImage] = useState(
+  const { user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+  const [profileImage, setProfileImage] = useState(user?.profileImage ? `${api.defaults.baseURL}${user.profileImage}` : 
     "/images/Iphone/default.png"
   );
-  const [bio, setBio] = useState({ content: "" });
-  const [bannerBackground, setBannerBackground] = useState("#000");
+  const [bio, setBio] = useState({ content :  user?.bio !== 'null' ? user?.bio : '' });
+  const [bannerBackground, setBannerBackground] = useState(user?.bannerBackground !== 'null' ? user?.bannerBackground : "#000");
   const [selectedBtn, setSelectedBtn] = useState("link");
   const [selectedColor, setSelectedColor] = useState(0);
-  const [username, setUsername] = useState('@pepeoye')
+  const [username, setUsername] = useState(`@${user?.username}`);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isShopModalOpen, setIsShopModalOpen] = useState(false);
   const [linkEnabled, setLinkEnabled] = useState(true);
@@ -115,6 +121,38 @@ function Profile() {
         setIsLinkModalOpen(true)
     } else {
         setIsShopModalOpen(true)
+    }
+  }
+
+  const handleProfileView = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('bio', bio.content)
+      formData.append('bannerBackground', bannerBackground)
+      formData.append('username', username.slice(1))
+      // handling profile image, checking whether it is file or string 
+      if(profileImage instanceof File) {
+        formData.append('profileImage', profileImage)
+      } else if(profileImage && typeof profileImage === 'string' && profileImage.startsWith('data:')) {
+        // if its base 64, convert it to file and append 
+        const response = await fetch(profileImage)
+        const blob = await response.blob()
+        const file = new File([blob], 'profile.jpg', {type: blob.type})
+
+        formData.append('profileImage', file)
+      }
+      const response = await api.put('./api/auth/update-user-card', formData, {
+         withCredentials: true,
+         headers: {
+          'Content-Type': 'multipart/form-data'
+         }
+         })
+      console.log(response.data)
+      dispatch(updateUser(response.data.user))
+      MyToast(`your profile card has been updated ${username}`, 'success')
+    } catch (error) {
+      console.log(error)
+      MyToast(`failed to update your profile card ${username}`, 'error')
     }
   }
   return (
@@ -192,15 +230,15 @@ function Profile() {
                 rows="4"
                 maxLength="80"
                 onChange={handleBioChange}
-                value={bio.content}
+                value={bio?.content || ''}
                 onDragStart={(e) => e.preventDefault()}
               ></textarea>
               <span
                 className={`${styles.charCount} ${
-                  bio.content.length === 80 ? styles.charLimit : ""
+                  bio?.content?.length === 80 ? styles.charLimit : ""
                 }`}
               >
-                {bio.content.length} / 80
+                {bio?.content?.length} / 80
               </span>
             </div>
           </form>
@@ -351,7 +389,8 @@ function Profile() {
                 />
               </div>
               <div className={styles.profileInfo}>
-                <h3>@opopo_08</h3>
+                <h3>{`@${user?.username}`}</h3>
+                <p className={styles.bio}>{bio.content}</p>
               </div>
             </div>
           </div>
@@ -385,7 +424,7 @@ function Profile() {
           </div>
         </div>
         <div className={styles.saveButtonContainer}>
-          <button className={styles.saveButton}>Save</button>
+          <button onClick={handleProfileView} className={styles.saveButton}>Save</button>
         </div>
       </section>
       

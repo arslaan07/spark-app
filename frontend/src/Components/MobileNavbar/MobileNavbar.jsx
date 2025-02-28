@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styles from './MobileNavbar.module.css'
+import Logout from '../Logout/Logout';
 const MobileNavbar = () => {
     const [profileImage, setProfileImage] = useState(
         "/images/Iphone/default.png"
@@ -17,7 +18,7 @@ const MobileNavbar = () => {
                   </span>
                 </span>
               </div>
-        <div className={styles.profilePic}>
+        {/* <div className={styles.profilePic}>
             <div className={styles.profileImagePreview}>
                          <img
                            src={profileImage}
@@ -25,7 +26,8 @@ const MobileNavbar = () => {
                            className={styles.profileImage}
                          />
                        </div>
-        </div>
+        </div> */}
+        <Logout />
     </div>
   )
 }

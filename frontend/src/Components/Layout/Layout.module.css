@@ -10,11 +10,17 @@
   
   .pageContent {
     /* padding: 20px; */
-    background-color: brown;
+    /* background-color: brown; */
   }
 
   @media screen and (max-width: 768px) {
     .container {
       display: block;
+    }
+    .mainContent {
+      margin-left: 0px;
+    }
+    .pageContent {
+      /* padding-top: 8px; */
     }
   }

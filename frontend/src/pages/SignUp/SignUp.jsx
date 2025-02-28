@@ -4,6 +4,7 @@ import { FiEye } from "react-icons/fi";
 import { IoMdEyeOff } from "react-icons/io";
 import api from "../../../api";
 import { useNavigate } from "react-router-dom";
+import MyToast from '../../Components/MyToast/MyToast';
 
 const SignUp = () => {
   // Separate states for password visibility
@@ -131,8 +132,10 @@ const SignUp = () => {
         const response = await api.post('api/auth/signup', formData, { withCredentials: true })
         console.log(response)
         navigate('/getting-to-know')
+        MyToast("You are welcome in Spark", "success");
       } catch (error) {
         console.log(error)
+        MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
       }
     } else {
       console.log("Form has errors:", errors);

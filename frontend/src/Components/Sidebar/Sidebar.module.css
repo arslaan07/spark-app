@@ -105,7 +105,16 @@
     height: 38px;
     animation: bounce 2s ease infinite;
   }
-
+  .logoutComponent {
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+  }
   @media screen and (max-width: 768px) {
     .sidebar {
       display: none;

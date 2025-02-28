@@ -110,8 +110,3 @@
   }
 }
 
-@media screen and (max-width: 768px) {
-  .navbar {
-    display: none;
-  }
-}

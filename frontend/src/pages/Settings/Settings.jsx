@@ -70,28 +70,33 @@ const Settings = () => {
         }
         break;
         case "newPassword":
-          if (value.trim()) {
-            if (!formData.oldPassword.trim()) {
-              newErrors.oldPassword = "Current password is required to set a new password";
-            } else {
-              delete newErrors.oldPassword;
-            }
-        
-            if (value.length < 8) {
-              newErrors.newPassword = "Password must be at least 8 characters long";
-            } else if (!/[A-Z]/.test(value)) {
-              newErrors.newPassword = "Password must contain at least one uppercase letter";
-            } else if (!/[a-z]/.test(value)) {
-              newErrors.newPassword = "Password must contain at least one lowercase letter";
-            } else if (!/[0-9]/.test(value)) {
-              newErrors.newPassword = "Password must contain at least one number";
-            } else if (!/[^A-Za-z0-9]/.test(value)) {
-              newErrors.newPassword = "Password must contain at least one special character";
-            } else {
-              delete newErrors.newPassword;
-            }
-          }
-          break;
+  if (value.trim()) {
+    if (!formData.oldPassword.trim()) {
+      newErrors.oldPassword = "Current password is required to set a new password";
+    } else {
+      delete newErrors.oldPassword;
+    }
+
+    if (value.length < 8) {
+      newErrors.newPassword = "Password must be at least 8 characters long";
+    } else if (!/[A-Z]/.test(value)) {
+      newErrors.newPassword = "Password must contain at least one uppercase letter";
+    } else if (!/[a-z]/.test(value)) {
+      newErrors.newPassword = "Password must contain at least one lowercase letter";
+    } else if (!/[0-9]/.test(value)) {
+      newErrors.newPassword = "Password must contain at least one number";
+    } else if (!/[^A-Za-z0-9]/.test(value)) {
+      newErrors.newPassword = "Password must contain at least one special character";
+    } else {
+      delete newErrors.newPassword;
+    }
+  } else {
+    // If newPassword is empty, remove its errors and oldPassword errors
+    delete newErrors.newPassword;
+    delete newErrors.oldPassword;
+  }
+  break;
+
         
       default:
         break;

@@ -1,0 +1,77 @@
+.logoutContainer {
+    padding: 0.2rem 0.4rem;
+    border-radius: 30px;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: start;
+    gap: 12px;
+    align-items: center;
+    width: 86%;
+    cursor: pointer;
+    background-color: #fff;
+}
+.logoutText {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -2%;
+    font-style: oblique;
+}
+.profileImagePreview {
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .profileImage {
+    width: 34px;
+    height: auto;
+    object-fit: contain;
+   
+  }
+  .modal {
+    position: absolute;
+    top: -2rem;
+    right: 10px;
+    background-color: #F3F3F1;
+    border-radius: 22px;
+    z-index: 100;
+  }
+  .confirmButton:hover {
+    background-color: #e7e7e5;
+  }
+  .confirmButton {
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 22px;
+    gap: 5px;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    .logoutContainer {
+        border-radius: 30px;
+        border: none;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        width: fit-content;
+        cursor: pointer;
+        background-color: #fff;
+    }
+    .logoutText {
+        display: none;
+    }
+    .modal {
+        position: absolute;
+        top: 2.4rem;
+        right: 10px;
+        background-color: #F3F3F1;
+        border-radius: 22px;
+    
+      }
+  }
