@@ -8,9 +8,18 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from './Iphone.module.css'
 
+const applications = [
+  { name: "Instagram", imgSrc: "/images/LinkModal/instagram.png" },
+  { name: "Facebook", imgSrc: "/images/LinkModal/facebook.png" },
+  { name: "YouTube", imgSrc: "/images/LinkModal/youtube.png" },
+  { name: "X", imgSrc: "/images/LinkModal/x.png" },
+  { name: "Others", imgSrc: "/images/LinkModal/social-media.png" },
+];
+
 const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout, themes,
-    selectedTheme, buttonColor, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius, bio }) => {
+    selectedTheme, buttonColor, setButtonColor, manualColorChange, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius, bio }) => {
     const [selectedBtn, setSelectedBtn] = useState('link');
+    
     // Slider settings for carousel
     const sliderSettings = {
       dots: true,
@@ -20,11 +29,14 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
       slidesToScroll: 1,
       arrows: false,
     };
-
+    console.log(links)
     // Function to get button style based on selection
     const getButtonStyle = () => {
+      const effectiveButtonColor = manualColorChange 
+        ? buttonColor 
+        : (selectedTheme === -1 ? themes[selectedTheme]?.buttonColor : buttonColor);
       const baseStyle = {
-        backgroundColor: selectedTheme !== -1 ? themes[selectedTheme]?.buttonColor : buttonColor,
+        backgroundColor: effectiveButtonColor,
         color: buttonFontColor,
         fontFamily: selectedFont,
         borderRadius: selectedButtonRadius, 
@@ -41,14 +53,14 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           return {
             ...baseStyle,
             backgroundColor: 'transparent',
-            border: `1px solid ${buttonColor}`,
+            border: `1px solid #232429`,
           };
         case 'Hard shadow':
           return {
             ...baseStyle,
             backgroundColor: '#fff',
-            border: `1px solid ${buttonColor}`,
-            boxShadow: `4px 4px 0 ${buttonColor}`,
+            border: `1px solid #232429`,
+            boxShadow: `4px 4px 0 #232429`,
           };
         case 'Soft shadow':
           return {
@@ -101,14 +113,14 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {/* List Layout for Links - with updated button style */}
           {selectedBtn === 'link' && Layout === 'Stack' && (
             <div className={styles.links}>
-              {links.map((link, i) => (
+              {[...links].reverse().map((link, i) => (
                 <button 
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkBtn}
                 >
                   <div className={styles.iconContainer}>
-                    <img src="/images/Links/youtube.png" alt="YouTube" />
+                    <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                   </div>
                   <div className={styles.marqueeContainer}>
                     <div className={styles.marqueeText}>
@@ -124,14 +136,14 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {/* Grid Layout for Links - with updated button style */}
           {selectedBtn === 'link' && Layout === 'Grid' && (
             <div className={styles.linksGridLayout}>
-              {links.map((link, i) => (
+              {[...links].reverse().map((link, i) => (
                 <button 
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkGridBtn}
                 >
                   <div className={styles.iconGridContainer}>
-                    <img src="/images/Links/youtube.png" alt="YouTube" />
+                  <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                   </div>
                   <div className={styles.marqueeContainer}>
                     <div className={styles.marqueeText}>
@@ -148,14 +160,14 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {selectedBtn === 'link' && Layout === 'Carousel' && (
             <div className={styles.carouselContainer}>
               <Slider {...sliderSettings}>
-                {links.map((link, i) => (
+                {[...links].reverse().map((link, i) => (
                   <div key={i} className={styles.carouselSlide}>
                     <button 
                       style={buttonStyle} 
                       className={styles.linkCarouselItem}
                     >
                       <div className={styles.iconCarouselContainer}>
-                        <img src="/images/Links/youtube.png" alt="YouTube" />
+                      <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                       </div>
                       <div className={styles.marqueeContainer}>
                         <div className={styles.marqueeText}>
@@ -173,7 +185,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {/* Shop Items - with updated button style for Buy buttons */}
           {selectedBtn === 'shop' && Layout === 'Stack' && (
             <div className={styles.shops}>
-              {shops.map((shop) => (
+              {[...shops].reverse().map((shop) => (
                 <div 
                   key={shop.id}
                   style={{ 
@@ -202,7 +214,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {/* Grid Layout for Shop Items - with updated button style */}
           {selectedBtn === 'shop' && Layout === 'Grid' && (
             <div className={styles.shopGridLayout}>
-              {shops.map((shop) => (
+              {[...shops].reverse().map((shop) => (
                 <div  
                   key={shop.id}
                   style={{ 
@@ -232,7 +244,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
           {selectedBtn === 'shop' && Layout === 'Carousel' && (
             <div className={styles.carouselContainer}>
               <Slider {...sliderSettings}>
-                {shops.map((shop) => (
+                {[...shops].reverse().map((shop) => (
                   <div key={shop.id} className={styles.carouselSlide}>
                     <div 
                       style={{

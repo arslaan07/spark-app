@@ -1,9 +1,15 @@
 // pages/Appearance/Appearance.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Appearance.module.css";
 import Iphone from "../../Components/Iphone/Iphone";
 import SpecialButton from "../../Components/SpecialButton/SpecialButton";
 import ThemeButtons from "../../Components/ThemeButtons/ThemeButtons";
+import api from "../../../api";
+import { setLinkCount } from "../../store/slices/linkSlice";
+import { setShopCount } from "../../store/slices/shopSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../store/slices/authSlice";
+import MyToast from "../../Components/MyToast/MyToast";
 
 const layouts = [
   { id: 1, name: "Stack", icon: "☰" },
@@ -30,117 +36,231 @@ const themes = [
   { id: 4, name: "Air Black", backgroundColor: "#000", buttonColor: "#1C1C1C", border: "none" },
   { id: 5, name: "Mineral Blue", backgroundColor: "#E0F6FF", buttonColor: "#E0F6FF", border: "1px solid #333" },
   { id: 6, name: "Mineral Green", backgroundColor: "#E0FAEE", buttonColor: "#E0FAEE", border: "1px solid #333" },
-  { id: 7, name: "Mineral Orange", backgroundColor: "#FFEEE2", buttonColor: "#FFEEE2", border: "1px solid #333" }
+  { id: 7, name: "Mineral Orange", backgroundColor: "#FFEEE2", buttonColor: "#FFEEE2", border: "1px solid #333" },
+  { id: 8, name: "Default", backgroundColor: "#fff", buttonColor: "#28A263", border: "none" }
 ];
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
-const links = [
-    {
-      id: 1,
-      title: "Instagram",
-      url: "https://www.instagram.com/opopo_08//opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 2,
-      title: "Twitter",
-      url: "https://twitter.com/opopo_08/www.iom/opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 3,
-      title: "Facebook",
-      url: "https://www.facebook.com/opopo_08",
-      clicks: 0,
-    },
-    {
-        id: 4,
-        title: "Facebook",
-        url: "https://www.facebook.com/opopo_08",
-        clicks: 0,
-      },
-      {
-        id: 5,
-        title: "Facebook",
-        url: "https://www.facebook.com/opopo_08",
-        clicks: 0,
-      },
-      {
-        id: 6,
-        title: "Facebook",
-        url: "https://www.facebook.com/opopo_08",
-        clicks: 0,
-      },
-  ];
+// const links = [
+//     {
+//       id: 1,
+//       title: "Instagram",
+//       url: "https://www.instagram.com/opopo_08//opopo_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 2,
+//       title: "Twitter",
+//       url: "https://twitter.com/opopo_08/www.iom/opopo_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 3,
+//       title: "Facebook",
+//       url: "https://www.facebook.com/opopo_08",
+//       clicks: 0,
+//     },
+//     {
+//         id: 4,
+//         title: "Facebook",
+//         url: "https://www.facebook.com/opopo_08",
+//         clicks: 0,
+//       },
+//       {
+//         id: 5,
+//         title: "Facebook",
+//         url: "https://www.facebook.com/opopo_08",
+//         clicks: 0,
+//       },
+//       {
+//         id: 6,
+//         title: "Facebook",
+//         url: "https://www.facebook.com/opopo_08",
+//         clicks: 0,
+//       },
+//   ];
   
-  const shops = [
-    {
-      id: 1,
-      title: "Amazon Shop",
-      url: "https://www.amazon.com/rechargeable-magnetic-charger/ww_08/",
-      clicks: 0,
-    },
-    {
-      id: 2,
-      title: "Etsy Shop",
-      url: "https://www.etsy.com/shop/opopo_08www.instagram.ram.com/opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 3,
-      title: "eBay Shop",
-      url: "https://www.ebay.com/usr/opopo_08",
-      clicks: 0,
-    },
-    {
-        id: 4,
-        title: "eBay Shop",
-        url: "https://www.ebay.com/usr/opopo_08",
-        clicks: 0,
-      },
-      {
-        id: 5,
-        title: "eBay Shop",
-        url: "https://www.ebay.com/usr/opopo_08",
-        clicks: 0,
-      },
-  ];
+//   const shops = [
+//     {
+//       id: 1,
+//       title: "Amazon Shop",
+//       url: "https://www.amazon.com/rechargeable-magnetic-charger/ww_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 2,
+//       title: "Etsy Shop",
+//       url: "https://www.etsy.com/shop/opopo_08www.instagram.ram.com/opopo_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 3,
+//       title: "eBay Shop",
+//       url: "https://www.ebay.com/usr/opopo_08",
+//       clicks: 0,
+//     },
+//     {
+//         id: 4,
+//         title: "eBay Shop",
+//         url: "https://www.ebay.com/usr/opopo_08",
+//         clicks: 0,
+//       },
+//       {
+//         id: 5,
+//         title: "eBay Shop",
+//         url: "https://www.ebay.com/usr/opopo_08",
+//         clicks: 0,
+//       },
+//   ];
 function Appearance() {
-  const [profileImage, setProfileImage] = useState("/images/Iphone/default.png");
-  const [bannerBackground, setBannerBackground] = useState("#000");
-  const [username, setUsername] = useState('@pepeoye');
-  const [Layout, setLayout] = useState('Stack');
-  const [selectedButtonStyle, setSelectedButtonStyle] = useState('Fill');
-  const [buttonColor, setButtonColor] = useState('#28A263');
-  const [buttonFontColor, setButtonFontColor] = useState('#fff');
-  const [selectedFont, setSelectedFont] = useState('Poppins');
-  const [fontColor, setFontColor] = useState('#000');
-  const [selectedTheme, setSelectedTheme] = useState(-1);
-  const [selectedButtonRadius, setSelectedButtonRadius] = useState('0px');
+  const { user } = useSelector((state) => state.auth);
+  const { linkCount } = useSelector((state) => state.link)
+  const { shopCount } = useSelector((state) => state.shop)
+  const dispatch = useDispatch()
+  const [profileImage, setProfileImage] = useState(
+    user?.profileImage 
+      ? `${api.defaults.baseURL}${user.profileImage}` 
+      : "/images/Iphone/default.png"
+  );
+  const [bannerBackground, setBannerBackground] = useState(
+    user?.bannerBackground !== 'null' ? user?.bannerBackground : "#000"
+  );
+  const [username, setUsername] = useState(`@${user?.username}`);
+  const [bio, setBio] = useState({ content: user?.bio !== 'null' ? user?.bio : '' });
+  const [Layout, setLayout] = useState(
+    user?.layout && user.layout !== 'null' 
+      ? user.layout 
+      : 'Stack'
+  );
+  const [selectedButtonStyle, setSelectedButtonStyle] = useState(
+    user?.buttonStyle && user.buttonStyle !== 'null' 
+      ? user.buttonStyle 
+      : 'Fill'
+  );
+  const [buttonColor, setButtonColor] = useState(
+    user?.buttonColor && user.buttonColor !== 'null' 
+      ? user.buttonColor 
+      : '#28A263'
+  );
+  const [buttonFontColor, setButtonFontColor] = useState(
+    user?.buttonFontColor && user.buttonFontColor !== 'null' 
+      ? user.buttonFontColor 
+      : '#fff'
+  );
+  const [selectedFont, setSelectedFont] = useState(
+    user?.font && user.font !== 'null' 
+      ? user.font 
+      : 'Poppins'
+  );
+  const [fontColor, setFontColor] = useState(
+    user?.fontColor && user.fontColor !== 'null' 
+      ? user.fontColor 
+      : '#000'
+  );
+  const [selectedTheme, setSelectedTheme] = useState(
+    user?.theme && user.theme !== 'null' 
+      ? user.theme 
+      : -1
+  );
+  const [selectedButtonRadius, setSelectedButtonRadius] = useState(
+    user?.buttonRadius && user.buttonRadius !== 'null' 
+      ? user.buttonRadius 
+      : '30px'
+  );
+  const [links, setLinks] = useState([])
+  const [shops, setShops] = useState([])
+  const [manualColorChange, setManualColorChange] = useState(false);
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await api.get('/api/links', { withCredentials: true })
+        setLinks(response.data.links)
+        dispatch(setLinkCount())
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [linkCount])
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await api.get('/api/shops', { withCredentials: true })
+        setShops(response.data.shops)
+        dispatch(setShopCount())
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [shopCount])
+  const handleButtonColorChange = (e) => {
+    setButtonColor(e.target.value);
+    setManualColorChange(true); // Flag that user manually changed color
+  };
+  const handleThemeSelection = (themeId) => {
+    setSelectedTheme(themeId);
+    setManualColorChange(false); // Reset flag when theme changes
+    
+    const theme = themes[themeId];
+    if (theme) {
+      setBannerBackground(theme.backgroundColor !== "none" ? theme.backgroundColor : "#000");
+      setButtonColor(theme.buttonColor);
+      
+      // Set other theme-specific properties if needed
+    }
+  };
   const handleButtonStyleSelect = (style, radius) => {
     setSelectedButtonStyle(style);
     setSelectedButtonRadius(radius);
+  };
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('bannerBackground', bannerBackground);
+      formData.append('layout', Layout);
+      formData.append('buttonStyle', selectedButtonStyle);
+      formData.append('buttonColor', buttonColor);
+      formData.append('buttonFontColor', buttonFontColor);
+      formData.append('font', selectedFont);
+      formData.append('fontColor', fontColor);
+      formData.append('buttonRadius', selectedButtonRadius);
+      formData.append('theme', selectedTheme);
+
+      const response = await api.put('/api/auth/update-user-card', formData, { withCredentials: true });
+      console.log(response.data);
+      dispatch(updateUser(response.data.user));
+      MyToast('Appearance settings updated successfully', 'success');
+    } catch (error) {
+      console.log(error);
+      MyToast('Failed to update appearance settings', 'error');
+    }
   };
 
   return (
     <div className={styles.appearanceContainer}>
       <section className={styles.leftSection}>
         <Iphone 
-          backgroundColor={bannerBackground} 
+          backgroundColor={bannerBackground}
           username={username}
-          profileImage={profileImage} 
+          profileImage={profileImage}
           links={links}
           shops={shops}
           Layout={Layout}
           themes={themes}
           selectedTheme={selectedTheme}
           buttonColor={buttonColor}
+          setButtonColor={setButtonColor}  // Pass the setter function
+          manualColorChange={manualColorChange}  // Pass the flag
           buttonFontColor={buttonFontColor}
           selectedFont={selectedFont}
           fontColor={fontColor}
           selectedButtonStyle={selectedButtonStyle}
           selectedButtonRadius={selectedButtonRadius}
-          bio={""}
+          bio={bio}
         />
       </section>
 
@@ -216,7 +336,10 @@ function Appearance() {
                 <input 
                   type="text" 
                   value={buttonColor}
-                  onChange={(e) => setButtonColor(e.target.value)}
+                  onChange={(e) => {
+                    setButtonColor(e.target.value);
+                    setManualColorChange(true);
+                  }}
                   
                 />
             </div>
@@ -286,9 +409,14 @@ function Appearance() {
               <div
                 
                 className={`${styles.themeCard} ${
-                  selectedTheme === theme.id - 1 ? styles.selected : ""
+                  selectedTheme === theme.id - 1 && selectedTheme !== 7 ? styles.selected : ""
                 }`}
-                onClick={() => setSelectedTheme(theme.id - 1)}
+                onClick={() => {
+                  setSelectedTheme(theme.id - 1);
+                  setManualColorChange(false);
+                  setButtonColor(theme.buttonColor);
+                  // Do NOT change bannerBackground here
+                }}
               >
                 <div style={{ backgroundColor: theme.backgroundColor}} className={styles.themePreview}>
                   <ThemeButtons buttonColor={theme.buttonColor} buttonBorder={theme.border} />
@@ -301,7 +429,7 @@ function Appearance() {
         </div>
 
         <div className={styles.saveButtonContainer}>
-          <button className={styles.saveButton}>Save</button>
+          <button onClick={handleSave} className={styles.saveButton}>Save</button>
         </div>
       </section>
     </div>

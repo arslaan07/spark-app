@@ -63,9 +63,6 @@ router.post('/signup', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                profileImage: null,
-                bio: null, 
-                bannerBackground: null,
             }
         });
 
@@ -132,6 +129,14 @@ router.post('/signin', async (req, res) => {
                 profileImage: user.profileImage,
                 bio: user.bio,
                 bannerBackground: user.bannerBackground,
+                layout: user.layout,
+                buttonStyle: user.buttonStyle,
+                buttonColor: user.buttonColor,
+                buttonFontColor: user.buttonFontColor,
+                font: user.font,
+                fontColor: user.fontColor,
+                buttonRadius: user.buttonRadius,
+                theme: user.theme
             }
         });
 
@@ -146,7 +151,14 @@ router.post('/signin', async (req, res) => {
 router.post('/set-username', verifyToken, async (req, res) => {
     try {
         const { username } = req.body;
-        const user = await User.findByIdAndUpdate(req.user.id, { username }, { new: true })
+        const user = await User.findOne({ username: username })
+        if (user) {
+            return res.status(400).json({
+                success: false,
+                message: "Username already exists"
+            });
+        }
+        await User.findByIdAndUpdate(req.user.id, { username }, { new: true })
         return res.status(200).json({
             success: true,
             message: "Username updated successfully",
@@ -258,42 +270,93 @@ router.put('/update-user', verifyToken, async (req, res) => {
     }
 });
 
+
 router.put('/update-user-card', verifyToken, upload.single('profileImage'), async (req, res) => {
     try {
-        const { username, bio, bannerBackground } = req.body 
-        const userId = req.user.id
-        const user = await User.findByIdAndUpdate(userId)
+        const { username, bio, bannerBackground, layout, buttonStyle, buttonColor,
+            buttonFontColor, font, fontColor, buttonRadius, theme
+        } = req.body;
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({
                 success: false,
                 message: "User not found"
             });
         }
-        let isUpdated = false; 
-        if (req.file){ 
-            // console.log("file received")
-            user.profileImage = `/images/uploads/${req.file.filename}`
-            isUpdated = true
+
+        let isUpdated = false;
+
+        if (req.file) {
+            user.profileImage = `/images/uploads/${req.file.filename}`;
+            isUpdated = true;
         }
-        if (username) {
-            user.username = username
-            isUpdated = true
+
+        if (username && user.username !== username) {
+            user.username = username;
+            isUpdated = true;
         }
-        if (bio) {
-            user.bio = bio
-            isUpdated = true
+
+        if (bio && user.bio !== bio) {
+            user.bio = bio;
+            isUpdated = true;
         }
-        if (bannerBackground) {
-            user.bannerBackground = bannerBackground
-            isUpdated = true
-        } 
+
+        if (bannerBackground && user.bannerBackground !== bannerBackground) {
+            user.bannerBackground = bannerBackground;
+            isUpdated = true;
+        }
+
+        if (layout && user.layout !== layout) {
+            user.layout = layout;
+            isUpdated = true;
+        }
+
+        if (buttonStyle && user.buttonStyle !== buttonStyle) {
+            user.buttonStyle = buttonStyle;
+            isUpdated = true;
+        }
+
+        if (buttonColor && user.buttonColor !== buttonColor) {
+            user.buttonColor = buttonColor;
+            isUpdated = true;
+        }
+
+        if (buttonFontColor && user.buttonFontColor !== buttonFontColor) {
+            user.buttonFontColor = buttonFontColor;
+            isUpdated = true;
+        }
+
+        if (font && user.font !== font) {
+            user.font = font;
+            isUpdated = true;
+        }
+
+        if (fontColor && user.fontColor !== fontColor) {
+            user.fontColor = fontColor;
+            isUpdated = true;
+        }
+
+        if (buttonRadius && user.buttonRadius !== buttonRadius) {
+            user.buttonRadius = buttonRadius;
+            isUpdated = true;
+        }
+
+        if (theme && user.theme !== theme) {
+            user.theme = theme;
+            isUpdated = true;
+        }
+
         if (!isUpdated) {
-            return res.status(204). json({
+            return res.status(204).json({
                 success: false,
                 message: "No updates provided"
-            })
+            });
         }
-        await user.save()
+
+        await user.save();
+
         return res.status(200).json({
             success: true,
             message: "User card updated successfully",
@@ -303,17 +366,27 @@ router.put('/update-user-card', verifyToken, upload.single('profileImage'), asyn
                 email: user.email,
                 profileImage: user.profileImage,
                 bio: user.bio,
-                bannerBackground: user.bannerBackground
+                bannerBackground: user.bannerBackground,
+                layout: user.layout,
+                buttonStyle: user.buttonStyle,
+                buttonColor: user.buttonColor,
+                buttonFontColor: user.buttonFontColor,
+                font: user.font,
+                fontColor: user.fontColor,
+                buttonRadius: user.buttonRadius,
+                theme: user.theme
             }
-        })
+        });
+
     } catch (error) {
+        console.error(error); // Log the error for debugging purposes
         return res.status(500).json({
             success: false,
             message: "User card update failed",
             error: error.message
-        })
+        });
     }
-})
+});
 router.get('/logout', verifyToken, (req, res) => {
     try {
         res.cookie('token', '', {

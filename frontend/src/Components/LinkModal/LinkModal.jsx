@@ -1,23 +1,88 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiCopy } from "react-icons/fi";
-import styles from './LinkModal.module.css'
-const LinkModal = ({ isOpen, onClose }) => {
-    const [isChecked, setIsChecked] = useState(true)
-    
+import styles from "./LinkModal.module.css";
+import MyToast from "../MyToast/MyToast";
+import api from "../../../api";
+import { useDispatch } from "react-redux";
+import { incrementLinkCount } from "../../store/slices/linkSlice";
+
+
+
+const LinkModal = ({ isOpen, onClose, applications }) => {
+  const dispatch = useDispatch()
+  const [isChecked, setIsChecked] = useState(true);
+  const [selectedApp, setSelectedApp] = useState(-1);
+  const [formData, setFormData] = useState({
+    title: "",
+    url: "",
+    application: "",
+    isActive: true,
+  });
+  // console.log(formData)
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle checkbox toggle
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+    setFormData((prev) => ({ ...prev, isActive: e.target.checked }));
+  };
+
+  // Handle application selection
+  const handleAppSelect = (index) => {
+    setSelectedApp(index);
+    setFormData((prev) => ({
+      ...prev,
+      application: applications[index].name,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmitForm = async () => {
+    onClose()
+    if(formData.title.trim() === '') {
+      MyToast('link title is required', 'error')
+      return;
+    }
+    if(formData.url.trim() === '') {
+      MyToast('link url is required', 'error')
+      return;
+    }
+    console.log("Form Submitted:", formData);
+    try {
+      const response = await api.post('/api/links', formData, { withCredentials: true })
+      console.log(response)
+      dispatch(incrementLinkCount())
+      setFormData({
+        title: "",
+        url: "",
+        application: "",
+        isActive: true,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  // Close modal when clicking outside
+  useEffect(() => {
     const handleModalClose = (e) => {
-        // Only close if clicking outside the modal
-        if (isOpen && e.target.className === styles.modalOverlay) {
-          onClose();
-        }
-      };
-    useEffect(() => {
-        document.addEventListener('mousedown', handleModalClose);
-        return () => {
-            document.removeEventListener('mousedown', handleModalClose);
-        };
-    }, [isOpen, onClose])
-    if (!isOpen) return null;
+      if (isOpen && e.target.classList.contains(styles.modalOverlay)) {
+        onClose();
+      }
+    };
+  
+    document.addEventListener("mousedown", handleModalClose);
+    return () => {
+      document.removeEventListener("mousedown", handleModalClose);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
@@ -25,80 +90,79 @@ const LinkModal = ({ isOpen, onClose }) => {
           {/* Title row with "Enter URL" and Add URL button */}
           <div className={styles.modalHeader}>
             <h3>Enter URL</h3>
-            <button className={styles.addUrlButton}>Add URL</button>
+            <button onClick={handleSubmitForm} className={styles.addUrlButton}>
+              Add URL
+            </button>
           </div>
 
           {/* Link title input with switch */}
           <div className={styles.inputGroup}>
-            <input 
-              type="text" 
-              placeholder="Link title" 
+            <input
+              type="text"
+              name="title"
+              placeholder="Link title"
               className={styles.linkInput}
+              value={formData.title}
+              onChange={handleChange}
             />
             <label className={styles.switch}>
-  <input 
-    type="checkbox" 
-    checked={isChecked} // Add state for this
-    onChange={(e) => setIsChecked(e.target.checked)} // Add state handler
-  />
-  <span className={styles.slider}></span>
-</label>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+              />
+              <span className={styles.slider}></span>
+            </label>
           </div>
 
           {/* Link URL input with copy and delete icons */}
           <div className={styles.inputGroup}>
-            <input 
-              type="text" 
-              placeholder="Link URL" 
+            <input
+              type="text"
+              name="url"
+              placeholder="Link URL"
               className={styles.linkInput}
+              value={formData.url}
+              onChange={handleChange}
             />
             <div className={styles.inputActions}>
-              <button className={styles.iconButton}>
-              <FiCopy className={styles.copyIcon} />
+              <button className={styles.iconButton} onClick={() => navigator.clipboard.writeText(formData.url)}>
+                <FiCopy className={styles.copyIcon} />
               </button>
-              <button className={styles.iconButton}>
-              <RiDeleteBin6Line className={styles.deleteIcon} />
+              <button className={styles.iconButton} onClick={() => setFormData({ ...formData, url: "" })}>
+                <RiDeleteBin6Line className={styles.deleteIcon} />
               </button>
             </div>
           </div>
-            <div className={styles.divider}></div>
+
+          <div className={styles.divider}></div>
+
           {/* Applications section */}
           <div className={styles.applications}>
             <p className={styles.applicationTitle}>Applications</p>
             <div className={styles.socialIcons}>
-                <div className={styles.socialBtnContainer}>
-              <button className={styles.socialBtn}>
-                <img src="/images/LinkModal/instagram.png" alt="Instagram" />
-              </button>
-              <span className={styles.platform}>Instagram</span>
-              </div>
-              <div className={styles.socialBtnContainer}>
-              <button className={styles.socialBtn}>
-                <img src="/images/LinkModal/facebook.png" alt="Facebook" />
-                
-              </button>
-              <span className={styles.platform}>Facebook</span>
-              </div>
-              <div className={styles.socialBtnContainer}>
-              <button className={styles.socialBtn}>
-                <img src="/images/LinkModal/youtube.png" alt="YouTube" />
-                
-              </button>
-              <span className={styles.platform}>YouTube</span>
-              </div>
-              <div className={styles.socialBtnContainer}>
-              <button className={styles.socialBtn}>
-                <img src="/images/LinkModal/x.png" alt="X" />
-                
-              </button>
-              <span className={styles.platform}>X</span>
-              </div>
+              {applications.map((app, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleAppSelect(index)}
+                  className={styles.socialBtnContainer}
+                >
+                  <button
+                    className={`${styles.socialBtn} ${
+                      selectedApp === index ? styles.active : ""
+                    }`}
+                  >
+                    <img src={app.imgSrc} alt={app.name} />
+                  </button>
+                  <span className={styles.platform}>{app.name}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LinkModal
+export default LinkModal;

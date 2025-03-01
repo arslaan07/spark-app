@@ -427,6 +427,29 @@
   input:checked + .slider:before {
     transform: translateX(22px);
   }
+
+  .updateButton {
+    background-color: #28A263;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  
+  .updateButton:hover {
+    background-color: #218a52;
+  }
+  
+  .editInput {
+    border: none;
+    border-radius: 20px;
+    padding: 4px 8px;
+    font-size: 14px;
+    width: 100%;
+  }
   @media screen and (max-width: 1240px) {
     .buttons {
         background-color: #C9C9C9;

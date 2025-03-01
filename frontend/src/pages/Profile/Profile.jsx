@@ -1,5 +1,5 @@
 // pages/Profile/Profile.jsx
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Iphone from "../../Components/Iphone/Iphone";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
@@ -11,58 +11,96 @@ import { useDispatch, useSelector } from "react-redux";
 import api from "../../../api";
 import MyToast from "../../Components/MyToast/MyToast";
 import { updateUser } from "../../store/slices/authSlice";
+import { decrementLinkCount, setLinkCount } from "../../store/slices/linkSlice";
+import { decrementShopCount, setShopCount } from "../../store/slices/shopSlice";
 
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
-const links = [
-    {
-      id: 1,
-      title: "Instagram",
-      url: "https://www.instagram.com/opopo_08//opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 2,
-      title: "Twitter",
-      url: "https://twitter.com/opopo_08/www.iom/opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 3,
-      title: "Facebook",
-      url: "https://www.facebook.com/opopo_08",
-      clicks: 0,
-    },
-    {
-        id: 4,
-        title: "Facebook",
-        url: "https://www.facebook.com/opopo_08",
-        clicks: 0,
-      },
+// const links = [
+//     {
+//       id: 1,
+//       title: "Instagram",
+//       url: "https://www.instagram.com/opopo_08//opopo_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 2,
+//       title: "Twitter",
+//       url: "https://twitter.com/opopo_08/www.iom/opopo_08/",
+//       clicks: 0,
+//     },
+//     {
+//       id: 3,
+//       title: "Facebook",
+//       url: "https://www.facebook.com/opopo_08",
+//       clicks: 0,
+//     },
+//     {
+//         id: 4,
+//         title: "Facebook",
+//         url: "https://www.facebook.com/opopo_08",
+//         clicks: 0,
+//       },
+//   ];
+  
+  // const shops = [
+  //   {
+  //     id: 1,
+  //     title: "Amazon Shop",
+  //     url: "https://www.amazon.com/rechargeable-magnetic-charger/ww_08/",
+  //     clicks: 0,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Etsy Shop",
+  //     url: "https://www.etsy.com/shop/opopo_08www.instagram.ram.com/opopo_08/",
+  //     clicks: 0,
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "eBay Shop",
+  //     url: "https://www.ebay.com/usr/opopo_08",
+  //     clicks: 0,
+  //   },
+  // ];
+  const applications = [
+    { name: "Instagram", imgSrc: "/images/LinkModal/instagram.png" },
+    { name: "Facebook", imgSrc: "/images/LinkModal/facebook.png" },
+    { name: "Youtube", imgSrc: "/images/LinkModal/youtube.png" },
+    { name: "X", imgSrc: "/images/LinkModal/x.png" },
+    { name: "Others", imgSrc: "/images/LinkModal/others.png" },
+  ];
+  const layouts = [
+    { id: 1, name: "Stack", icon: "☰" },
+    { id: 2, name: "Grid", icon: "⊞" },
+    { id: 3, name: "Carousel", icon: "⊟" }
   ];
   
-  const shops = [
-    {
-      id: 1,
-      title: "Amazon Shop",
-      url: "https://www.amazon.com/rechargeable-magnetic-charger/ww_08/",
-      clicks: 0,
-    },
-    {
-      id: 2,
-      title: "Etsy Shop",
-      url: "https://www.etsy.com/shop/opopo_08www.instagram.ram.com/opopo_08/",
-      clicks: 0,
-    },
-    {
-      id: 3,
-      title: "eBay Shop",
-      url: "https://www.ebay.com/usr/opopo_08",
-      clicks: 0,
-    },
+  const buttonStyles = [
+    { id: 1, name: "Fill" },
+    { id: 2, name: "Outline" },
+    { id: 3, name: "Hard shadow" },
+    { id: 4, name: "Soft shadow" },
   ];
-
+  const specialButtonStyles = [
+      { id: 1, name: "Torn Edge", type: "tornButton" },
+      { id: 2, name: "Wavy Edge", type: "wavyButton" },
+      { id: 3, name: "Rounded", type: "rounded" },
+      { id: 4, name: "Half-Rounded", type: "halfRounded" },
+  ]
+  const themes = [
+    { id: 1, name: "Air Snow", backgroundColor: "E0E2D9", buttonColor: "#2A3235", border: "none" },
+    { id: 2, name: "Air Gray", backgroundColor: "#EBEEF1", buttonColor: "#FFF", border: "none" },
+    { id: 3, name: "Air Smoke", backgroundColor: "#2A3235", buttonColor: "#FFF", border: "none" },
+    { id: 4, name: "Air Black", backgroundColor: "#000", buttonColor: "#1C1C1C", border: "none" },
+    { id: 5, name: "Mineral Blue", backgroundColor: "#E0F6FF", buttonColor: "#E0F6FF", border: "1px solid #333" },
+    { id: 6, name: "Mineral Green", backgroundColor: "#E0FAEE", buttonColor: "#E0FAEE", border: "1px solid #333" },
+    { id: 7, name: "Mineral Orange", backgroundColor: "#FFEEE2", buttonColor: "#FFEEE2", border: "1px solid #333" },
+    { id: 8, name: "Default", backgroundColor: "#fff", buttonColor: "#28A263", border: "none" }
+  ];
 function Profile() {
   const { user } = useSelector((state) => state.auth)
+  const { linkCount } = useSelector((state) => state.link)
+  const { shopCount } = useSelector((state) => state.shop)
   const dispatch = useDispatch()
   const [profileImage, setProfileImage] = useState(user?.profileImage ? `${api.defaults.baseURL}${user.profileImage}` : 
     "/images/Iphone/default.png"
@@ -72,11 +110,91 @@ function Profile() {
   const [selectedBtn, setSelectedBtn] = useState("link");
   const [selectedColor, setSelectedColor] = useState(0);
   const [username, setUsername] = useState(`@${user?.username}`);
+  const [Layout, setLayout] = useState(
+    user?.layout && user.layout !== 'null' 
+      ? user.layout 
+      : 'Stack'
+  );
+  const [selectedButtonStyle, setSelectedButtonStyle] = useState(
+    user?.buttonStyle && user.buttonStyle !== 'null' 
+      ? user.buttonStyle 
+      : 'Fill'
+  );
+  const [buttonColor, setButtonColor] = useState(
+    user?.buttonColor && user.buttonColor !== 'null' 
+      ? user.buttonColor 
+      : '#28A263'
+  );
+  const [buttonFontColor, setButtonFontColor] = useState(
+    user?.buttonFontColor && user.buttonFontColor !== 'null' 
+      ? user.buttonFontColor 
+      : '#fff'
+  );
+  const [selectedFont, setSelectedFont] = useState(
+    user?.font && user.font !== 'null' 
+      ? user.font 
+      : 'Poppins'
+  );
+  const [fontColor, setFontColor] = useState(
+    user?.fontColor && user.fontColor !== 'null' 
+      ? user.fontColor 
+      : '#000'
+  );
+  const [selectedTheme, setSelectedTheme] = useState(
+    user?.theme && user.theme !== 'null' 
+      ? user.theme 
+      : -1
+  );
+  const [selectedButtonRadius, setSelectedButtonRadius] = useState(
+    user?.buttonRadius && user.buttonRadius !== 'null' 
+      ? user.buttonRadius 
+      : '30px'
+  );
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [isShopModalOpen, setIsShopModalOpen] = useState(false);
   const [linkEnabled, setLinkEnabled] = useState(true);
   const fileInputRef = useRef(null);
+  const [links, setLinks] = useState([])
+  const [shops, setShops] = useState([])
+  const [editingLinkId, setEditingLinkId] = useState(null);
+  const [editedLinkData, setEditedLinkData] = useState({
+  title: "",
+  url: "",
+  isActive: true
+});
+const [editingShopId, setEditingShopId] = useState(null);
+  const [editedShopData, setEditedShopData] = useState({
+  title: "",
+  url: "",
+  isActive: true
+});
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await api.get('/api/links', { withCredentials: true })
+        setLinks(response.data.links)
+        dispatch(setLinkCount())
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [linkCount])
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await api.get('/api/shops', { withCredentials: true })
+        setShops(response.data.shops)
+        dispatch(setShopCount())
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [shopCount])
   
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -155,25 +273,167 @@ function Profile() {
       MyToast(`failed to update your profile card ${username}`, 'error')
     }
   }
+  const handleDeleteLink = async (id) => {
+    try {
+      const response = await api.delete(`/api/links/${id}`, { withCredentials: true })
+      setLinks(links.filter(link => link._id !== id));
+      dispatch(decrementLinkCount())
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // Add a function to handle edit mode toggle
+const toggleEditMode = (link) => {
+  if (editingLinkId === link._id) {
+    // If already editing this link, cancel editing
+    setEditingLinkId(null);
+  } else {
+    // Start editing this link
+    setEditingLinkId(link._id);
+    setEditedLinkData({
+      title: link.title,
+      url: link.url,
+      isActive: link.isActive
+    });
+  }
+};
+
+// Add a function to handle changes to the link being edited
+const handleEditChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setEditedLinkData({
+    ...editedLinkData,
+    [name]: type === 'checkbox' ? checked : value
+  });
+};
+
+// Add a function to save changes
+const saveEditedLink = async (id) => {
+  try {
+    const response = await api.put(`/api/links/${id}`, editedLinkData, { withCredentials: true });
+    // Update links in state
+    const updatedLinks = links.map(link => 
+      link._id === id ? { ...link, ...editedLinkData } : link
+    );
+    setLinks(updatedLinks);
+    setEditingLinkId(null);
+    MyToast('Link updated successfully', 'success');
+  } catch (error) {
+    console.log(error);
+    MyToast('Failed to update link', 'error');
+  }
+};
+
+// Function to toggle active status
+const handleToggleActive = async (linkId, currentStatus) => {
+  // Optimistically update UI first
+  const updatedLinks = links.map((link) =>
+    link._id === linkId ? { ...link, isActive: !currentStatus } : link
+  );
+  setLinks(updatedLinks);
+
+  try {
+    // Send update to server
+    await api.put(`/api/links/${linkId}`, { isActive: !currentStatus }, { withCredentials: true });
+    MyToast("Link status updated", "success");
+  } catch (error) {
+    // Revert UI on failure
+    setLinks(links); // Revert to previous state
+    console.log("Error updating link:", error);
+    MyToast("Failed to update link status", "error");
+  }
+};
+
+/*      */
+// Toggle edit mode for shops
+const toggleEditShopMode = (shop) => {
+  if (editingShopId === shop._id) {
+    setEditingShopId(null);
+  } else {
+    setEditingShopId(shop._id);
+    setEditedShopData({
+      title: shop.title,
+      url: shop.url,
+      isActive: shop.isActive
+    });
+  }
+};
+
+// Handle changes to shop data during editing
+const handleEditShopChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setEditedShopData({
+    ...editedShopData,
+    [name]: type === 'checkbox' ? checked : value
+  });
+};
+
+// Save edited shop
+const saveEditedShop = async (id) => {
+  try {
+    const response = await api.put(`/api/shops/${id}`, editedShopData, { withCredentials: true });
+    const updatedShops = shops.map(shop => 
+      shop._id === id ? { ...shop, ...editedShopData } : shop
+    );
+    setShops(updatedShops); // Corrected to update shops, not links
+    setEditingShopId(null);
+    MyToast('Shop updated successfully', 'success');
+  } catch (error) {
+    console.log(error);
+    MyToast('Failed to update shop', 'error');
+  }
+};
+
+// Toggle active status for shops
+const handleToggleActiveShop = async (shopId, currentStatus) => {
+  const updatedShops = shops.map((shop) =>
+    shop._id === shopId ? { ...shop, isActive: !currentStatus } : shop
+  );
+  setShops(updatedShops); // Corrected to update shops, not links
+
+  try {
+    await api.put(`/api/shops/${shopId}`, { isActive: !currentStatus }, { withCredentials: true });
+    MyToast("Shop status updated", "success");
+  } catch (error) {
+    setShops(shops); // Revert to previous state on failure
+    console.log("Error updating shop:", error);
+    MyToast("Failed to update shop status", "error");
+  }
+};
+
+// Delete shop
+const handleDeleteShop = async (id) => {
+  try {
+    const response = await api.delete(`/api/shops/${id}`, { withCredentials: true });
+    setShops(shops.filter(shop => shop._id !== id));
+    dispatch(decrementShopCount());
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
   return (
     <div className={styles.profileContainer}>
       <section className={styles.leftSection}>
       <Iphone 
-  backgroundColor={bannerBackground} 
-  username={username}
-  profileImage={profileImage} 
-  links={links}
-  shops={shops} // Add this
-  Layout="Stack" // Add a default layout
-  themes={[]} // Add empty themes array
-  selectedTheme={-1} // No theme selected by default
-  buttonColor="#28A263" // Default button color
-  buttonFontColor="#fff" // Default button font color
-  selectedFont="Poppins" // Default font
-  fontColor="#000" // Default font color
-  selectedButtonStyle="Fill" // Default button style
-  selectedButtonRadius="30px" // Default button radius
-  bio={bio}
+   backgroundColor={bannerBackground}
+   username={username}
+   profileImage={profileImage}
+   links={links}
+   shops={shops}
+   Layout={Layout}
+   themes={themes}
+   selectedTheme={selectedTheme}
+   buttonColor={buttonColor}
+   setButtonColor={setButtonColor}  // Pass the setter function
+   buttonFontColor={buttonFontColor}
+   selectedFont={selectedFont}
+   fontColor={fontColor}
+   selectedButtonStyle={selectedButtonStyle}
+   selectedButtonRadius={selectedButtonRadius}
+   bio={bio}
 />
       </section>
 
@@ -287,89 +547,211 @@ function Profile() {
           </button>
 
           <div className={styles.socialLinks}>
-    {selectedBtn === 'link' &&
-      links.map((link) => (
-        <div key={link.id} className={styles.socialLink}>
-          <span className={styles.dragIcon}>
-            <MdOutlineDragIndicator />
-          </span>
-          <div className={styles.linkInfo}>
-            <div className={styles.titleContainer}>
-              <span className={styles.linkTitle}>{link.title}</span>
-              <span className={styles.editIcon}>
-                <FiEdit3 />
-              </span>
-            </div>
-            <div className={styles.linkContainer}>
-              <span className={styles.userLink}>{link.url}</span>
-              <span className={styles.editIcon}>
-                <FiEdit3 />
-              </span>
-            </div>
-            <div className={styles.clickStats}>
-              <span className={styles.icon}>
-                <img src="/images/Profile/click.png" alt="" />
-                <span className={styles.clickCount}>{link.clicks} clicks</span>
-              </span>
-            </div>
-          </div>
-          <div className={styles.rightLinkContainer}>
-            <label className={styles.switch}>
+          {selectedBtn === "link" && links && links.length > 0 && 
+    [...links].reverse().map((link) => (
+      <div key={link._id} className={styles.socialLink}>
+        <span className={styles.dragIcon}>
+          <MdOutlineDragIndicator />
+        </span>
+        <div className={styles.linkInfo}>
+          <div className={styles.titleContainer}>
+            {editingLinkId === link._id ? (
               <input
-                type="checkbox"
-                checked={linkEnabled}
-                onChange={(e) => setLinkEnabled(e.target.checked)}
+                type="text"
+                name="title"
+                value={editedLinkData.title}
+                onChange={handleEditChange}
+                className={styles.editInput}
               />
-              <span className={styles.slider}></span>
-            </label>
-            <span className={styles.deleteIcon}>
-              <RiDeleteBin6Line />
+            ) : (
+              <span 
+                className={styles.linkTitle}
+                onClick={() => toggleEditMode(link)}
+              >
+                {link.title}
+              </span>
+            )}
+            <span 
+              onClick={() => toggleEditMode(link)} 
+              className={styles.editIcon}
+            >
+              <FiEdit3 />
+            </span>
+          </div>
+          <div className={styles.linkContainer}>
+            {editingLinkId === link._id ? (
+              <input
+                type="text"
+                name="url"
+                value={editedLinkData.url}
+                onChange={handleEditChange}
+                className={styles.editInput}
+              />
+            ) : (
+              <span 
+                className={styles.userLink}
+                onClick={() => toggleEditMode(link)}
+              >
+                {link.url}
+              </span>
+            )}
+            <span 
+              onClick={() => toggleEditMode(link)} 
+              className={styles.editIcon}
+            >
+              <FiEdit3 />
+            </span>
+          </div>
+          <div className={styles.clickStats}>
+            <span className={styles.icon}>
+              <img src="/images/Profile/click.png" alt="" />
+              <span className={styles.clickCount}>{link.clicks} clicks</span>
             </span>
           </div>
         </div>
-      ))}
+        <div className={styles.rightLinkContainer}>
+          {editingLinkId === link._id ? (
+            <>
+              <label className={styles.switch}>
+                <input
+                  type="checkbox"
+                  name="isActive"
+                  checked={editedLinkData.isActive}
+                  onChange={handleEditChange} // Only updates editedLinkData during edit mode
+                />
+                <span className={styles.slider}></span>
+              </label>
+              <button 
+                onClick={() => saveEditedLink(link._id)} 
+                className={styles.updateButton}
+              >
+                Update
+              </button>
+            </>
+          ) : (
+            <>
+              <label className={styles.switch}>
+                <input
+                  type="checkbox"
+                  checked={link.isActive}
+                  onChange={() => handleToggleActive(link._id, link.isActive)} // Direct toggle without edit mode
+                />
+                <span className={styles.slider}></span>
+              </label>
+              <span 
+                onClick={() => handleDeleteLink(link._id)} 
+                className={styles.deleteIcon}
+              >
+                <RiDeleteBin6Line />
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+    ))}
 
-    {selectedBtn === 'shop' &&
-      shops.map((shop) => (
-        <div key={shop.id} className={styles.socialLink}>
-          <span className={styles.dragIcon}>
-            <MdOutlineDragIndicator />
+{selectedBtn === 'shop' && shops && shops.length > 0 &&
+  [...shops].reverse().map((shop) => (
+    <div key={shop._id} className={styles.socialLink}>
+      <span className={styles.dragIcon}>
+        <MdOutlineDragIndicator />
+      </span>
+      <div className={styles.linkInfo}>
+        <div className={styles.titleContainer}>
+          {editingShopId === shop._id ? (
+            <input
+              type="text"
+              name="title"
+              value={editedShopData.title}
+              onChange={handleEditShopChange}
+              className={styles.editInput}
+            />
+          ) : (
+            <span 
+              className={styles.linkTitle}
+              onClick={() => toggleEditShopMode(shop)}
+            >
+              {shop.title}
+            </span>
+          )}
+          <span 
+            onClick={() => toggleEditShopMode(shop)} 
+            className={styles.editIcon}
+          >
+            <FiEdit3 />
           </span>
-          <div className={styles.linkInfo}>
-            <div className={styles.titleContainer}>
-              <span className={styles.linkTitle}>{shop.title}</span>
-              <span className={styles.editIcon}>
-                <FiEdit3 />
-              </span>
-            </div>
-            <div className={styles.linkContainer}>
-              <span className={styles.userLink}>{shop.url}</span>
-              <span className={styles.editIcon}>
-                <FiEdit3 />
-              </span>
-            </div>
-            <div className={styles.clickStats}>
-              <span className={styles.icon}>
-                <img src="/images/Profile/click.png" alt="" />
-                <span className={styles.clickCount}>{shop.clicks} clicks</span>
-              </span>
-            </div>
-          </div>
-          <div className={styles.rightLinkContainer}>
+        </div>
+        <div className={styles.linkContainer}>
+          {editingShopId === shop._id ? (
+            <input
+              type="text"
+              name="url"
+              value={editedShopData.url}
+              onChange={handleEditShopChange}
+              className={styles.editInput}
+            />
+          ) : (
+            <span 
+              className={styles.userLink}
+              onClick={() => toggleEditShopMode(shop)}
+            >
+              {shop.url}
+            </span>
+          )}
+          <span 
+            onClick={() => toggleEditShopMode(shop)} 
+            className={styles.editIcon}
+          >
+            <FiEdit3 />
+          </span>
+        </div>
+        <div className={styles.clickStats}>
+          <span className={styles.icon}>
+            <img src="/images/Profile/click.png" alt="" />
+            <span className={styles.clickCount}>{shop.clicks} clicks</span>
+          </span>
+        </div>
+      </div>
+      <div className={styles.rightLinkContainer}>
+        {editingShopId === shop._id ? (
+          <>
             <label className={styles.switch}>
               <input
                 type="checkbox"
-                checked={linkEnabled}
-                onChange={(e) => setLinkEnabled(e.target.checked)}
+                name="isActive"
+                checked={editedShopData.isActive}
+                onChange={handleEditShopChange}
               />
               <span className={styles.slider}></span>
             </label>
-            <span className={styles.deleteIcon}>
+            <button 
+              onClick={() => saveEditedShop(shop._id)} 
+              className={styles.updateButton}
+            >
+              Update
+            </button>
+          </>
+        ) : (
+          <>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={shop.isActive}
+                onChange={() => handleToggleActiveShop(shop._id, shop.isActive)}
+              />
+              <span className={styles.slider}></span>
+            </label>
+            <span 
+              onClick={() => handleDeleteShop(shop._id)} 
+              className={styles.deleteIcon}
+            >
               <RiDeleteBin6Line />
             </span>
-          </div>
-        </div>
-      ))}
+          </>
+        )}
+      </div>
+    </div>
+  ))}
   </div>
         </div>
 
@@ -431,6 +813,7 @@ function Profile() {
       <LinkModal 
       isOpen={isLinkModalOpen} 
       onClose={() => setIsLinkModalOpen(false)}
+      applications={applications}
     />
     <ShopModal
       isOpen={isShopModalOpen} 

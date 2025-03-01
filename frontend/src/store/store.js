@@ -2,16 +2,20 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import authReducer from './slices/authSlice'
+import linkReducer from './slices/linkSlice'
+import shopReducer from './slices/shopSlice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth']
+  whitelist: ['auth', 'link', 'shop']
 }
 
 // Combine reducers first
 const rootReducer = combineReducers({
   auth: authReducer,
+  link: linkReducer,
+  shop: shopReducer,
 })
 
 // Persist the combined reducer
