@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import api from "../../../api";
 import { updateUser } from "../../store/slices/authSlice";
+import Spinner from "../../Components/Spinner/Spinner";
+
 
 const categories = [
   { id: 'business', label: 'Business', icon: '💼' },
@@ -25,22 +27,46 @@ const UserInfo = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (username && selectedCategory) {
       console.log("Form submitted:", { username, selectedCategory });
       try {
+        setIsLoading(true)
         const response = await api.post('/api/auth/set-username', { username: username }, { withCredentials: true })
         console.log(response.data)
         dispatch(updateUser(response.data.user))
         navigate('/profile')
       } catch (error) {
         console.log(error.message)
+      } finally {
+        setIsLoading(false)
       }
     }
   };
 
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>  
+  </>
+  }
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>

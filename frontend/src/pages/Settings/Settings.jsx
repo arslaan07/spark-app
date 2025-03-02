@@ -6,6 +6,8 @@ import api from "../../../api";
 import { updateUser } from "../../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MyToast from "../../Components/MyToast/MyToast";
+import Spinner from "../../Components/Spinner/Spinner";
+
 
 const Settings = () => {
   const { user } = useSelector((state) => state.auth);
@@ -13,6 +15,7 @@ const Settings = () => {
   // Password visibility states
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   // Initial form data state with original user data
   const [formData, setFormData] = useState({
@@ -134,6 +137,7 @@ const Settings = () => {
     if (Object.keys(errors).length === 0) {
       console.log("form submitted successfully:", formData);
       try {
+        setIsLoading(true)
         const response = await api.put('/api/auth/update-user', formData, { withCredentials: true })
         console.log(response.data)
         dispatch(updateUser(response.data.user))
@@ -141,12 +145,35 @@ const Settings = () => {
       } catch (error) {
         console.error(error.message)
         MyToast('User profile update failed', 'error')
+      } finally {
+        setIsLoading(false)
       }
     } else {
       console.log("Form has errors:", errors);
     }
   };
   
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>
+    
+  </>
+  }
 
   return (
     <div className={styles.container}>

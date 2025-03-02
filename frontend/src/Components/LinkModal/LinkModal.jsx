@@ -6,12 +6,13 @@ import MyToast from "../MyToast/MyToast";
 import api from "../../../api";
 import { useDispatch } from "react-redux";
 import { incrementLinkCount } from "../../store/slices/linkSlice";
-
+import Spinner from '../Spinner/Spinner'
 
 
 const LinkModal = ({ isOpen, onClose, applications }) => {
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedApp, setSelectedApp] = useState(-1);
   const [formData, setFormData] = useState({
     title: "",
@@ -54,6 +55,7 @@ const LinkModal = ({ isOpen, onClose, applications }) => {
     }
     console.log("Form Submitted:", formData);
     try {
+      setIsLoading(true)
       const response = await api.post('/api/links', formData, { withCredentials: true })
       console.log(response.data.links)
       dispatch(incrementLinkCount())
@@ -67,6 +69,8 @@ const LinkModal = ({ isOpen, onClose, applications }) => {
     } catch (error) {
       console.log(error)
       MyToast('link creation failed', 'error')
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -85,6 +89,27 @@ const LinkModal = ({ isOpen, onClose, applications }) => {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div> 
+  </>
+  }
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>

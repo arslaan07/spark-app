@@ -12,6 +12,8 @@ import { updateUser } from "../../store/slices/authSlice";
 import themes from "../../utils/themes"
 import MyToast from "../../Components/MyToast/MyToast";
 import Preview from "../../Components/Preview/Preview";
+import Spinner from "../../Components/Spinner/Spinner";
+
 
 const layouts = [
   { id: 1, name: "Stack", icon: "☰" },
@@ -171,16 +173,20 @@ function Appearance() {
   const [links, setLinks] = useState([])
   const [shops, setShops] = useState([])
   const [manualColorChange, setManualColorChange] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('/api/links', { withCredentials: true })
         setLinks(response.data.links)
         dispatch(setLinkCount())
         console.log(response.data)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetch()
@@ -189,12 +195,15 @@ function Appearance() {
   useEffect(() => {
     const fetch = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('/api/shops', { withCredentials: true })
         setShops(response.data.shops)
         dispatch(setShopCount())
         console.log(response.data)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetch()
@@ -242,6 +251,27 @@ function Appearance() {
     }
   };
 
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>
+    
+  </>
+  }
   return (
     <div className={styles.appearanceContainer}>
       <section className={styles.leftSection}>

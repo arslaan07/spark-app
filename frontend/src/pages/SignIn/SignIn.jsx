@@ -7,6 +7,7 @@ import api from "../../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/slices/authSlice";
 import MyToast from '../../Components/MyToast/MyToast';
+import Spinner from "../../Components/Spinner/Spinner";
 
 const SignIn = () => {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-
+  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState({});
 
   const validateField = (name, value) => {
@@ -82,6 +83,7 @@ const SignIn = () => {
     if (Object.keys(newErrors).length > 0) return;
   
     try {
+      setIsLoading(true)
       const response = await api.post("api/auth/signin", formData, { withCredentials: true });
       console.log("Login successful:", response.data);
   
@@ -101,9 +103,31 @@ const SignIn = () => {
     } catch (error) {
       console.error("Login failed:", error);
       MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
+    } finally {
+      setIsLoading(false)
     }
   };
   
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div> 
+  </>
+  }
   return (
     <div className={styles.container}>
       <div className={styles.heroSection}>

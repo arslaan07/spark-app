@@ -4,6 +4,7 @@ import StatCard from '../../Components/StatCard/StatCard';
 import LineChart from '../../Components/LineChart/LineChart';
 import BarChart from '../../Components/BarChart/BarChart';
 import PieChart from '../../Components/PieChart/PieChart';
+import Spinner from "../../Components/Spinner/Spinner";
 import api from '../../../api';
 
 function Analytics() {
@@ -20,7 +21,7 @@ function Analytics() {
   const [shopReferrerData, setShopReferrerData] = useState([]);
   const [totalLinkClicks, setTotalLinkClicks] = useState(0);
   const [totalShopClicks, setTotalShopClicks] = useState(0);
-  
+  const [isLoading, setIsLoading] = useState(false)
   // Extract domain from full URL for referrer
   const extractDomain = (url) => {
     if (!url) return 'Direct';
@@ -72,6 +73,7 @@ function Analytics() {
     // Fetch links data
     const fetchLinks = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('api/links', { withCredentials: true });
         const links = response.data.links;
         
@@ -147,6 +149,8 @@ function Analytics() {
 
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false)
       }
     };
     
@@ -157,6 +161,7 @@ function Analytics() {
     // Fetch shops data
     const fetchShops = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('api/shops', { withCredentials: true });
         const shops = response.data.shops;
         
@@ -232,6 +237,8 @@ function Analytics() {
         
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -251,7 +258,27 @@ function Analytics() {
   };
  
   const [showDeviceData, setShowDeviceData] = useState(true);
-  
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>
+    
+  </>
+  }
   return (
     <div className={styles.analyticsContainer}>
       <h1 className={styles.analyticsTitle}>Overview</h1>

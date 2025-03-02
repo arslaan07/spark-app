@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import themes from '../../../utils/themes'
+import Spinner from "../../../Components/Spinner/Spinner";
 import api from '../../../../api';
 import Iphone from '../../../Components/Iphone/Iphone';
 import Mobile from '../../../Components/Mobile/Mobile';
 
+
 function PublicProfile() {
   const { username } = useParams();
   const [profileData, setProfileData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get(`/api/profile/${username}`);
         console.log(response.data)
         setProfileData(response.data);
@@ -21,13 +24,33 @@ function PublicProfile() {
         console.error(err);
         setError(err.response?.data?.message || 'Profile not found');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchProfile();
   }, [username]);
 
-  if (loading) return <div>Loading profile...</div>;
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>
+    
+  </>
+  }
   if (error) return <div>Error: {error}</div>;
   if (!profileData) return <div>Profile not found</div>;
   return (

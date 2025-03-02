@@ -150,15 +150,15 @@ router.post('/', verifyToken, async (req, res) => {
             click.ipAddress === clientIP || click.userIdentifier === userIdentifier
         );
 
-        // if (!alreadyClicked) {
-        //     if (!userIdentifier) {
-        //         // If no cookie, generate a new unique identifier
-        //         userIdentifier = Math.random().toString(36).substring(2) + Date.now();
-        //         res.cookie("click-tracker", userIdentifier, {
-        //             httpOnly: true,
-        //             maxAge: 30 * 24 * 60 * 60 * 1000, // Expires in 30 days
-        //         });
-        //     }
+        if (!alreadyClicked) {
+            if (!userIdentifier) {
+                // If no cookie, generate a new unique identifier
+                userIdentifier = Math.random().toString(36).substring(2) + Date.now();
+                res.cookie("click-tracker", userIdentifier, {
+                    httpOnly: true,
+                    maxAge: 30 * 24 * 60 * 60 * 1000, // Expires in 30 days
+                });
+            }
 
             existingShop.clickData.push({
                 ipAddress: clientIP,
@@ -171,9 +171,9 @@ router.post('/', verifyToken, async (req, res) => {
             });
 
             await existingShop.save();
-        // } else {
-        //     console.log(`User ${clientIP} (or cookie) has already clicked, ignoring duplicate.`);
-        // }
+        } else {
+            console.log(`User ${clientIP} (or cookie) has already clicked, ignoring duplicate.`);
+        }
 
         res.status(200).json({ success: true, redirectUrl: redirectUrl});
     } catch (error) {

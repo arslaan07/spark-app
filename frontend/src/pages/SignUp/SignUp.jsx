@@ -5,12 +5,15 @@ import { IoMdEyeOff } from "react-icons/io";
 import api from "../../../api";
 import { useNavigate } from "react-router-dom";
 import MyToast from '../../Components/MyToast/MyToast';
+import Spinner from "../../Components/Spinner/Spinner";
+
 
 const SignUp = () => {
   // Separate states for password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [continueWithEmail, setContinueWithEmail] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -129,6 +132,7 @@ const SignUp = () => {
     if (Object.keys(errors).length === 0) {
       console.log("Form submitted successfully:", formData);
       try {
+        setIsLoading(true)
         const response = await api.post('api/auth/signup', formData, { withCredentials: true })
         console.log(response)
         navigate('/getting-to-know')
@@ -136,12 +140,35 @@ const SignUp = () => {
       } catch (error) {
         console.log(error)
         MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
+      } finally {
+        setIsLoading(false)
       }
     } else {
       console.log("Form has errors:", errors);
     }
   };
 
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div>
+    
+  </>
+  }
   return (
     <div className={styles.container}>
       <div className={styles.heroSection}>

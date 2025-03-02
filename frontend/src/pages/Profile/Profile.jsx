@@ -14,6 +14,7 @@ import { updateUser } from "../../store/slices/authSlice";
 import { decrementLinkCount, setLinkCount } from "../../store/slices/linkSlice";
 import { decrementShopCount, setShopCount } from "../../store/slices/shopSlice";
 import Preview from "../../Components/Preview/Preview";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
 // const links = [
@@ -169,16 +170,23 @@ const [editingShopId, setEditingShopId] = useState(null);
   url: "",
   isActive: true
 });
+const [isLoading, setIsLoading] = useState(false)
+// In Profile.jsx, add a console log
+useEffect(() => {
+  console.log('Loading state changed:', isLoading);
+}, [isLoading]);
   useEffect(() => {
     const fetch = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('/api/links', { withCredentials: true })
         setLinks(response.data.links)
         dispatch(setLinkCount(response.data.links.length))
-        console.log(linkCount)
         console.log(response.data)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetch()
@@ -187,12 +195,15 @@ const [editingShopId, setEditingShopId] = useState(null);
   useEffect(() => {
     const fetch = async () => {
       try {
+        setIsLoading(true)
         const response = await api.get('/api/shops', { withCredentials: true })
         setShops(response.data.shops)
         dispatch(setShopCount(response.data.shops.length))
         console.log(response.data)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetch()
@@ -219,6 +230,7 @@ const [editingShopId, setEditingShopId] = useState(null);
       fileInputRef.current.value = "";
     }
     try {
+      setIsLoading(true)
       const response = await api.put('/api/auth/update-user-card', {profileImage: 'default'}, { withCredentials: true })
       console.log(response.data)
       dispatch(updateUser(response.data.user))
@@ -226,6 +238,8 @@ const [editingShopId, setEditingShopId] = useState(null);
     } catch (error) {
       console.log(error)
       MyToast('failed to delete profile picture', 'error')
+    } finally {
+      setIsLoading(false)
     }
   };
   const handleBioChange = (e) => {
@@ -255,6 +269,7 @@ const [editingShopId, setEditingShopId] = useState(null);
 
   const handleProfileView = async () => {
     try {
+      setIsLoading(true)
       const formData = new FormData()
       formData.append('bio', bio.content)
       formData.append('bannerBackground', bannerBackground)
@@ -282,16 +297,21 @@ const [editingShopId, setEditingShopId] = useState(null);
     } catch (error) {
       console.log(error)
       MyToast(`failed to update your profile card ${username}`, 'error')
+    } finally {
+      setIsLoading(false)
     }
   }
   const handleDeleteLink = async (id) => {
     try {
+      setIsLoading(true)
       const response = await api.delete(`/api/links/${id}`, { withCredentials: true })
       setLinks(links.filter(link => link._id !== id));
       dispatch(decrementLinkCount())
       console.log(response.data)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -323,6 +343,7 @@ const handleEditChange = (e) => {
 // Add a function to save changes
 const saveEditedLink = async (id) => {
   try {
+    setIsLoading(true);
     const response = await api.put(`/api/links/${id}`, editedLinkData, { withCredentials: true });
     // Update links in state
     const updatedLinks = links.map(link => 
@@ -334,6 +355,8 @@ const saveEditedLink = async (id) => {
   } catch (error) {
     console.log(error);
     MyToast('Failed to update link', 'error');
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -346,6 +369,7 @@ const handleToggleActive = async (linkId, currentStatus) => {
   setLinks(updatedLinks);
 
   try {
+    setIsLoading(true)
     // Send update to server
     await api.put(`/api/links/${linkId}`, { isActive: !currentStatus }, { withCredentials: true });
     MyToast("Link status updated", "success");
@@ -354,6 +378,8 @@ const handleToggleActive = async (linkId, currentStatus) => {
     setLinks(links); // Revert to previous state
     console.log("Error updating link:", error);
     MyToast("Failed to update link status", "error");
+  } finally {
+    setIsLoading(false)
   }
 };
 
@@ -384,6 +410,7 @@ const handleEditShopChange = (e) => {
 // Save edited shop
 const saveEditedShop = async (id) => {
   try {
+    setIsLoading(true)
     const response = await api.put(`/api/shops/${id}`, editedShopData, { withCredentials: true });
     const updatedShops = shops.map(shop => 
       shop._id === id ? { ...shop, ...editedShopData } : shop
@@ -394,6 +421,8 @@ const saveEditedShop = async (id) => {
   } catch (error) {
     console.log(error);
     MyToast('Failed to update shop', 'error');
+  } finally {
+    setIsLoading(false)
   }
 };
 
@@ -405,26 +434,53 @@ const handleToggleActiveShop = async (shopId, currentStatus) => {
   setShops(updatedShops); // Corrected to update shops, not links
 
   try {
+    setIsLoading(true)
     await api.put(`/api/shops/${shopId}`, { isActive: !currentStatus }, { withCredentials: true });
     MyToast("Shop status updated", "success");
   } catch (error) {
     setShops(shops); // Revert to previous state on failure
     console.log("Error updating shop:", error);
     MyToast("Failed to update shop status", "error");
+  } finally {
+    setIsLoading(false)
   }
 };
 
 // Delete shop
 const handleDeleteShop = async (id) => {
   try {
+    setIsLoading(true)
     const response = await api.delete(`/api/shops/${id}`, { withCredentials: true });
     setShops(shops.filter(shop => shop._id !== id));
     dispatch(decrementShopCount());
     console.log(response.data);
   } catch (error) {
     console.log(error);
+  } finally {
+    setIsLoading(false)
   }
 };
+if (isLoading) {
+  console.log('Rendering spinner...');
+  return <>
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10000,
+    fontSize: '24px'
+  }}>
+    <Spinner />
+  </div>
+  
+</>
+}
   return (
     <div className={styles.profileContainer}>
       <section className={styles.leftSection}>

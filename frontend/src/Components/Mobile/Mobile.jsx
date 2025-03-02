@@ -9,7 +9,9 @@ import themes from '../../utils/themes';
 import styles from './Mobile.module.css';
 import { handleShareProfile } from '../../utils/handleShareProfile';
 import { useNavigate, Link } from 'react-router-dom';
+import MyToast from '../MyToast/MyToast'
 import api from '../../../api';
+import Spinner from '../Spinner/Spinner'
 
 const Mobile = ({ 
   backgroundColor, 
@@ -30,6 +32,7 @@ const Mobile = ({
   bio 
 }) => {
   const [selectedBtn, setSelectedBtn] = useState('link');
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   // Slider settings for carousel
   const sliderSettings = {
@@ -83,9 +86,14 @@ const Mobile = ({
 
   const buttonStyle = getButtonStyle();
 
-  const handleLinkClick = async (url, type) => {
+  const handleLinkClick = async (url, type, active) => {
+    if(!active) {
+        MyToast('link has expired', 'error')
+        return
+    }
     try {
         // Track the click
+        setIsLoading(true)
         const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
         console.log(response);
 
@@ -95,11 +103,18 @@ const Mobile = ({
         }
     } catch (error) {
         console.error("Error in handleLinkClick:", error);
+    } finally {
+        setIsLoading(false)
     }
 };
-const handleShopClick = async (url, type) => {
+const handleShopClick = async (url, type, active) => {
+    if(!active) {
+        MyToast('link has expired', 'error')
+        return
+    }
     try {
         // Track the click
+        setIsLoading(true)
         const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
         console.log(response);
 
@@ -109,8 +124,31 @@ const handleShopClick = async (url, type) => {
         }
     } catch (error) {
         console.error("Error in handleShopClick:", error);
+    } finally {
+        setIsLoading(false)
     }
 };
+
+if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div> 
+  </>
+  }
   return (
     <div className={styles.mobileContainer}>
       <div 
@@ -164,7 +202,7 @@ const handleShopClick = async (url, type) => {
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkBtn}
-                  onClick={() => handleLinkClick(link.url, selectedBtn)}
+                  onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
                 >
                   <div className={styles.iconContainer}>
                     <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -188,7 +226,7 @@ const handleShopClick = async (url, type) => {
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkGridBtn}
-                  onClick={() => handleLinkClick(link.url, selectedBtn)}
+                  onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
                 >
                   <div className={styles.iconGridContainer}>
                     <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -213,7 +251,7 @@ const handleShopClick = async (url, type) => {
                     <button 
                       style={buttonStyle} 
                       className={styles.linkCarouselItem}
-                      onClick={() => handleLinkClick(link.url, selectedBtn)}
+                      onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
                     >
                       <div className={styles.iconCarouselContainer}>
                         <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -251,7 +289,7 @@ const handleShopClick = async (url, type) => {
                   <button 
                     style={buttonStyle} 
                     className={styles.buyItem}
-                    onClick={() => handleShopClick(shop.url, selectedBtn)}
+                    onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
                   >
                     <span className={styles.cartIcon}><BiCart /></span>
                     <span>Buy Now</span>
@@ -281,7 +319,7 @@ const handleShopClick = async (url, type) => {
                   <button 
                     style={buttonStyle} 
                     className={styles.buyGridItem}
-                    onClick={() => handleShopClick(shop.url, selectedBtn)}
+                    onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
                   >
                     <span className={styles.cartIcon}><BiCart /></span>
                     <span>Buy</span>
@@ -312,7 +350,7 @@ const handleShopClick = async (url, type) => {
                       <button 
                         style={buttonStyle} 
                         className={styles.buyCarouselItem}
-                        onClick={() => handleShopClick(shop.url, selectedBtn)}
+                        onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
                       >
                         <span className={styles.cartIcon}><BiCart /></span>
                         <span>Buy Now</span>

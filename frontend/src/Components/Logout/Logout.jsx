@@ -8,6 +8,8 @@ import MyToast from '../../Components/MyToast/MyToast';
 import api from "../../../api";
 import { setLinkCount } from "../../store/slices/linkSlice";
 import { setShopCount } from "../../store/slices/shopSlice";
+import Spinner from '../Spinner/Spinner'
+
 
 const Logout = () => {
   const navigate = useNavigate()
@@ -17,6 +19,7 @@ const Logout = () => {
     "/images/Iphone/default.png"
   );
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   
   // Toggle modal without the complex outside click handling
   const toggleModal = (e) => {
@@ -38,6 +41,7 @@ const Logout = () => {
   const handleLogout = async () => {
     setShowModal(false);
     try {
+        setIsLoading(true)
         const response = await api.get('/api/auth/logout', { withCredentials: true })
         console.log(response.data)
         dispatch(logout())
@@ -48,8 +52,31 @@ const Logout = () => {
     } catch (error) {
         console.log(error)
         MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
+    } finally {
+        setIsLoading(false)
     }
   };
+
+  if (isLoading) {
+    console.log('Rendering spinner...');
+    return <>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'white',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10000,
+      fontSize: '24px'
+    }}>
+      <Spinner />
+    </div> 
+  </>
+  }
   return (
     <>
       <button
