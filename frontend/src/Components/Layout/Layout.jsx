@@ -4,7 +4,7 @@ import Sidebar from '../Sidebar/Sidebar'
 import styles from './Layout.module.css'
 import ProfileNavbar from '../ProfileNavbar/ProfileNavbar'
 import MobileNavbar from '../MobileNavbar/MobileNavbar'
-import Toolbar from '../ToolBar/Toolbar'
+import Toolbar from '../Toolbar/Toolbar'
 
 function Layout() {
   return (
