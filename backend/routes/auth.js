@@ -179,37 +179,59 @@ router.post('/set-username', verifyToken, async (req, res) => {
 
 router.put('/update-user', verifyToken, async (req, res) => {
     try {
-        // Extract data from request body
-        const { fname, lname, email, oldPassword, newPassword } = req.body;
-        const userId = req.user.id; // Assuming verifyToken middleware sets req.user.id
+        const { fname, lname, email, oldPassword, newPassword, password } = req.body;
+        const userId = req.user.id;
+
         // Fetch the user from the database
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({
-                success: false, 
-                message: "User not found"
-            });
+            return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        // Track if any updates are made
-        let isUpdated = false; 
+        let isUpdated = false;
 
-        // Update fname and lname if provided (no restrictions)
+        // Update first name and last name
         if (fname) {
             user.firstName = fname;
             isUpdated = true;
         }
-
         if (lname) {
             user.lastName = lname;
             isUpdated = true;
         }
-        // Handle email and password updates (requires oldPassword)
-        if (oldPassword) {
 
-            // Verify old password (assuming User model has a method to compare passwords)
-            const isPasswordValid = await bcrypt.compare(oldPassword, user.password); // You’ll need bcrypt or similar
+        // Handle email and password updates (Requires password verification)
+        if (email && email !== user.email) {
+            if (!password) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Password is required to change email"
+                });
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Incorrect password"
+                });
+            }
+
+            user.email = email;
+            isUpdated = true;
+        }
+
+        // Handle password change (Requires oldPassword)
+        if (newPassword) {
+            if (!oldPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Old password is required to set a new password"
+                });
+            }
+
+            const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({
                     success: false,
@@ -217,31 +239,16 @@ router.put('/update-user', verifyToken, async (req, res) => {
                 });
             }
 
-            // Update email if provided
-            if (email) {
-                user.email = email;
-                isUpdated = true;
+            if (newPassword === oldPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: "New password cannot be the same as the old password"
+                });
             }
 
-            // Update password if newPassword is provided
-            if (newPassword) {
-                if(newPassword === oldPassword) {
-                    return res.status(400).json({
-                        success: false,
-                        message: "New password cannot be the same as the old password"
-                    });
-                }
-                const salt = await bcrypt.genSalt(10);
-                user.password = await bcrypt.hash(newPassword, salt); // Hash the new password
-                isUpdated = true;
-            }
-        } else if ((email && email !== user.email) || newPassword) {
-
-            // If email or newPassword is provided without oldPassword, reject the request
-            return res.status(400).json({
-                success: false,
-                message: "Old password is required to update email or password"
-            });
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(newPassword, salt);
+            isUpdated = true;
         }
 
         // Save changes if any updates were made
@@ -249,7 +256,6 @@ router.put('/update-user', verifyToken, async (req, res) => {
             await user.save();
         }
 
-        // Return success response
         return res.status(200).json({
             success: true,
             message: "User updated successfully",
@@ -261,6 +267,7 @@ router.put('/update-user', verifyToken, async (req, res) => {
                 lastName: user.lastName
             }
         });
+
     } catch (error) {
         return res.status(500).json({
             success: false,

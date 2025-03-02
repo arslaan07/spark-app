@@ -21,6 +21,7 @@ const Settings = () => {
     email: user.email,
     oldPassword: "",
     newPassword: "",
+    password: ""
   });
 
   // Track which fields have been modified
@@ -51,17 +52,19 @@ const Settings = () => {
           delete newErrors.lname;
         }
         break;
-      case "email":
-        if (!value.trim()) {
-          newErrors.email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors.email = "Invalid email address";
-        } else if (value !== formData.email && !formData.password) {
-          newErrors.password = "Please enter your password to change email";
-        } else {
-          delete newErrors.email;
-        }
-        break;
+        case "email":
+          if (!value.trim()) {
+            newErrors.email = "Email is required";
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            newErrors.email = "Invalid email address";
+          } else if (value !== user.email && !formData.password.trim()) {
+            newErrors.password = "Please enter your password to change email";
+          } else {
+            delete newErrors.email;
+            delete newErrors.password; // Ensure the error disappears when valid
+          }
+          break;
+        
       case "oldPassword":
         if (modifiedFields.password && !value.trim()) {
           newErrors.oldPassword = "Current password is required to change password";
@@ -111,13 +114,14 @@ const Settings = () => {
     
     if (name === 'email' && value !== formData.email) {
       setModifiedFields(prev => ({ ...prev, email: true }));
-    } else if ((name === 'oldPassword' || name === 'newPassword') && value) {
+    } else if ((name === 'oldPassword' || name === 'newPassword' || name === 'password') && value) {
       setModifiedFields(prev => ({ ...prev, password: true }));
     }
-
+  
     setFormData(prev => ({ ...prev, [name]: value }));
     validateField(name, value);
   };
+  
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -126,7 +130,7 @@ const Settings = () => {
     Object.keys(formData).forEach((field) => {
       validateField(field, formData[field]);
     });
-
+  
     if (Object.keys(errors).length === 0) {
       console.log("form submitted successfully:", formData);
       try {
@@ -142,6 +146,7 @@ const Settings = () => {
       console.log("Form has errors:", errors);
     }
   };
+  
 
   return (
     <div className={styles.container}>

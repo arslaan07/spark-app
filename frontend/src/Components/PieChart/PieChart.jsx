@@ -24,7 +24,7 @@ function PieChart({ data }) {
   }, []);
 
   useEffect(() => {
-    if (!canvasRef.current || dimensions.width === 0) return;
+    if (!canvasRef.current || dimensions.width === 0 || data.length === 0) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -44,7 +44,7 @@ function PieChart({ data }) {
     const centerY = height / 2;
     
     // Colors for different segments
-    const colors = ['#2ecc71', '#333', '#3498db', '#f1c40f'];
+    const colors = ['#2ecc71', '#333', '#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#e67e22', '#1abc9c', '#95a5a6', '#34495e'];
     
     // Calculate total value for percentage
     const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -86,7 +86,7 @@ function PieChart({ data }) {
           <div key={index} className={styles.legendItem}>
             <div
               className={styles.legendColor}
-              style={{ backgroundColor: ['#2ecc71', '#333', '#3498db', '#f1c40f'][index % 4] }}
+              style={{ backgroundColor: ['#2ecc71', '#333', '#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#e67e22', '#1abc9c', '#95a5a6', '#34495e'][index % 10] }}
             ></div>
             <div className={styles.legendLabel}>{item.label}</div>
             <div className={styles.legendValue}>{item.value}</div>

@@ -94,6 +94,12 @@
         /* padding-bottom: 2rem; */
     }
   }
+
+  @media (max-width: 768px) {
+    .analyticsContainer {
+      padding-bottom: 8rem;
+    }
+  }
   
   /* Small Mobile Devices */
   @media (max-width: 480px) {
@@ -113,4 +119,27 @@
     .linkChartContainer h2 {
       font-size: 14px;
     }
+  }
+  .active {
+    background-color: #22D679;
+    color: #fff;
+  }
+  .statCard {
+    padding: 30px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .statCard:hover {
+    cursor: pointer;
+  }
+  .toggleButton {
+    padding: 5px 9px;
+    border-radius: 20px;
+    border: none;
+  }
+  .toggleButton:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
   }

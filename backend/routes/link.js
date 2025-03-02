@@ -1,6 +1,7 @@
 const express = require('express');
 const verifyToken = require('../middlewares/verifyToken');
-const Link = require('../models/link')
+const Link = require('../models/link');
+const { parseUserAgent } = require('../utils/userAgentParser');
 const router = express.Router();
 
 router.post('/', verifyToken, async (req, res) => {
@@ -18,7 +19,13 @@ router.post('/', verifyToken, async (req, res) => {
       res.status(200).json({
         success: true,
         message: 'Link created successfully',
-        link: link,
+        link: {
+            id: link._id,
+            title: link.title,
+            url: link.url,
+            application: link.application,
+            isActive: link.isActive,
+          }
       });
     } catch (error) {
       res.status(500).json({
@@ -36,7 +43,7 @@ router.get('/', verifyToken, async (req, res) => {
       return res.status(200).json({
         success: true,
         message: 'Links retrieved successfully',
-        links: links,
+        links: links
       })
     } catch (error) {
       res.status(500).json({ 
@@ -128,4 +135,71 @@ router.delete('/:id', verifyToken, async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
+
+  router.post('/:url/track-click', async (req, res) => {
+    try {
+        const { url } = req.params;
+        const { referrer } = req.body;
+        const existingLink = await Link.findOne({ url });
+
+        if (!existingLink) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Link not found'
+            });
+        }
+
+        let redirectUrl = existingLink.url;
+        if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+            redirectUrl = 'https://' + redirectUrl;
+        }
+
+
+        const userAgent = req.headers["user-agent"];
+        const { device, os } = parseUserAgent(userAgent);
+
+        const clientIP = req.headers["x-forwarded-for"]?.split(',')[0] || 
+                         req.socket?.remoteAddress || 
+                         req.ip || 
+                         "Unknown";
+
+        // **Check if user has a tracking cookie**
+        let userIdentifier = req.cookies["click-tracker"]; // Read cookie
+
+        // **Check if this user (IP or Cookie) has already clicked**
+        const alreadyClicked = existingLink.clickData.some(click => 
+            click.ipAddress === clientIP || click.userIdentifier === userIdentifier
+        );
+
+        // if (!alreadyClicked) {
+        //     if (!userIdentifier) {
+        //         userIdentifier = Math.random().toString(36).substring(2) + Date.now();
+        //         res.cookie("click-tracker", userIdentifier, {
+        //             httpOnly: true,
+        //             maxAge: 30 * 24 * 60 * 60 * 1000, 
+        //         });
+        //     }
+
+            existingLink.clickData.push({
+                ipAddress: clientIP,
+                userIdentifier,
+                timestamp: new Date(),
+                userAgent, 
+                device,
+                os,
+                referrer,
+            });
+
+            await existingLink.save();
+        // } else {
+        //     console.log(`User ${clientIP} (or cookie) has already clicked, ignoring duplicate.`);
+        // }
+
+        res.status(200).json({ success: true, redirectUrl: redirectUrl });
+    } catch (error) {
+        console.error('Error tracking click:', error);
+        res.status(500).json({ message: 'Error tracking click' });
+    }
+});
+
 module.exports = router

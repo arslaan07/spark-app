@@ -12,7 +12,8 @@ const linkSchema = new mongoose.Schema({
         userAgent: String,
         device: String,
         os: String,
-        referrer: String
+        referrer: String,
+        userIdentifier: String
       }]
 },
  { timestamps: true })

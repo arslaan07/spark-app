@@ -8,6 +8,8 @@ import { IoShareOutline } from "react-icons/io5";
 import themes from '../../utils/themes';
 import styles from './Mobile.module.css';
 import { handleShareProfile } from '../../utils/handleShareProfile';
+import { useNavigate, Link } from 'react-router-dom';
+import api from '../../../api';
 
 const Mobile = ({ 
   backgroundColor, 
@@ -28,7 +30,7 @@ const Mobile = ({
   bio 
 }) => {
   const [selectedBtn, setSelectedBtn] = useState('link');
-  
+  const navigate = useNavigate()
   // Slider settings for carousel
   const sliderSettings = {
     dots: true,
@@ -81,6 +83,34 @@ const Mobile = ({
 
   const buttonStyle = getButtonStyle();
 
+  const handleLinkClick = async (url, type) => {
+    try {
+        // Track the click
+        const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
+        console.log(response);
+
+        // Open the URL directly if tracking is successful
+        if (response.data.success) {
+            window.open(response.data.redirectUrl, '_blank');
+        }
+    } catch (error) {
+        console.error("Error in handleLinkClick:", error);
+    }
+};
+const handleShopClick = async (url, type) => {
+    try {
+        // Track the click
+        const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
+        console.log(response);
+
+        // Open the URL directly if tracking is successful
+        if (response.data.success) {
+            window.open(response.data.redirectUrl, '_blank');
+        }
+    } catch (error) {
+        console.error("Error in handleShopClick:", error);
+    }
+};
   return (
     <div className={styles.mobileContainer}>
       <div 
@@ -134,6 +164,7 @@ const Mobile = ({
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkBtn}
+                  onClick={() => handleLinkClick(link.url, selectedBtn)}
                 >
                   <div className={styles.iconContainer}>
                     <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -157,6 +188,7 @@ const Mobile = ({
                   style={buttonStyle} 
                   key={i} 
                   className={styles.linkGridBtn}
+                  onClick={() => handleLinkClick(link.url, selectedBtn)}
                 >
                   <div className={styles.iconGridContainer}>
                     <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -181,6 +213,7 @@ const Mobile = ({
                     <button 
                       style={buttonStyle} 
                       className={styles.linkCarouselItem}
+                      onClick={() => handleLinkClick(link.url, selectedBtn)}
                     >
                       <div className={styles.iconCarouselContainer}>
                         <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
@@ -218,6 +251,7 @@ const Mobile = ({
                   <button 
                     style={buttonStyle} 
                     className={styles.buyItem}
+                    onClick={() => handleShopClick(shop.url, selectedBtn)}
                   >
                     <span className={styles.cartIcon}><BiCart /></span>
                     <span>Buy Now</span>
@@ -247,6 +281,7 @@ const Mobile = ({
                   <button 
                     style={buttonStyle} 
                     className={styles.buyGridItem}
+                    onClick={() => handleShopClick(shop.url, selectedBtn)}
                   >
                     <span className={styles.cartIcon}><BiCart /></span>
                     <span>Buy</span>
@@ -277,6 +312,7 @@ const Mobile = ({
                       <button 
                         style={buttonStyle} 
                         className={styles.buyCarouselItem}
+                        onClick={() => handleShopClick(shop.url, selectedBtn)}
                       >
                         <span className={styles.cartIcon}><BiCart /></span>
                         <span>Buy Now</span>
@@ -291,7 +327,7 @@ const Mobile = ({
 
         {/* Footer */}
         <div className={styles.footer}>
-          <button className={styles.connectBtn}>Get Connected</button>
+          <Link to="/" className={styles.connectBtn}>Get Connected</Link>
           <div className={styles.logo}>
             <div className={styles.logoImg}>
               <img src="/images/Footer/chingari.png" alt="Spark" />

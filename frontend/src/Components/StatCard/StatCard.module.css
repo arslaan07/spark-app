@@ -22,7 +22,10 @@
     font-weight: 600;
     margin: 0;
   }
-
+  .active {
+    background-color: #22D679;
+    color: #fff;
+  }
   @media screen and (max-width: 768px) {
     .statCard {
         padding: 20px 15px;

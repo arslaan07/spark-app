@@ -40,9 +40,10 @@
   
   .barLabel {
     position: absolute;
-    bottom: -25px; /* Position below the bar */
+    bottom: -35px; 
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(-15deg);
+    transform-origin: center;
     text-align: center;
     font-size: 12px;
     color: #666;
@@ -79,54 +80,25 @@
   /* Mobile Responsive Styles */
   @media screen and (max-width: 480px) {
     .barChartContainer {
-      height: 250px;
+      height: 300px; /* Increased from 250px to 300px */
       padding: 5px 2px;
     }
-    
+  
     .chartArea {
       height: 65%;
-      margin-bottom: 35px;
+      margin-bottom: 50px; /* Increased from 35px to 50px */
     }
-    
-    .barGroup {
-      margin: 0 1px;
-    }
-    
-    .bar {
-      max-width: 20px;
-    }
-    
+  
     .barLabel {
-      font-size: 9px;
-      transform: translateX(-50%) rotate(-30deg);
-      bottom: -30px;
-      width: 50px;
+      bottom: -40px; /* Increased from -30px to -40px */
     }
   }
   
   /* For very small screens */
   @media screen and (max-width: 390px) {
-    .barChartContainer {
-      height: 200px;
-    }
-    
-    .chartArea {
-      height: 60%;
-      margin-bottom: 40px;
-    }
-    
-    .barGroup {
-      margin: 0;
-    }
-    
-    .bar {
-      max-width: 15px;
-    }
-    
     .barLabel {
-      font-size: 7px;
-      transform: translateX(-50%) rotate(-45deg);
-      bottom: -32px;
-      width: 35px;
+      transform: translateX(-50%) rotate(-30deg); /* Reduced from -45deg to -30deg */
+      bottom: -35px; /* Adjusted to match the new rotation */
     }
   }
+  

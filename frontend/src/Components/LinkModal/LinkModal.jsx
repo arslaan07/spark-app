@@ -55,7 +55,7 @@ const LinkModal = ({ isOpen, onClose, applications }) => {
     console.log("Form Submitted:", formData);
     try {
       const response = await api.post('/api/links', formData, { withCredentials: true })
-      console.log(response)
+      console.log(response.data.links)
       dispatch(incrementLinkCount())
       setFormData({
         title: "",
@@ -63,8 +63,10 @@ const LinkModal = ({ isOpen, onClose, applications }) => {
         application: "",
         isActive: true,
       })
+      MyToast('link created successfully', 'success')
     } catch (error) {
       console.log(error)
+      MyToast('link creation failed', 'error')
     }
   };
 

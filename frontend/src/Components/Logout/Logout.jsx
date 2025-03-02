@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom"
 import { logout } from "../../store/slices/authSlice";
 import MyToast from '../../Components/MyToast/MyToast';
 import api from "../../../api";
+import { setLinkCount } from "../../store/slices/linkSlice";
+import { setShopCount } from "../../store/slices/shopSlice";
 
 const Logout = () => {
   const navigate = useNavigate()
@@ -39,6 +41,8 @@ const Logout = () => {
         const response = await api.get('/api/auth/logout', { withCredentials: true })
         console.log(response.data)
         dispatch(logout())
+        dispatch(setLinkCount(0))
+        dispatch(setShopCount(0))
         navigate('/')
         MyToast(`${response.data.message}`, "success");
     } catch (error) {

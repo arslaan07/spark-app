@@ -1,6 +1,7 @@
 const express = require('express');
 const Shop = require('../models/shop');
-const verifyToken = require('../middlewares/verifyToken')
+const verifyToken = require('../middlewares/verifyToken');
+const { parseUserAgent } = require('../utils/userAgentParser');
 const router = express.Router();
 
 router.post('/', verifyToken, async (req, res) => {
@@ -114,5 +115,71 @@ router.post('/', verifyToken, async (req, res) => {
     }
   });
 
+  router.post('/:url/track-click', async (req, res) => {
+    try {
+        const { url } = req.params;
+        const { referrer } = req.body;
+        const existingShop = await Shop.findOne({ url });
+
+        if (!existingShop) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Link not found'
+            });
+        }
+
+        let redirectUrl = existingShop.url;
+        if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+            redirectUrl = 'https://' + redirectUrl;
+        }
+
+
+        const userAgent = req.headers["user-agent"];
+        const { device, os } = parseUserAgent(userAgent);
+
+        const clientIP = req.headers["x-forwarded-for"]?.split(',')[0] || 
+                         req.socket?.remoteAddress || 
+                         req.ip || 
+                         "Unknown";
+
+        // **Check if user has a tracking cookie**
+        let userIdentifier = req.cookies["click-tracker"]; // Read cookie
+
+        // **Check if this user (IP or Cookie) has already clicked**
+        const alreadyClicked = existingShop.clickData.some(click => 
+            click.ipAddress === clientIP || click.userIdentifier === userIdentifier
+        );
+
+        // if (!alreadyClicked) {
+        //     if (!userIdentifier) {
+        //         // If no cookie, generate a new unique identifier
+        //         userIdentifier = Math.random().toString(36).substring(2) + Date.now();
+        //         res.cookie("click-tracker", userIdentifier, {
+        //             httpOnly: true,
+        //             maxAge: 30 * 24 * 60 * 60 * 1000, // Expires in 30 days
+        //         });
+        //     }
+
+            existingShop.clickData.push({
+                ipAddress: clientIP,
+                userIdentifier,
+                timestamp: new Date(),
+                userAgent, 
+                device,
+                os,
+                referrer,
+            });
+
+            await existingShop.save();
+        // } else {
+        //     console.log(`User ${clientIP} (or cookie) has already clicked, ignoring duplicate.`);
+        // }
+
+        res.status(200).json({ success: true, redirectUrl: redirectUrl});
+    } catch (error) {
+        console.error('Error tracking click:', error);
+        res.status(500).json({ message: 'Error tracking click' });
+    }
+});
   
 module.exports = router

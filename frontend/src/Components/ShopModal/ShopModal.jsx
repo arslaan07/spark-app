@@ -5,6 +5,7 @@ import styles from "./ShopModal.module.css";
 import { useDispatch } from "react-redux";
 import api from "../../../api";
 import { incrementShopCount } from "../../store/slices/shopSlice";
+import MyToast from "../MyToast/MyToast";
 
 const ShopModal = ({ isOpen, onClose }) => {
   const [isChecked, setIsChecked] = useState(true);
@@ -34,11 +35,11 @@ const ShopModal = ({ isOpen, onClose }) => {
   const handleSubmitForm = async () => {
     onClose()
     if (formData.title.trim() === "") {
-      alert("Shop title is required"); // Replace with a toast
+      MyToast("Shop title is required", 'error'); // Replace with a toast
       return;
     }
     if (formData.url.trim() === "") {
-      alert("Shop URL is required"); // Replace with a toast
+      MyToast("Shop URL is required", 'error'); // Replace with a toast
       return;
     }
 
@@ -53,9 +54,10 @@ const ShopModal = ({ isOpen, onClose }) => {
         application: "",
         isActive: true,
       });
-      onClose();
+      MyToast('shop created successfully', 'success')
     } catch (error) {
       console.error(error);
+      MyToast('shop creation failed', 'error')
     }
   };
 
