@@ -35,7 +35,7 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/sign-in" element={<PublicRoute><SignIn /></PublicRoute>} />
         <Route path="/sign-up" element={<PublicRoute><SignUp /></PublicRoute>} />
-        <Route path="/profile/:username" element={<PrivateRoute><PublicProfile /></PrivateRoute>} />
+        <Route path="/profile/:username" element={<PublicRoute><PublicProfile /></PublicRoute>} />
 
         {/* Private Routes */}
         <Route path="/getting-to-know" element={<PrivateRoute><UserInfo /></PrivateRoute>} />

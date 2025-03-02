@@ -6,6 +6,7 @@ import api from "../../../api";
 import { useNavigate } from "react-router-dom";
 import MyToast from '../../Components/MyToast/MyToast';
 import Spinner from "../../Components/Spinner/Spinner";
+import { login } from "../../store/slices/authSlice";
 
 
 const SignUp = () => {
@@ -15,6 +16,8 @@ const SignUp = () => {
   const [continueWithEmail, setContinueWithEmail] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -135,6 +138,11 @@ const SignUp = () => {
         setIsLoading(true)
         const response = await api.post('api/auth/signup', formData, { withCredentials: true })
         console.log(response)
+        dispatch(
+                login({
+                  user: response.data.user,
+                })
+              );
         navigate('/getting-to-know')
         MyToast("You are welcome in Spark", "success");
       } catch (error) {
