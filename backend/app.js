@@ -15,6 +15,7 @@ connectDB();
 
 const allowedOrigins = [
   "http://localhost:5173", // Development 
+ " https://spark07.netlify.app"  //Production
 ];
 
 app.use(
