@@ -16,6 +16,9 @@ import Settings from './pages/Settings/Settings';
 import Appearance from './pages/Appearance/Appearance';
 import Analytics from './pages/Analytics/Analytics';
 import Logout from './Components/Logout/Logout';
+import PublicProfile from './pages/PublicProfile/PublicProfile/PublicProfile';
+import Mobile from './Components/Mobile/Mobile';
+import Preview from './Components/Preview/Preview';
 
 const App = () => {
   return (
@@ -26,6 +29,9 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/getting-to-know" element={<UserInfo />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/profile/:username" element={<PublicProfile />} />
+        <Route path="/preview" element={<Preview />} />
+        <Route path="/mobile" element={<Mobile />} />
         <Route path="/profile" element={<Layout />}>
           <Route index element={<Profile />} /> 
           <Route path="settings" element={<Settings />} /> 

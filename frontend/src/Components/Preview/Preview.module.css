@@ -1,0 +1,31 @@
+.previewContainer {
+    /* background-color: red; */
+    z-index: 100;
+    position: fixed;
+    bottom: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.previewBtn {
+    display: flex;
+    justify-content: center;
+    padding: 4px 8px;
+    background-color: #fff;
+    border-radius: 14px;
+    border: none;
+    gap: 6px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+.previewBtn:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+.previewText {
+    font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+    .previewContainer {
+        display: none;
+    }
+}

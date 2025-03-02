@@ -13,6 +13,7 @@ import MyToast from "../../Components/MyToast/MyToast";
 import { updateUser } from "../../store/slices/authSlice";
 import { decrementLinkCount, setLinkCount } from "../../store/slices/linkSlice";
 import { decrementShopCount, setShopCount } from "../../store/slices/shopSlice";
+import Preview from "../../Components/Preview/Preview";
 
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
 // const links = [
@@ -211,10 +212,19 @@ const [editingShopId, setEditingShopId] = useState(null);
     fileInputRef.current.click();
   };
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = async () => {
     setProfileImage("/images/Iphone/default.png");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+    try {
+      const response = await api.put('/api/auth/update-user-card', {profileImage: 'default'}, { withCredentials: true })
+      console.log(response.data)
+      dispatch(updateUser(response.data.user))
+      MyToast('profile picture deleted successfully', 'success')
+    } catch (error) {
+      console.log(error)
+      MyToast('failed to delete profile picture', 'error')
     }
   };
   const handleBioChange = (e) => {
@@ -819,6 +829,7 @@ const handleDeleteShop = async (id) => {
       isOpen={isShopModalOpen} 
       onClose={() => setIsShopModalOpen(false)}
     />
+    <Preview />
     </div>
   );
 }

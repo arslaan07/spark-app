@@ -1,46 +1,52 @@
-/* Iphone.module.css */
-.phoneContainer {
+.mobileContainer {
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
-    padding: 20px;
   }
   
-  .phone {
-    width: 280px;
-    height: 580px;
+  .mobile {
+    width: 100%;
+    height: 100%;
     background: white;
-    border-radius: 50px;
     position: relative;
-    border: 3px solid #333;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-
   }
   
-  .dynamicIsland {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 20px;
-    background: #333;
-    border-radius: 20px;
-  }
-  
-  .content {
+  /* Keep all inner styles exactly as provided */
+  .usercard {
+    background-color: #000;
+    width: 100%;
+    height: 35%;
+    border-radius: 47px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
-    height: calc(50% - 0px);
-    border-radius: 50px;
-    padding: 10px;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 10px;
+    position: relative;
   }
   
   .profileHeader {
     text-align: center;
   }
-  
+  .shareIcon {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #F0F0F0;
+    border-radius: 50%;
+    border: none;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shareIcon:hover {
+    background-color: #dddada;
+  }
   .avatar {
     width: 80px;
     height: 80px;
@@ -65,15 +71,21 @@
     margin: 0;
   }
   
-  .usercard {
-    background-color: #000;
-    width: 100%;
-    height: 35%;
-    border-radius: 47px;
+  .bio {
+    color: #fff;
+    font-size: 11px;
+    max-width: 240px;
+    word-break: break-all;
+  }
+  
+  .content {
     display: flex;
-    justify-content: center;
-    align-items: end;
-    padding-bottom: 10px;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    height: calc(50% - 0px);
+    border-radius: 50px;
+    padding: 10px;
   }
   
   .buttons {
@@ -106,12 +118,7 @@
     color: #595959;
     font-weight: 500;
   }
-  .bio {
-    color: #fff;
-    font-size: 11px;
-    max-width: 240px;
-    word-break: break-all;
-  }
+  
   /* Link styles - List view */
   .links {
     display: flex;
@@ -159,13 +166,16 @@
   
   /* Link styles - Grid view */
   .linksGridLayout {
-    display: grid;
+    /* display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 6px; */
+    display: flex;
+    gap: 16px;
     max-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 98%;
+    width: 96%;
+    flex-wrap: wrap;
   }
   
   .linkGridBtn {
@@ -218,7 +228,7 @@
     justify-content: center;
     align-items: center;
     gap: 4px;
-    width: 98%;
+    width: 99%;
   }
   
   .shopLink {
@@ -248,13 +258,16 @@
   
   /* Shop styles - Grid view */
   .shopGridLayout {
-    display: grid;
+    /* display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 6px; */
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
     max-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 96%;
+    width: 90%;
   }
   
   .shopGridItem {
@@ -429,9 +442,9 @@
     align-items: center;
     justify-content: center;
   }
-
+  
   /* Carousel styles */
-.carouselContainer {
+  .carouselContainer {
     width: 100%;
     padding: 0 10px;
     margin-top: 10px;
@@ -453,7 +466,7 @@
     padding: 15px;
     border: none;
     cursor: pointer;
-    margin-bottom: 6px;
+    margin-bottom: 20px;
   }
   
   .iconCarouselContainer {
@@ -469,12 +482,6 @@
   .iconCarouselContainer img {
     width: 30px;
     height: 30px;
-  }
-  
-  .linkCarouselTitle {
-    color: white;
-    font-size: 14px;
-    text-align: center;
   }
   
   .shopCarouselItem {
@@ -527,9 +534,9 @@
   :global .slick-dots li.slick-active button:before {
     color: #28A263;
   }
-
+  
   /* For grid layout marquee */
-.linkGridBtn .marqueeContainer {
+  .linkGridBtn .marqueeContainer {
     margin-top: 5px;
     max-width: 100px;
   }
@@ -562,4 +569,51 @@
     animation: marqueeC 8s linear infinite;
     gap: 50%;
     /* background-color: red; */
+  }
+  @media screen and (max-width: 400px) {
+    .linkGridBtn {
+        width: 150px;
+        height: 90px;
+      }
+  }
+
+  @media screen and (max-width: 360px) {
+    .linkGridBtn {
+        width: 130px;
+        height: 90px;
+      }
+  }
+  @media screen and (max-width: 315px) {
+    .linkGridBtn {
+        width: 110px;
+        height: 90px;
+      }
+  }
+
+ 
+  @media screen and (max-width: 400px) {
+    .shopGridItem {
+        width: 150px;
+      }
+  }
+
+  @media screen and (max-width: 378px) {
+    .shopGridItem {
+        width: 140px;
+      }
+  }
+  @media screen and (max-width: 354px) {
+    .shopGridItem {
+        width: 130px;
+      }
+  }
+  @media screen and (max-width: 334px) {
+    .shopGridItem {
+        width: 110px;
+      }
+  }
+  @media screen and (max-width: 290px) {
+    .shopGridItem {
+        width: 95px;
+      }
   }

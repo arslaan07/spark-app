@@ -3,6 +3,7 @@ const app = express();
 const authRoutes = require("./routes/auth");
 const linkRoutes = require("./routes/link");
 const shopRoutes = require("./routes/shop");
+const publicRoutes = require("./routes/public");
 const connectDB = require("./connection/mongoose");
 const cookieParser = require("cookie-parser");
 const axios = require("axios");
@@ -32,7 +33,7 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')))
 app.use("/api/auth", authRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/shops", shopRoutes);
-
+app.use("/api/profile", publicRoutes);
 app.get('/', (req, res) => {
   res.send('Hello my dear World!');
 });

@@ -274,10 +274,9 @@ router.put('/update-user', verifyToken, async (req, res) => {
 router.put('/update-user-card', verifyToken, upload.single('profileImage'), async (req, res) => {
     try {
         const { username, bio, bannerBackground, layout, buttonStyle, buttonColor,
-            buttonFontColor, font, fontColor, buttonRadius, theme
+            buttonFontColor, font, fontColor, buttonRadius, theme, profileImage
         } = req.body;
         const userId = req.user.id;
-
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({
@@ -292,7 +291,10 @@ router.put('/update-user-card', verifyToken, upload.single('profileImage'), asyn
             user.profileImage = `/images/uploads/${req.file.filename}`;
             isUpdated = true;
         }
-
+        if(profileImage) {
+            user.profileImage = null;
+            isUpdated = true;
+        }
         if (username && user.username !== username) {
             user.username = username;
             isUpdated = true;

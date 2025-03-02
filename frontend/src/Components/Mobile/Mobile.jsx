@@ -1,93 +1,115 @@
-// Modified Iphone component to accept and use selectedButtonStyle prop
-
-// In Iphone.jsx
+// Mobile.jsx
 import React, { useState } from 'react';
 import { BiCart } from "react-icons/bi";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import themes from '../../utils/themes'
-import applications from '../../utils/applications'
-import styles from './Iphone.module.css'
+import { IoShareOutline } from "react-icons/io5";
+import themes from '../../utils/themes';
+import styles from './Mobile.module.css';
+import { handleShareProfile } from '../../utils/handleShareProfile';
 
-const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
-    selectedTheme, buttonColor, setButtonColor, manualColorChange, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius, bio }) => {
-    const [selectedBtn, setSelectedBtn] = useState('link');
+const Mobile = ({ 
+  backgroundColor, 
+  username, 
+  profileImage, 
+  links, 
+  shops, 
+  Layout,
+  selectedTheme, 
+  buttonColor, 
+  setButtonColor, 
+  manualColorChange, 
+  buttonFontColor, 
+  selectedFont, 
+  fontColor, 
+  selectedButtonStyle, 
+  selectedButtonRadius, 
+  bio 
+}) => {
+  const [selectedBtn, setSelectedBtn] = useState('link');
+  
+  // Slider settings for carousel
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
+
+  // Function to get button style based on selection
+  const getButtonStyle = () => {
+    const effectiveButtonColor = manualColorChange 
+      ? buttonColor 
+      : (selectedTheme === -1 ? themes[selectedTheme]?.buttonColor : buttonColor);
+    const baseStyle = {
+      backgroundColor: effectiveButtonColor,
+      color: buttonFontColor,
+      fontFamily: selectedFont,
+      borderRadius: selectedButtonRadius,
+    };
     
-    // Slider settings for carousel
-    const sliderSettings = {
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-    };
-    // console.log(links)
-    // Function to get button style based on selection
-    const getButtonStyle = () => {
-      const effectiveButtonColor = manualColorChange 
-        ? buttonColor 
-        : (selectedTheme === -1 ? themes[selectedTheme]?.buttonColor : buttonColor);
-      const baseStyle = {
-        backgroundColor: effectiveButtonColor,
-        color: buttonFontColor,
-        fontFamily: selectedFont,
-        borderRadius: selectedButtonRadius, 
-      };
-      
-      // Add specific styles based on selectedButtonStyle
-      switch(selectedButtonStyle) {
-        case 'Fill':
-          return {
-            ...baseStyle,
-            border: 'none',
-          };
-        case 'Outline':
-          return {
-            ...baseStyle,
-            backgroundColor: 'transparent',
-            border: `1px solid #232429`,
-          };
-        case 'Hard shadow':
-          return {
-            ...baseStyle,
-            backgroundColor: '#fff',
-            border: `1px solid #232429`,
-            boxShadow: `4px 4px 0 #232429`,
-          };
-        case 'Soft shadow':
-          return {
-            ...baseStyle,
-            backgroundColor: '#fff',
-            border: 'none',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          };
-        default:
-          return baseStyle;
-      }
-    };
+    switch(selectedButtonStyle) {
+      case 'Fill':
+        return { ...baseStyle, border: 'none' };
+      case 'Outline':
+        return {
+          ...baseStyle,
+          backgroundColor: 'transparent',
+          border: `1px solid #232429`,
+        };
+      case 'Hard shadow':
+        return {
+          ...baseStyle,
+          backgroundColor: '#fff',
+          border: `1px solid #232429`,
+          boxShadow: `4px 4px 0 #232429`,
+        };
+      case 'Soft shadow':
+        return {
+          ...baseStyle,
+          backgroundColor: '#fff',
+          border: 'none',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        };
+      default:
+        return baseStyle;
+    }
+  };
 
-    const buttonStyle = getButtonStyle();
+  const buttonStyle = getButtonStyle();
 
   return (
-    <div className={styles.phoneContainer}>
-      <div style={{ backgroundColor: selectedTheme !== -1 ? themes[selectedTheme]?.backgroundColor : ""}} className={styles.phone}>
-        {/* Rest of the code remains the same */}
+    <div className={styles.mobileContainer}>
+      <div 
+        style={{ 
+          backgroundColor: selectedTheme !== -1 
+            ? themes[selectedTheme]?.backgroundColor 
+            : ""
+        }} 
+        className={styles.mobile}
+      >
+        {/* User Card */}
         <div style={{ backgroundColor: backgroundColor }} className={styles.usercard}>
-            <div className={styles.profileHeader}>
-                <div className={styles.avatar}>
-                <img 
-                  src={profileImage}
-                  alt="Profile"
-                  className={styles.profileImage}
-                />
-                </div>
-                <h3 className={styles.username}>{username}</h3>
-                <p className={styles.bio}>{bio.content}</p>
+            <button
+            onClick={() => handleShareProfile(username.slice(1))}
+            className={styles.shareIcon}><IoShareOutline size={24} /></button>
+          <div className={styles.profileHeader}>
+            <div className={styles.avatar}>
+              <img 
+                src={profileImage}
+                alt="Profile"
+                className={styles.profileImage}
+              />
             </div>
+            <h3 className={styles.username}>{username}</h3>
+            <p className={styles.bio}>{bio.content}</p>
+          </div>
         </div>
-        <div className={styles.dynamicIsland}></div>
+
+        {/* Content */}
         <div className={styles.content}>
           <div className={styles.buttons}>
             <span 
@@ -104,7 +126,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </span>
           </div>
           
-          {/* List Layout for Links - with updated button style */}
+          {/* List Layout for Links */}
           {selectedBtn === 'link' && Layout === 'Stack' && (
             <div className={styles.links}>
               {[...links].reverse().map((link, i) => (
@@ -127,7 +149,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
           
-          {/* Grid Layout for Links - with updated button style */}
+          {/* Grid Layout for Links */}
           {selectedBtn === 'link' && Layout === 'Grid' && (
             <div className={styles.linksGridLayout}>
               {[...links].reverse().map((link, i) => (
@@ -137,7 +159,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
                   className={styles.linkGridBtn}
                 >
                   <div className={styles.iconGridContainer}>
-                  <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
+                    <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                   </div>
                   <div className={styles.marqueeContainer}>
                     <div className={styles.marqueeText}>
@@ -150,7 +172,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
           
-          {/* Carousel Layout for Links - with updated button style */}
+          {/* Carousel Layout for Links */}
           {selectedBtn === 'link' && Layout === 'Carousel' && (
             <div className={styles.carouselContainer}>
               <Slider {...sliderSettings}>
@@ -161,7 +183,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
                       className={styles.linkCarouselItem}
                     >
                       <div className={styles.iconCarouselContainer}>
-                      <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
+                        <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                       </div>
                       <div className={styles.marqueeContainer}>
                         <div className={styles.marqueeText}>
@@ -176,7 +198,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
           
-          {/* Shop Items - with updated button style for Buy buttons */}
+          {/* Shop Items - Stack */}
           {selectedBtn === 'shop' && Layout === 'Stack' && (
             <div className={styles.shops}>
               {[...shops].reverse().map((shop) => (
@@ -205,7 +227,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
           
-          {/* Grid Layout for Shop Items - with updated button style */}
+          {/* Grid Layout for Shop Items */}
           {selectedBtn === 'shop' && Layout === 'Grid' && (
             <div className={styles.shopGridLayout}>
               {[...shops].reverse().map((shop) => (
@@ -234,7 +256,7 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
           
-          {/* Carousel Layout for Shop Items - with updated button style */}
+          {/* Carousel Layout for Shop Items */}
           {selectedBtn === 'shop' && Layout === 'Carousel' && (
             <div className={styles.carouselContainer}>
               <Slider {...sliderSettings}>
@@ -266,6 +288,8 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
             </div>
           )}
         </div>
+
+        {/* Footer */}
         <div className={styles.footer}>
           <button className={styles.connectBtn}>Get Connected</button>
           <div className={styles.logo}>
@@ -283,4 +307,4 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
   );
 };
 
-export default Iphone;
+export default Mobile;
