@@ -19,8 +19,18 @@ import CustomCursor from './Components/CustomCursor/CustomCursor';
 import { Toaster } from 'sonner';
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  return isAuthenticated ? children : <Navigate to="/" />;
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/" />;
+  }
+  
+  // Redirect new users with null username to getting-to-know page
+  if (user && user.username === null && window.location.pathname !== '/getting-to-know') {
+    return <Navigate to="/getting-to-know" />;
+  }
+  
+  return children;
 };
 const PublicRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
