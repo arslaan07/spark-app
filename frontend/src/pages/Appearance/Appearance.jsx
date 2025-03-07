@@ -1,18 +1,20 @@
 // pages/Appearance/Appearance.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import styles from "./Appearance.module.css";
-import Iphone from "../../Components/Iphone/Iphone";
-import SpecialButton from "../../Components/SpecialButton/SpecialButton";
-import ThemeButtons from "../../Components/ThemeButtons/ThemeButtons";
 import api from "../../../api";
 import { setLinkCount } from "../../store/slices/linkSlice";
 import { setShopCount } from "../../store/slices/shopSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../store/slices/authSlice";
-import themes from "../../utils/themes"
+import themes from "../../utils/themes";
 import MyToast from "../../Components/MyToast/MyToast";
-import Preview from "../../Components/Preview/Preview";
 import Spinner from "../../Components/Spinner/Spinner";
+
+// Lazy-loaded components
+const Iphone = lazy(() => import("../../Components/Iphone/Iphone"));
+const SpecialButton = lazy(() => import("../../Components/SpecialButton/SpecialButton"));
+const ThemeButtons = lazy(() => import("../../Components/ThemeButtons/ThemeButtons"));
+const Preview = lazy(() => import("../../Components/Preview/Preview"));
 
 
 const layouts = [
@@ -251,28 +253,100 @@ function Appearance() {
     }
   };
 
-  if (isLoading) {
-    console.log('Rendering spinner...');
-    return <>
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'white',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 10000,
-      fontSize: '24px'
-    }}>
-      <Spinner />
+  
+  return isLoading ? (
+    <div className={styles.appearanceContainer}>
+      <section className={styles.leftSection}>
+        {/* Iphone Skeleton */}
+        <Iphone 
+   backgroundColor={bannerBackground}
+   username={username}
+   profileImage={profileImage}
+   links={links}
+   shops={shops}
+   Layout={Layout}
+   themes={themes}
+   selectedTheme={selectedTheme}
+   buttonColor={buttonColor}
+   setButtonColor={setButtonColor}  // Pass the setter function
+   buttonFontColor={buttonFontColor}
+   selectedFont={selectedFont}
+   fontColor={fontColor}
+   selectedButtonStyle={selectedButtonStyle}
+   selectedButtonRadius={selectedButtonRadius}
+   bio={bio}
+   isLoading={isLoading}
+/>
+      </section>
+  
+      <section className={styles.rightSection}>
+        {/* Layout Section Skeleton */}
+        <h3 className={styles.heading}>Layout</h3>
+        <div className={styles.section}>
+          <div className={styles.layoutGrid}>
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className={`${styles.skeleton} ${styles.skeletonLayoutCard}`}></div>
+            ))}
+          </div>
+        </div>
+  
+        {/* Buttons Section Skeleton */}
+        <h3 className={styles.heading}>Buttons</h3>
+        <div className={styles.section}>
+          <div className={styles.buttonStyles}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className={styles.buttonStyleGroup}>
+                <div className={`${styles.skeleton} ${styles.skeletonButtonExample}`}></div>
+                <div className={styles.buttonExamples}>
+                  {[...Array(3)].map((_, j) => (
+                    <div key={j} className={`${styles.skeleton} ${styles.skeletonButtonExample}`}></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className={styles.specialStyles}>
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonSpecialButton}`}></div>
+              ))}
+            </div>
+          </div>
+  
+          {/* Button Colors Skeleton */}
+          <div className={styles.colorPicker}>
+            <div className={`${styles.skeleton} ${styles.skeletonColorPicker}`}></div>
+            <div className={`${styles.skeleton} ${styles.skeletonButtonExample}`}></div>
+          </div>
+        </div>
+  
+        {/* Fonts Section Skeleton */}
+        <h3 className={styles.heading}>Fonts</h3>
+        <div className={styles.section}>
+          <div className={styles.fontSelector}>
+            <div className={`${styles.skeleton} ${styles.skeletonFontPreview}`}></div>
+          </div>
+          <div className={styles.colorPicker}>
+            <div className={`${styles.skeleton} ${styles.skeletonColorPicker}`}></div>
+            <div className={`${styles.skeleton} ${styles.skeletonButtonExample}`}></div>
+          </div>
+        </div>
+  
+        {/* Themes Section Skeleton */}
+        <h3 className={styles.heading}>Themes</h3>
+        <div className={styles.section}>
+          <div className={styles.themeGrid}>
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className={`${styles.skeleton} ${styles.skeletonThemeCard}`}></div>
+            ))}
+          </div>
+        </div>
+  
+        {/* Save Button Skeleton */}
+        <div className={styles.saveButtonContainer}>
+          <div className={`${styles.skeleton} ${styles.skeletonSaveButton}`}></div>
+        </div>
+      </section>
     </div>
-    
-  </>
-  }
-  return (
+  ) : (
     <div className={styles.appearanceContainer}>
       <section className={styles.leftSection}>
         <Iphone 

@@ -31,10 +31,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/images', express.static(path.join(__dirname, 'public/images')))
 
+
 app.use("/api/auth", authRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/profile", publicRoutes);
+
+
 app.get('/', (req, res) => {
   res.send('Hello my dear World!');
 });

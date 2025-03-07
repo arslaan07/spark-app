@@ -1,11 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Toolbar.module.css'
-import { Link, useNavigate } from 'react-router-dom'
-import ProfileNavbar from '../ProfileNavbar/ProfileNavbar'
-import MobileNavbar from '../MobileNavbar/MobileNavbar'
-import Profile from '../../pages/Profile/Profile'
-import Settings from '../../pages/Settings/Settings'
-import Appearance from '../../pages/Appearance/Appearance'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
 const navItems = [
     {
         label: "Links",
@@ -46,19 +42,23 @@ const navItems = [
 },
 ]
 const Toolbar = () => {
+  const location = useLocation()
+ 
     const [selected, setSelected] = useState('Links')
     const navigate = useNavigate()
     const handleClick = (item) => {
       setSelected(item.label)
       navigate(item.path)
     }
+    useEffect(() => {
+          navItems.map((navItem) => {
+            if(window.location.pathname === navItem.path) {
+              setSelected(navItem.label)
+            }}
+          )
+        }, [])
   return (
     <>
-    {/* <MobileNavbar /> */}
-    {/* <Profile /> */}
-    {/* <Settings /> */}
-    {/* <Appearance /> */}
-    {/* <Dashboard /> */}
     <div className={styles.toolbar}>
       <nav className={styles.nav}>
         <ul>

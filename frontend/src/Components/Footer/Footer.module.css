@@ -155,3 +155,65 @@
     padding: 2rem 2rem;
   }
 }
+
+/* Shimmer Effect Styles */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Skeleton Placeholders */
+.skeletonActionButtons {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.skeletonList {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+}
+
+.skeletonDisclaimer {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.skeletonSocialLinks {
+  width: 100%;
+  height: 30px;
+  border-radius: 8px;
+}
+
+/* Mobile responsiveness for Skeleton */
+@media (max-width: 768px) {
+  .skeletonActionButtons {
+    height: 80px;
+  }
+
+  .skeletonList {
+    height: 120px;
+  }
+
+  .skeletonDisclaimer {
+    height: 40px;
+  }
+
+  .skeletonSocialLinks {
+    height: 20px;
+  }
+}

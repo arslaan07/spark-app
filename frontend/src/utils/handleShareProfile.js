@@ -2,7 +2,7 @@ import MyToast from "../Components/MyToast/MyToast";
 
 export const handleShareProfile = async (username) => {
     try {
-      const shareableLink = `${window.location.origin}/profile/${username}`;
+      const shareableLink = `${window.location.origin}/${username}`;
   
       // Copy to clipboard
       await navigator.clipboard.writeText(shareableLink);

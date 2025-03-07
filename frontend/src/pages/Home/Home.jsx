@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import styles from './Home.module.css'
-import Navbar from '../../Components/Navbar/Navbar'
-import Hero from '../../Components/Hero/Hero'
-import Analytics from '../../Components/Analytics/Analytics'
-import ContentSharing from '../../Components/ContentSharing/ContentSharing'
-import Testimonials from '../../Components/Testimonials/Testimonials'
-import Integrations from '../../Components/Integrations/Integrations'
-import Footer from '../../Components/Footer/Footer'
+const Navbar = lazy(() => import("../../Components/Navbar/Navbar"));
+const Hero = lazy(() => import("../../Components/Hero/Hero"));
+const Analytics = lazy(() => import("../../Components/Analytics/Analytics"));
+const ContentSharing = lazy(() => import("../../Components/ContentSharing/ContentSharing"));
+const Testimonials = lazy(() => import("../../Components/Testimonials/Testimonials"));
+const Integrations = lazy(() => import("../../Components/Integrations/Integrations"));
+const Footer = lazy(() => import("../../Components/Footer/Footer"));
 
 const Home = () => {
   return (

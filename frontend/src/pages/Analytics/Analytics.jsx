@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy } from 'react';
 import styles from './Analytics.module.css';
-import StatCard from '../../Components/StatCard/StatCard';
-import LineChart from '../../Components/LineChart/LineChart';
-import BarChart from '../../Components/BarChart/BarChart';
-import PieChart from '../../Components/PieChart/PieChart';
 import Spinner from "../../Components/Spinner/Spinner";
 import api from '../../../api';
+
+// Lazy load components
+const StatCard = lazy(() => import('../../Components/StatCard/StatCard'));
+const LineChart = lazy(() => import('../../Components/LineChart/LineChart'));
+const BarChart = lazy(() => import('../../Components/BarChart/BarChart'));
+const PieChart = lazy(() => import('../../Components/PieChart/PieChart'));
 
 function Analytics() {
   const [selectedCard, setSelectedCard] = useState(0);
@@ -258,28 +260,39 @@ function Analytics() {
   };
  
   const [showDeviceData, setShowDeviceData] = useState(true);
-  if (isLoading) {
-    console.log('Rendering spinner...');
-    return <>
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'white',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 10000,
-      fontSize: '24px'
-    }}>
-      <Spinner />
+ 
+  return isLoading ? (
+    <div className={styles.analyticsContainer}>
+      <h1 className={styles.analyticsTitle}>Overview</h1>
+  
+      {/* Stats Section Skeleton */}
+      <div className={styles.statsContainer}>
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className={`${styles.skeleton} ${styles.skeletonStatCard}`}></div>
+        ))}
+      </div>
+  
+      {/* Chart Section Skeleton */}
+      <div className={styles.chartContainer}>
+        <div className={`${styles.skeleton} ${styles.skeletonChart}`}></div>
+      </div>
+  
+      {/* Lower Section Skeleton */}
+      <div className={styles.lowerSection}>
+        <div className={styles.barChartContainer}>
+          <div className={`${styles.skeleton} ${styles.skeletonBarChart}`}></div>
+        </div>
+        <div className={styles.pieChartContainer}>
+          <div className={`${styles.skeleton} ${styles.skeletonPieChart}`}></div>
+        </div>
+      </div>
+  
+      {/* Link Chart Section Skeleton */}
+      <div className={styles.linkChartContainer}>
+        <div className={`${styles.skeleton} ${styles.skeletonLinkChart}`}></div>
+      </div>
     </div>
-    
-  </>
-  }
-  return (
+  ) :  (
     <div className={styles.analyticsContainer}>
       <h1 className={styles.analyticsTitle}>Overview</h1>
 

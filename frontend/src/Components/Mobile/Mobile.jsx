@@ -1,4 +1,3 @@
-// Mobile.jsx
 import React, { useState } from 'react';
 import { BiCart } from "react-icons/bi";
 import Slider from "react-slick";
@@ -11,7 +10,6 @@ import { handleShareProfile } from '../../utils/handleShareProfile';
 import { useNavigate, Link } from 'react-router-dom';
 import MyToast from '../MyToast/MyToast'
 import api from '../../../api';
-import Spinner from '../Spinner/Spinner'
 
 const Mobile = ({ 
   backgroundColor, 
@@ -29,12 +27,13 @@ const Mobile = ({
   fontColor, 
   selectedButtonStyle, 
   selectedButtonRadius, 
-  bio 
+  bio,
+  isLoading,
+  setIsLoading
 }) => {
   const [selectedBtn, setSelectedBtn] = useState('link');
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-  // Slider settings for carousel
+  const navigate = useNavigate();
+
   const sliderSettings = {
     dots: true,
     infinite: false,
@@ -44,7 +43,6 @@ const Mobile = ({
     arrows: false,
   };
 
-  // Function to get button style based on selection
   const getButtonStyle = () => {
     const effectiveButtonColor = manualColorChange 
       ? buttonColor 
@@ -92,12 +90,10 @@ const Mobile = ({
         return
     }
     try {
-        // Track the click
         setIsLoading(true)
         const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
         console.log(response);
 
-        // Open the URL directly if tracking is successful
         if (response.data.success) {
             window.open(response.data.redirectUrl, '_blank');
         }
@@ -106,19 +102,18 @@ const Mobile = ({
     } finally {
         setIsLoading(false)
     }
-};
-const handleShopClick = async (url, type, active) => {
+  };
+
+  const handleShopClick = async (url, type, active) => {
     if(!active) {
         MyToast('link has expired', 'error')
         return
     }
     try {
-        // Track the click
         setIsLoading(true)
         const response = await api.post(`/api/${type}s/${url}/track-click`, { referrer: document.referrer });
         console.log(response);
 
-        // Open the URL directly if tracking is successful
         if (response.data.success) {
             window.open(response.data.redirectUrl, '_blank');
         }
@@ -127,28 +122,8 @@ const handleShopClick = async (url, type, active) => {
     } finally {
         setIsLoading(false)
     }
-};
+  };
 
-if (isLoading) {
-    console.log('Rendering spinner...');
-    return <>
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'white',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 10000,
-      fontSize: '24px'
-    }}>
-      <Spinner />
-    </div> 
-  </>
-  }
   return (
     <div className={styles.mobileContainer}>
       <div 
@@ -166,14 +141,27 @@ if (isLoading) {
             className={styles.shareIcon}><IoShareOutline size={24} /></button>
           <div className={styles.profileHeader}>
             <div className={styles.avatar}>
-              <img 
-                src={profileImage}
-                alt="Profile"
-                className={styles.profileImage}
-              />
+              {isLoading ? (
+                <div className={`${styles.skeleton} ${styles.skeletonAvatar}`}></div>
+              ) : (
+                <img 
+                  src={profileImage}
+                  alt="Profile"
+                  className={styles.profileImage}
+                />
+              )}
             </div>
-            <h3 className={styles.username}>{username}</h3>
-            <p className={styles.bio}>{bio.content}</p>
+            {isLoading ? (
+              <>
+                <div className={`${styles.skeleton} ${styles.skeletonText}`}></div>
+                <div className={`${styles.skeleton} ${styles.skeletonTextShort}`}></div>
+              </>
+            ) : (
+              <>
+                <h3 className={styles.username}>{username}</h3>
+                <p className={styles.bio}>{bio.content}</p>
+              </>
+            )}
           </div>
         </div>
 
@@ -194,66 +182,38 @@ if (isLoading) {
             </span>
           </div>
           
-          {/* List Layout for Links */}
-          {selectedBtn === 'link' && Layout === 'Stack' && (
+          {/* Skeleton Loading for Links */}
+          {isLoading && selectedBtn === 'link' && Layout === 'Stack' && (
             <div className={styles.links}>
-              {[...links].reverse().map((link, i) => (
-                <button 
-                  style={buttonStyle} 
-                  key={i} 
-                  className={styles.linkBtn}
-                  onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
-                >
-                  <div className={styles.iconContainer}>
-                    <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
-                  </div>
-                  <div className={styles.marqueeContainer}>
-                    <div className={styles.marqueeText}>
-                      <span style={{ fontFamily: selectedFont }}>{link.url}</span>
-                      <span style={{ fontFamily: selectedFont }}>{link.url}</span>
-                    </div>
-                  </div>
-                </button>
+              {[1, 2, 3].map((_, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonButton}`}></div>
               ))}
             </div>
           )}
-          
-          {/* Grid Layout for Links */}
-          {selectedBtn === 'link' && Layout === 'Grid' && (
-            <div className={styles.linksGridLayout}>
-              {[...links].reverse().map((link, i) => (
-                <button 
-                  style={buttonStyle} 
-                  key={i} 
-                  className={styles.linkGridBtn}
-                  onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
-                >
-                  <div className={styles.iconGridContainer}>
-                    <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
-                  </div>
-                  <div className={styles.marqueeContainer}>
-                    <div className={styles.marqueeText}>
-                      <span style={{ fontFamily: selectedFont }}>{link.url}</span>
-                      <span style={{ fontFamily: selectedFont }}>{link.url}</span>
-                    </div>
-                  </div>
-                </button>
+
+          {/* Skeleton Loading for Shops */}
+          {isLoading && selectedBtn === 'shop' && Layout === 'Stack' && (
+            <div className={styles.shops}>
+              {[1, 2, 3].map((_, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonButton}`}></div>
               ))}
             </div>
           )}
-          
-          {/* Carousel Layout for Links */}
-          {selectedBtn === 'link' && Layout === 'Carousel' && (
-            <div className={styles.carouselContainer}>
-              <Slider {...sliderSettings}>
-                {[...links].reverse().map((link, i) => (
-                  <div key={i} className={styles.carouselSlide}>
+
+          {/* Actual Content */}
+          {!isLoading && (
+            <>
+              {/* List Layout for Links */}
+              {selectedBtn === 'link' && Layout === 'Stack' && (
+                <div className={styles.links}>
+                  {[...links].reverse().map((link, i) => (
                     <button 
                       style={buttonStyle} 
-                      className={styles.linkCarouselItem}
+                      key={i} 
+                      className={styles.linkBtn}
                       onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
                     >
-                      <div className={styles.iconCarouselContainer}>
+                      <div className={styles.iconContainer}>
                         <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
                       </div>
                       <div className={styles.marqueeContainer}>
@@ -263,103 +223,154 @@ if (isLoading) {
                         </div>
                       </div>
                     </button>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          )}
-          
-          {/* Shop Items - Stack */}
-          {selectedBtn === 'shop' && Layout === 'Stack' && (
-            <div className={styles.shops}>
-              {[...shops].reverse().map((shop) => (
-                <div 
-                  key={shop._id}
-                  style={{ 
-                    border: selectedTheme !== -1 ? themes[selectedTheme]?.border : "",
-                  }}  
-                  className={styles.shopItem}
-                >
-                  <div className={styles.marqueeContainer}>
-                    <div className={styles.marqueeText}>
-                      <span style={{ fontFamily: selectedFont, color: fontColor }}>{shop.title}</span>
-                      <span style={{ fontFamily: selectedFont, color: fontColor }}>{shop.title}</span>
-                    </div>
-                  </div>
-                  <button 
-                    style={buttonStyle} 
-                    className={styles.buyItem}
-                    onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
-                  >
-                    <span className={styles.cartIcon}><BiCart /></span>
-                    <span>Buy Now</span>
-                  </button>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Grid Layout for Shop Items */}
-          {selectedBtn === 'shop' && Layout === 'Grid' && (
-            <div className={styles.shopGridLayout}>
-              {[...shops].reverse().map((shop) => (
-                <div  
-                  key={shop._id}
-                  style={{ 
-                    border: selectedTheme !== -1 ? themes[selectedTheme]?.border : "",
-                  }} 
-                  className={styles.shopGridItem}
-                >
-                  <div className={styles.marqueeContainer}>
-                    <div className={styles.marqueeText}>
-                      <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopGridLink}>{shop.title}</span>
-                      <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopGridLink}>{shop.title}</span>
-                    </div>
-                  </div>
-                  <button 
-                    style={buttonStyle} 
-                    className={styles.buyGridItem}
-                    onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
-                  >
-                    <span className={styles.cartIcon}><BiCart /></span>
-                    <span>Buy</span>
-                  </button>
+              )}
+              
+              {/* Grid Layout for Links */}
+              {selectedBtn === 'link' && Layout === 'Grid' && (
+                <div className={styles.linksGridLayout}>
+                  {[...links].reverse().map((link, i) => (
+                    <button 
+                      style={buttonStyle} 
+                      key={i} 
+                      className={styles.linkGridBtn}
+                      onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
+                    >
+                      <div className={styles.iconGridContainer}>
+                        <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
+                      </div>
+                      <div className={styles.marqueeContainer}>
+                        <div className={styles.marqueeText}>
+                          <span style={{ fontFamily: selectedFont }}>{link.url}</span>
+                          <span style={{ fontFamily: selectedFont }}>{link.url}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Carousel Layout for Shop Items */}
-          {selectedBtn === 'shop' && Layout === 'Carousel' && (
-            <div className={styles.carouselContainer}>
-              <Slider {...sliderSettings}>
-                {[...shops].reverse().map((shop) => (
-                  <div key={shop._id} className={styles.carouselSlide}>
+              )}
+              
+              {/* Carousel Layout for Links */}
+              {selectedBtn === 'link' && Layout === 'Carousel' && (
+                <div className={styles.carouselContainer}>
+                  <Slider {...sliderSettings}>
+                    {[...links].reverse().map((link, i) => (
+                      <div key={i} className={styles.carouselSlide}>
+                        <button 
+                          style={buttonStyle} 
+                          className={styles.linkCarouselItem}
+                          onClick={() => handleLinkClick(link.url, selectedBtn, link.isActive)}
+                        >
+                          <div className={styles.iconCarouselContainer}>
+                            <img src={`/images/LinkModal/${link.application.toLowerCase()}.png`} alt={link.application} />
+                          </div>
+                          <div className={styles.marqueeContainer}>
+                            <div className={styles.marqueeText}>
+                              <span style={{ fontFamily: selectedFont }}>{link.url}</span>
+                              <span style={{ fontFamily: selectedFont }}>{link.url}</span>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
+              )}
+              
+              {/* Shop Items - Stack */}
+              {selectedBtn === 'shop' && Layout === 'Stack' && (
+                <div className={styles.shops}>
+                  {[...shops].reverse().map((shop) => (
                     <div 
-                      style={{
+                      key={shop._id}
+                      style={{ 
                         border: selectedTheme !== -1 ? themes[selectedTheme]?.border : "",
-                      }} 
-                      className={styles.shopCarouselItem}
+                      }}  
+                      className={styles.shopItem}
                     >
                       <div className={styles.marqueeContainer}>
                         <div className={styles.marqueeText}>
-                          <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopCarouselTitle}>{shop.title}</span>
-                          <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopCarouselTitle}>{shop.title}</span>
+                          <span style={{ fontFamily: selectedFont, color: fontColor }}>{shop.title}</span>
+                          <span style={{ fontFamily: selectedFont, color: fontColor }}>{shop.title}</span>
                         </div>
                       </div>
                       <button 
                         style={buttonStyle} 
-                        className={styles.buyCarouselItem}
+                        className={styles.buyItem}
                         onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
                       >
                         <span className={styles.cartIcon}><BiCart /></span>
                         <span>Buy Now</span>
                       </button>
                     </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Grid Layout for Shop Items */}
+              {selectedBtn === 'shop' && Layout === 'Grid' && (
+                <div className={styles.shopGridLayout}>
+                  {[...shops].reverse().map((shop) => (
+                    <div  
+                      key={shop._id}
+                      style={{ 
+                        border: selectedTheme !== -1 ? themes[selectedTheme]?.border : "",
+                      }} 
+                      className={styles.shopGridItem}
+                    >
+                      <div className={styles.marqueeContainer}>
+                        <div className={styles.marqueeText}>
+                          <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopGridLink}>{shop.title}</span>
+                          <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopGridLink}>{shop.title}</span>
+                        </div>
+                      </div>
+                      <button 
+                        style={buttonStyle} 
+                        className={styles.buyGridItem}
+                        onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
+                      >
+                        <span className={styles.cartIcon}><BiCart /></span>
+                        <span>Buy</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Carousel Layout for Shop Items */}
+              {selectedBtn === 'shop' && Layout === 'Carousel' && (
+                <div className={styles.carouselContainer}>
+                  <Slider {...sliderSettings}>
+                    {[...shops].reverse().map((shop) => (
+                      <div key={shop._id} className={styles.carouselSlide}>
+                        <div 
+                          style={{
+                            border: selectedTheme !== -1 ? themes[selectedTheme]?.border : "",
+                          }} 
+                          className={styles.shopCarouselItem}
+                        >
+                          <div className={styles.marqueeContainer}>
+                            <div className={styles.marqueeText}>
+                              <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopCarouselTitle}>{shop.title}</span>
+                              <span style={{ fontFamily: selectedFont, color: fontColor }} className={styles.shopCarouselTitle}>{shop.title}</span>
+                            </div>
+                          </div>
+                          <button 
+                            style={buttonStyle} 
+                            className={styles.buyCarouselItem}
+                            onClick={() => handleShopClick(shop.url, selectedBtn, shop.isActive)}
+                          >
+                            <span className={styles.cartIcon}><BiCart /></span>
+                            <span>Buy Now</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
+              )}
+            </>
           )}
         </div>
 

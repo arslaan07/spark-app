@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from "react";
-import styles from "./SignIn.module.css";
+import styles from "./ForgotPassword.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { FiEye } from "react-icons/fi";
-import { IoMdEyeOff } from "react-icons/io";
 import api from "../../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/slices/authSlice";
 import MyToast from '../../Components/MyToast/MyToast';
-import Spinner from "../../Components/Spinner/Spinner";
 
 
-const SignIn = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
   });
+  const [sentCount, setSentCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [errors, setErrors] = useState({});
 
@@ -40,16 +32,6 @@ const SignIn = () => {
         newErrors.email = "Invalid email address";
       } else {
         delete newErrors.email;
-      }
-    }
-
-    if (name === "password") {
-      if (!value.trim()) {
-        newErrors.password = "Password is required";
-      } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters long";
-      } else {
-        delete newErrors.password;
       }
     }
 
@@ -78,10 +60,6 @@ const SignIn = () => {
       newErrors.email = "Invalid email address";
     }
   
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    }
-  
     setErrors(newErrors);
   
     // If there are validation errors, stop form submission
@@ -89,18 +67,12 @@ const SignIn = () => {
   
     try {
       setIsLoading(true)
-      const response = await api.post("api/auth/signin", formData, { withCredentials: true });
-      console.log("Login successful:", response.data);
-  
-      dispatch(
-        login({
-          user: response.data.user,
-        })
-      );
-      // Redirect based on user data
-
-      navigate("/profile");
-      MyToast("You are welcome in Spark", "success");
+      const response = await api.post("api/auth/forgot-password", formData, { withCredentials: true });
+      console.log(response.data);
+      setSentCount(sentCount+1)
+     
+     
+      MyToast("Spark reset password link sent", "success");
     } catch (error) {
       console.error("Login failed:", error);
       MyToast(`${error.response?.data?.message || "Something went wrong"}`, "error");
@@ -126,7 +98,7 @@ const SignIn = () => {
         </div>
 
         <div className={styles.form}>
-          <h1 className={styles.heading}>Sign in to your Spark</h1>
+          <h1 className={styles.heading}>Recover your Spark</h1>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               {isLoading ? (
@@ -146,43 +118,22 @@ const SignIn = () => {
               {errors.email && <div className={styles.error}>{errors.email}</div>}
             </div>
 
-            <div className={styles.formGroup} style={{ position: "relative" }}>
-              {isLoading ? (
-                <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
-              ) : (
-                <>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    placeholder="spark password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    style={errors.password ? { border: "2px solid red", outline: "none" } : {}}
-                  />
-                  <span onClick={togglePasswordVisibility} className={styles.eye}>
-                    {showPassword ? <FiEye /> : <IoMdEyeOff />}
-                  </span>
-                </>
-              )}
-              {errors.password && <div className={styles.error}>{errors.password}</div>}
-            </div>
-
+          
             <div className={styles.formGroup}>
               {isLoading ? (
                 <div className={`${styles.skeleton} ${styles.skeletonButton}`}></div>
               ) : (
                 <button type="submit" className={styles.btn}>
-                  Login
+                  {
+                    sentCount > 0 ? "resend reset password link" : "send password reset link"
+                  }
                 </button>
               )}
             </div>
           </form>
-
-          <p className={styles.registerLink}>
-            <Link to="/forgot-password">Forgot password?</Link>
-          </p>
+              {
+                sentCount > 0 && <p className={styles.spamText}>Please check your Spam folder too!</p>
+              }
           <p className={styles.registerLink}>
             Don't have an account? <a href="/sign-up">Sign Up</a>
           </p>
@@ -200,4 +151,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

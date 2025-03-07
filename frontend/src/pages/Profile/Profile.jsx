@@ -1,20 +1,21 @@
 // pages/Profile/Profile.jsx
-import { useEffect, useRef, useState } from "react";
-import Iphone from "../../Components/Iphone/Iphone";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 import { MdOutlineDragIndicator } from "react-icons/md";
 import styles from "./Profile.module.css";
-import LinkModal from "../../Components/LinkModal/LinkModal";
-import ShopModal from "../../Components/ShopModal/ShopModal";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../../../api";
-import MyToast from "../../Components/MyToast/MyToast";
 import { updateUser } from "../../store/slices/authSlice";
 import { decrementLinkCount, setLinkCount } from "../../store/slices/linkSlice";
 import { decrementShopCount, setShopCount } from "../../store/slices/shopSlice";
-import Preview from "../../Components/Preview/Preview";
+import MyToast from "../../Components/MyToast/MyToast";
 import Spinner from "../../Components/Spinner/Spinner";
+
+const Iphone = lazy(() => import("../../Components/Iphone/Iphone")) 
+const Preview = lazy(() => import("../../Components/Preview/Preview"))
+const LinkModal = lazy(() => import("../../Components/LinkModal/LinkModal"))
+const ShopModal = lazy(() => import("../../Components/ShopModal/ShopModal"))
 
 const backgroundColor = ["#000", "rgb(156, 108, 108)", "#28A263"];
 // const links = [
@@ -460,28 +461,97 @@ const handleDeleteShop = async (id) => {
     setIsLoading(false)
   }
 };
-if (isLoading) {
-  console.log('Rendering spinner...');
-  return <>
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10000,
-    fontSize: '24px'
-  }}>
-    <Spinner />
-  </div>
-  
-</>
-}
-  return (
+
+  return isLoading ? (
+    <div className={styles.profileContainer}>
+  <section className={styles.leftSection}>
+  <Iphone 
+   backgroundColor={bannerBackground}
+   username={username}
+   profileImage={profileImage}
+   links={links}
+   shops={shops}
+   Layout={Layout}
+   themes={themes}
+   selectedTheme={selectedTheme}
+   buttonColor={buttonColor}
+   setButtonColor={setButtonColor}  // Pass the setter function
+   buttonFontColor={buttonFontColor}
+   selectedFont={selectedFont}
+   fontColor={fontColor}
+   selectedButtonStyle={selectedButtonStyle}
+   selectedButtonRadius={selectedButtonRadius}
+   bio={bio}
+   isLoading={isLoading}
+/>
+  </section>
+
+  <section className={styles.rightSection}>
+    <h2 className={styles.sectionTitle}>Profile</h2>
+
+    {/* Profile Settings Section */}
+    <div className={styles.profileSettings}>
+      <div className={styles.imageUpload}>
+        <div className={`${styles.skeleton} ${styles.skeletonProfileImage}`}></div>
+        <div className={styles.profileBtns}>
+          <div className={`${styles.skeleton} ${styles.skeletonUploadButton}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonRemoveButton}`}></div>
+        </div>
+      </div>
+
+      <form className={styles.settingsForm}>
+        <div className={styles.formGroup}>
+          <label htmlFor="profileTitle">Profile Title</label>
+          <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="bio">Bio</label>
+          <div className={`${styles.skeleton} ${styles.skeletonTextArea}`}></div>
+          <span className={styles.charCount}>0 / 80</span>
+        </div>
+      </form>
+    </div>
+
+    {/* Add Link & Shop Section */}
+    <div className={styles.addSection}>
+      <div className={styles.buttons}>
+        <div className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+        <div className={`${styles.skeleton} ${styles.skeletonShop}`}></div>
+      </div>
+
+      <div className={styles.socialLinks}>
+        <div className={`${styles.skeleton} ${styles.skeletonLinkCard}`}></div>
+        <div className={`${styles.skeleton} ${styles.skeletonLinkCard}`}></div>
+        <div className={`${styles.skeleton} ${styles.skeletonLinkCard}`}></div>
+      </div>
+    </div>
+
+    {/* Banner Section */}
+    <h2 className={styles.sectionTitle}>Banner</h2>
+    <div className={styles.bannerSection}>
+      <div className={`${styles.skeleton} ${styles.skeletonBanner}`}></div>
+
+      <div className={styles.colorPicker}>
+        <p className={styles.bgColortxt}>Custom Background Color</p>
+        <div className={styles.colorOptions}>
+          <div className={`${styles.skeleton} ${styles.skeletonColorOption}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonColorOption}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonColorOption}`}></div>
+        </div>
+        <div className={styles.colorInput}>
+          <div className={`${styles.skeleton} ${styles.skeletonCustomColorOption}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+        </div>
+      </div>
+    </div>
+
+    <div className={styles.saveButtonContainer}>
+      <div className={`${styles.skeleton} ${styles.skeletonSaveButton}`}></div>
+    </div>
+  </section>
+</div>
+  ) : (
     <div className={styles.profileContainer}>
       <section className={styles.leftSection}>
       <Iphone 
@@ -501,6 +571,7 @@ if (isLoading) {
    selectedButtonStyle={selectedButtonStyle}
    selectedButtonRadius={selectedButtonRadius}
    bio={bio}
+   isLoading={isLoading}
 />
       </section>
 

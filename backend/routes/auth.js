@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const verifyToken = require('../middlewares/verifyToken')
 const upload = require('../middlewares/multer')
+const nodemailer = require('nodemailer');
+const crypto = require('crypto')
+const transporter = require('../config/nodemailer')
 // Signup Route
 router.post('/signup', async (req, res) => {
     try {
@@ -49,8 +52,8 @@ router.post('/signup', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: process.env.NODE_ENV === 'production'? true : false,
+            sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -112,8 +115,8 @@ router.post('/signin', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: process.env.NODE_ENV === 'production'? true : false,
+            sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -151,17 +154,25 @@ router.post('/signin', async (req, res) => {
 router.post('/set-username', verifyToken, async (req, res) => {
     try {
         const { username } = req.body;
-        const user = await User.findOne({ username: username })
-        if (user) {
+        if(!username) {
             return res.status(400).json({
                 success: false,
-                message: "Username already exists"
+                message: "username not provided"
             });
         }
-        await User.findByIdAndUpdate(req.user.id, { username }, { new: true })
+        const user = await User.findOne({ _id: req.user.id })
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "user does not exist"
+            });
+        }
+        user.username = username
+        await user.save()
         return res.status(200).json({
             success: true,
-            message: "Username updated successfully",
+            message: "username set successfully",
             user: {
                 id: user._id,
                 username: user.username,
@@ -171,7 +182,7 @@ router.post('/set-username', verifyToken, async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Username update failed",
+            message: "username update failed",
             error: error.message
         });
     }
@@ -396,6 +407,7 @@ router.put('/update-user-card', verifyToken, upload.single('profileImage'), asyn
         });
     }
 });
+
 router.get('/logout', verifyToken, (req, res) => {
     try {
         res.cookie('token', '', {
@@ -414,5 +426,86 @@ router.get('/logout', verifyToken, (req, res) => {
         });
     }
 });
+
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body
+        const user = await User.findOne({ email: email })
+        if(!user) {
+            return res.json({
+                success: false,
+                message: 'user does not exist'
+            })
+        }
+        const resetToken = crypto.randomBytes(20).toString('hex')
+        user.resetPasswordToken = resetToken 
+        user.resetPasswordExpires = Date.now() + 3600000
+        await user.save()
+
+        const resetUrl = `${process.env.VITE_API_URL}/reset-password/${resetToken}`
+
+        const mailOptions = {
+            from: 'mysparkapp18@gmail.com',
+            to: user.email,
+            subject: 'Password Reset Request',
+            text: `Dear ${user.username !== null ? user.username : user.firstName}, You requested a password reset. Please click the following link to reset your password: ${resetUrl}\n\nThis link expires in 1 hour.`
+        }
+
+        await transporter.sendMail(mailOptions)
+
+        return res.status(200).json({
+            success: true,
+            message: 'Password reset mail sent'
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to process password reset",
+            error: error.message
+        });
+    }
+});
+
+router.post('/set-newpassword', async (req, res) => {
+    try {
+        const { password } = req.body
+        const { resetToken } = req.query
+        const user = await User.findOne({ resetPasswordToken: resetToken });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+        if(Date.now() > user.resetPasswordExpires) {
+            return res.status(401).json({
+                success: false,
+                message: "link has expired",
+            })
+        }
+
+       const salt = await bcrypt.genSalt(10)
+       const hash = await bcrypt.hash(password, salt)
+
+       user.password = hash 
+       user.resetPasswordToken = null
+       user.resetPasswordExpires = null
+       await user.save()
+
+       return res.status(200).json({ 
+        success: true,
+        message: "password changed successfully"
+        })
+            
+    } catch (error) {
+        console.error(error); // Log the error for debugging purposes
+        return res.status(500).json({
+            success: false,
+            message: "password change failed",
+            error: error.message
+        });
+    }
+});
+
 
 module.exports = router

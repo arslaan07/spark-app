@@ -1,11 +1,11 @@
 // components/Layout/Layout.jsx
 import { Outlet } from 'react-router-dom'
-import Sidebar from '../Sidebar/Sidebar'
+import { lazy } from 'react'
 import styles from './Layout.module.css'
-import ProfileNavbar from '../ProfileNavbar/ProfileNavbar'
-import MobileNavbar from '../MobileNavbar/MobileNavbar'
-import Toolbar from '../Toolbar/Toolbar'
-
+const Sidebar = lazy(() => import('../Sidebar/Sidebar'));
+const ProfileNavbar = lazy(() => import('../ProfileNavbar/ProfileNavbar'));
+const MobileNavbar = lazy(() => import('../MobileNavbar/MobileNavbar'));
+const Toolbar = lazy(() => import('../Toolbar/Toolbar'));
 function Layout() {
   return (
     <div className={styles.container}>

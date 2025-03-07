@@ -1,8 +1,8 @@
 // components/Sidebar/Sidebar.jsx
-import { useState } from 'react';
+import { useState, lazy, useEffect } from 'react';
 import styles from './Sidebar.module.css'
-import { Link, useNavigate } from 'react-router-dom';
-import Logout from '../Logout/Logout';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+const Logout = lazy(() => import('../Logout/Logout'))
 
 const navItems = [
     {
@@ -45,12 +45,20 @@ const navItems = [
 ]
 
 function Sidebar() {
+    const location = useLocation()    
     const [selected, setSelected] = useState('Links')
     const navigate = useNavigate()
     const handleClick = (item) => {
       setSelected(item.label)
       navigate(item.path)
     }
+    useEffect(() => {
+      navItems.map((navItem) => {
+        if(window.location.pathname === navItem.path) {
+          setSelected(navItem.label)
+        }}
+      )
+    }, [])
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>

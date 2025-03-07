@@ -97,3 +97,67 @@
     margin-bottom: -1rem;
   }
 }
+
+/* Shimmer Effect Styles */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Skeleton Placeholders */
+.skeletonTitle {
+  width: 80%;
+  height: 2.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonDescription {
+  width: 100%;
+  height: 1.125rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonCaption {
+  width: 80%;
+  height: 1.125rem;
+  border-radius: 8px;
+}
+
+/* Mobile Styles for Skeleton */
+@media (max-width: 768px) {
+  .skeletonTitle {
+    height: 2rem;
+  }
+
+  .skeletonDescription {
+    height: 1rem;
+  }
+
+  .skeletonImage {
+    height: 200px;
+  }
+
+  .skeletonCaption {
+    height: 1rem;
+  }
+}

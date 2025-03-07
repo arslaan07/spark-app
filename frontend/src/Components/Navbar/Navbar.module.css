@@ -16,7 +16,6 @@
     border: 1px solid #E0E2D9;
     z-index: 100;
   }
-  
   .logo {
     display: flex;
     align-items: center;
@@ -109,4 +108,43 @@
     font-size: 0.9rem;
   }
 }
+/* Skeleton styles for Navbar */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeletonLogo {
+  width: 150px;
+  height: 38px;
+  border-radius: 20px;
+}
+
+.skeletonButton {
+  width: 120px;
+  height: 40px;
+  border-radius: 96px;
+}
+
+@media (max-width: 768px) {
+  .skeletonLogo {
+    width: 40px;
+    height: 34px;
+  }
+  
+  .skeletonButton {
+    width: 100px;
+    height: 36px;
+  }
+}

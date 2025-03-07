@@ -6,13 +6,15 @@ import { useNavigate } from 'react-router-dom';
 const Preview = () => {
   const { user } = useSelector((state) => state.auth)
   const navigate = useNavigate()
+
   const handleProfileView = async (username) => {
     try {
-      navigate(`/profile/${username}`)
+      navigate(`/${username}`)
     } catch (err) {
       console.error(err);
     }
   };
+  
   return (
     <div className={styles.previewContainer}>
       <button onClick={() => handleProfileView(user?.username)} className={styles.previewBtn}>

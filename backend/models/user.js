@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
   font: { type: String, default: null },
   fontColor: { type: String, default: null },
   theme: { type: String, default: null },
+  resetPasswordToken: { type: String, default: null },
+  resetPasswordExpires: { type: String, default: null },
 });
 
 module.exports = mongoose.model('User', userSchema);

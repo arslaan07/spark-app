@@ -33,6 +33,11 @@ const testimonials = [
 
 const Testimonials = () => {
   const [isMobile, setIsMobile] = useState(false);
+   const [isLoading, setIsLoading] = useState(true)
+    useEffect(() => {
+        setTimeout(() => setIsLoading(false), 1000); 
+      }, []);
+    
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,7 +67,10 @@ const Testimonials = () => {
           <h2 className={styles.title}>
             Here's what our <span className={styles.highlight}>customer</span> has to say
           </h2>
-          <button className={styles.readMore}>Read customer stories</button>
+          {
+            isLoading ? <div className={`${styles.skeletonButton} ${styles.skeleton}`}></div> :
+                        <button className={styles.readMore}>Read customer stories</button>
+          }
         </div>
         <div className={styles.descriptionContainer}>
           <img className={styles.descImg} src="/images/Testimonials/desc.png" alt="" />
@@ -70,49 +78,89 @@ const Testimonials = () => {
         </div>
       </div>
 
-      {isMobile ? (
-        <div className={styles.sliderContainer}>
-          <Slider {...sliderSettings}>
-            {testimonials.map((testimonial, i) => (
-              <div key={i}>
-                <div className={i === 0 || i === 3 ? `${styles.testimonialCard} ${styles.odd}` : `${styles.testimonialCard} ${styles.even}`}>
-                  <h3 className={styles.cardTitle}>{testimonial.title}</h3>
-                  <p className={styles.cardText}>{testimonial.review}</p>
-                  <div className={styles.reviewer}>
-                    <div className={styles.reviewerInfo}>
-                      <div className={styles.circle}></div>
-                      <div className={styles.signature}>
-                        <span className={styles.name}>{testimonial.name}</span>
-                        <span className={styles.position}>{testimonial.position}</span>
+      {isLoading ? (
+        // Shimmer effect for loading state
+        isMobile ? (
+          <div className={styles.sliderContainer}>
+            <Slider {...sliderSettings}>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i}>
+                  <div className={`${styles.testimonialCard} ${styles.skeleton}`}>
+                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`}></div>
+                    <div className={`${styles.skeletonText} ${styles.skeleton}`}></div>
+                    <div className={styles.reviewer}>
+                      <div className={styles.reviewerInfo}>
+                        <div className={`${styles.skeletonCircle} ${styles.skeleton}`}></div>
+                        <div className={`${styles.skeletonSignature} ${styles.skeleton}`}></div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        ) : (
+          <div className={styles.testimonialGrid}>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className={`${styles.testimonialCard} ${styles.skeleton}`}>
+                <div className={`${styles.skeletonTitle} ${styles.skeleton}`}></div>
+                <div className={`${styles.skeletonText} ${styles.skeleton}`}></div>
+                <div className={styles.reviewer}>
+                  <div className={styles.reviewerInfo}>
+                    <div className={`${styles.skeletonCircle} ${styles.skeleton}`}></div>
+                    <div className={`${styles.skeletonSignature} ${styles.skeleton}`}></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      ) : (
+        // Actual content
+        isMobile ? (
+          <div className={styles.sliderContainer}>
+            <Slider {...sliderSettings}>
+              {testimonials.map((testimonial, i) => (
+                <div key={i}>
+                  <div className={i === 0 || i === 3 ? `${styles.testimonialCard} ${styles.odd}` : `${styles.testimonialCard} ${styles.even}`}>
+                    <h3 className={styles.cardTitle}>{testimonial.title}</h3>
+                    <p className={styles.cardText}>{testimonial.review}</p>
+                    <div className={styles.reviewer}>
+                      <div className={styles.reviewerInfo}>
+                        <div className={styles.circle}></div>
+                        <div className={styles.signature}>
+                          <span className={styles.name}>{testimonial.name}</span>
+                          <span className={styles.position}>{testimonial.position}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        ) : (
+          <div className={styles.testimonialGrid}>
+            {testimonials.map((testimonial, i) => (
+              <div key={i} className={i === 0 || i === 3 ? `${styles.testimonialCard} ${styles.odd}` : `${styles.testimonialCard} ${styles.even}`}>
+                <h3 className={styles.cardTitle}>{testimonial.title}</h3>
+                <p className={styles.cardText}>{testimonial.review}</p>
+                <div className={styles.reviewer}>
+                  <div className={styles.reviewerInfo}>
+                    <div className={styles.circle}></div>
+                    <div className={styles.signature}>
+                      <span className={styles.name}>{testimonial.name}</span>
+                      <span className={styles.position}>{testimonial.position}</span>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-          </Slider>
-        </div>
-      ) : (
-        <div className={styles.testimonialGrid}>
-          {testimonials.map((testimonial, i) => (
-            <div key={i} className={i === 0 || i === 3 ? `${styles.testimonialCard} ${styles.odd}` : `${styles.testimonialCard} ${styles.even}`}>
-              <h3 className={styles.cardTitle}>{testimonial.title}</h3>
-              <p className={styles.cardText}>{testimonial.review}</p>
-              <div className={styles.reviewer}>
-                <div className={styles.reviewerInfo}>
-                  <div className={styles.circle}></div>
-                  <div className={styles.signature}>
-                    <span className={styles.name}>{testimonial.name}</span>
-                    <span className={styles.position}>{testimonial.position}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+          </div>
+        )
       )}
     </section>
-  )
+  );
 }
 
 export default Testimonials

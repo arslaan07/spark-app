@@ -143,6 +143,34 @@
   .btn:hover {
     background-color: #28A253;
   }
+
+    /* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeletonInput {
+  height: 42px;
+  width: 60%;
+}
+
+.skeletonButton {
+  padding: 14px 80px;
+  margin-top: 10px;
+  height: 50px;
+}
   @media screen and (max-width: 768px) {
     .container {
       padding: 1rem;
@@ -163,11 +191,12 @@
       margin-bottom: 1rem;
     }
   
-    .formGroup input {
+    .formGroup input, .skeletonInput {
       height: 44px;
       font-size: 14px;
       width: 100%;
     }
+    
   
     ::placeholder {
       font-size: 14px;
@@ -176,6 +205,7 @@
     .btn {
       padding: 0.6rem;
     }
+    
     .eye {
         right: 16px;
     }
@@ -196,6 +226,10 @@
         cursor: pointer;
         font-size: 12px;
         
+      }
+      .skeletonButton {
+        height: 30px;
+        padding: 0px 44px;
       }
   }
   
@@ -232,3 +266,4 @@
       bottom: -16px;
     }
   }
+

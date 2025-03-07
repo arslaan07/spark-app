@@ -58,6 +58,7 @@
     align-items: center;
     overflow: hidden;
   }
+ 
   .profileImage {
     width: 100px;
     height: 100px;
@@ -450,6 +451,95 @@
     font-size: 14px;
     width: 100%;
   }
+
+  /* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+/* Specific Skeleton Styles */
+.skeletonProfileImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.skeletonUploadButton {
+  width: 100%;
+  height: 44px;
+  border-radius: 64px;
+}
+
+.skeletonRemoveButton {
+  width: 100%;
+  height: 44px;
+  border-radius: 64px;
+}
+
+.skeletonInput {
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
+}
+
+.skeletonTextArea {
+  width: 100%;
+  height: 100px;
+  border-radius: 8px;
+}
+
+.skeletonLink {
+  width: 100%;
+  height: 40px;
+  border-radius: 24px;
+}
+.skeletonLinkCard {
+  width: 100%;
+  height: 70px;
+  border-radius: 12px;
+}
+
+.skeletonShop {
+  width: 100%;
+  height: 40px;
+  border-radius: 24px;
+}
+
+.skeletonBanner {
+  width: 100%;
+  height: 270px;
+  border-radius: 16px;
+}
+
+.skeletonColorOption {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeletonCustomColorOption {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.skeletonSaveButton {
+  width: 150px;
+  height: 44px;
+  border-radius: 8px;
+}
   @media screen and (max-width: 1240px) {
     .buttons {
         background-color: #C9C9C9;

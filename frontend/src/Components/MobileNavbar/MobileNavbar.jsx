@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, lazy } from 'react'
 import styles from './MobileNavbar.module.css'
-import Logout from '../Logout/Logout';
+const Logout = lazy(() => import('../Logout/Logout'))
 const MobileNavbar = () => {
     const [profileImage, setProfileImage] = useState(
         "/images/Iphone/default.png"

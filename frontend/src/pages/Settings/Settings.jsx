@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, lazy, useEffect } from "react";
 import styles from "./Settings.module.css";
 import { FiEye } from "react-icons/fi";
 import { IoMdEyeOff } from "react-icons/io";
@@ -15,18 +15,31 @@ const Settings = () => {
   // Password visibility states
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
-
-  // Initial form data state with original user data
+  const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({
-    fname: user.firstName,
-    lname: user.lastName,
-    email: user.email,
+    fname: "",
+    lname: "",
+    email: "",
     oldPassword: "",
     newPassword: "",
-    password: ""
+    password: "",
   });
 
+  // Initial form data state with original user data
+  useEffect(() => {
+    setTimeout(() => {
+      setFormData({
+        fname: user.firstName,
+        lname: user.lastName,
+        email: user.email,
+        oldPassword: "",
+        newPassword: "",
+        password: "",
+      });
+      setIsLoading(false); 
+    }, 300); // Simulate API delay
+  }, [user]);
+  
   // Track which fields have been modified
   const [modifiedFields, setModifiedFields] = useState({
     email: false,
@@ -153,29 +166,90 @@ const Settings = () => {
     }
   };
   
-  if (isLoading) {
-    console.log('Rendering spinner...');
-    return <>
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'white',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 10000,
-      fontSize: '24px'
-    }}>
-      <Spinner />
-    </div>
+  // if (isLoading) {
+  //   console.log('Rendering spinner...');
+  //   return <>
+  //   <div style={{
+  //     position: 'fixed',
+  //     top: 0,
+  //     left: 0,
+  //     right: 0,
+  //     bottom: 0,
+  //     backgroundColor: 'white',
+  //     display: 'flex',
+  //     justifyContent: 'center',
+  //     alignItems: 'center',
+  //     zIndex: 10000,
+  //     fontSize: '24px'
+  //   }}>
+  //     <Spinner />
+  //   </div>
     
-  </>
-  }
+  // </>
+  // }
 
-  return (
+  return isLoading ? (
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <div className={styles.editProfileHeader}>
+          <h1 className={styles.heading}>Edit Profile</h1>
+          <div className={styles.dividerContainer}>
+          <div className={styles.greenDivider}></div>
+          <div className={styles.grayDivider}></div>
+          </div>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label htmlFor="fname">First name</label>
+            <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+            {errors.fname && <div className={styles.error}>{errors.fname}</div>}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="lname">Last name</label>
+            <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+            {errors.lname && <div className={styles.error}>{errors.lname}</div>}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="email">Email</label>
+            <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+            {errors.email && <div className={styles.error}>{errors.email}</div>}
+          </div>
+
+          {modifiedFields.email && (
+            <div className={styles.formGroup}>
+              <label htmlFor="password">Password</label>
+              <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+              {errors.password && <div className={styles.error}>{errors.password}</div>}
+            </div>
+          )}
+
+          <div className={styles.formGroup}>
+            <label htmlFor="oldPassword">Old Password</label>
+            <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+            <span onClick={() => setShowOldPassword(!showOldPassword)} className={styles.eye}>
+              {showOldPassword ? <FiEye /> : <IoMdEyeOff />}
+            </span>
+            {errors.oldPassword && <div className={styles.error}>{errors.oldPassword}</div>}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="newPassword">New Password</label>
+            <div className={`${styles.skeleton} ${styles.skeletonInput}`}></div>
+            <span onClick={() => setShowNewPassword(!showNewPassword)} className={styles.eye}>
+              {showNewPassword ? <FiEye /> : <IoMdEyeOff />}
+            </span>
+            {errors.newPassword && <div className={styles.error}>{errors.newPassword}</div>}
+          </div>
+          <div className={styles.saveBtnContainer}>
+          <div className={`${styles.skeleton} ${styles.skeletonButton}`}></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  ) :
+   (
     <div className={styles.container}>
       <div className={styles.form}>
         <div className={styles.editProfileHeader}>

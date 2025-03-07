@@ -335,4 +335,7 @@ input:checked + .slider:before {
       .platform {
         font-size: 11px;
       }
+      .active {
+        background-color: #817f7f;
+      }
 }

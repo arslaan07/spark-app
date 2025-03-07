@@ -10,10 +10,10 @@ import themes from '../../utils/themes'
 import applications from '../../utils/applications'
 import styles from './Iphone.module.css'
 
-const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
+const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout, isLoading,
     selectedTheme, buttonColor, setButtonColor, manualColorChange, buttonFontColor, selectedFont, fontColor, selectedButtonStyle, selectedButtonRadius, bio }) => {
-    const [selectedBtn, setSelectedBtn] = useState('link');
-    
+    const [selectedBtn, setSelectedBtn] = useState('link')
+    console.log(isLoading)
     // Slider settings for carousel
     const sliderSettings = {
       dots: true,
@@ -70,7 +70,99 @@ const Iphone = ({ backgroundColor, username, profileImage, links, shops, Layout,
 
     const buttonStyle = getButtonStyle();
 
-  return (
+  return isLoading ? (
+    <div className={styles.phoneContainer}>
+      <div className={styles.phone}>
+
+        {/* Rest of the code remains the same */}
+        {/* User Card Skeleton */}
+      <div className={styles.usercard}>
+        <div className={styles.profileHeader}>
+          <div className={`${styles.avatar} ${styles.skeleton} ${styles.skeletonProfileImage}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonUsername}`}></div>
+          <div className={`${styles.skeleton} ${styles.skeletonBio}`}></div>
+        </div>
+      </div>
+        <div className={styles.dynamicIsland}></div>
+        <div className={styles.content}>
+          <div className={styles.buttons}>
+            <div className={`${styles.skeleton} ${styles.skeletonLinkBtn}`}></div>
+            <div className={`${styles.skeleton} ${styles.skeletonLinkBtn}`}></div>
+          </div>
+          
+          {/* List Layout for Links - with updated button style */}
+          {selectedBtn === 'link' && Layout === 'Stack' && (
+            <div className={styles.links}>
+              {[...links].reverse().map((link, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+              ))}
+            </div>
+          )}
+          
+          {/* Grid Layout for Links - with updated button style */}
+          {selectedBtn === 'link' && Layout === 'Grid' && (
+            <div className={styles.linksGridLayout}>
+              {[...links].reverse().map((link, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+              ))}
+            </div>
+          )}
+          
+          {/* Carousel Layout for Links - with updated button style */}
+          {selectedBtn === 'link' && Layout === 'Carousel' && (
+            <div className={styles.carouselContainer}>
+              <Slider {...sliderSettings}>
+                {[...links].reverse().map((link, i) => (
+                  <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+                ))}
+              </Slider>
+            </div>
+          )}
+          
+          {/* Shop Items - with updated button style for Buy buttons */}
+          {selectedBtn === 'shop' && Layout === 'Stack' && (
+            <div className={styles.shops}>
+              {[...shops].reverse().map((shop, i) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+              ))}
+            </div>
+          )}
+          
+          {/* Grid Layout for Shop Items - with updated button style */}
+          {selectedBtn === 'shop' && Layout === 'Grid' && (
+            <div className={styles.shopGridLayout}>
+              {[...shops].reverse().map((shop) => (
+                <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+              ))}
+            </div>
+          )}
+          
+          {/* Carousel Layout for Shop Items - with updated button style */}
+          {selectedBtn === 'shop' && Layout === 'Carousel' && (
+            <div className={styles.carouselContainer}>
+              <Slider {...sliderSettings}>
+                {[...shops].reverse().map((shop) => (
+                  <div key={i} className={`${styles.skeleton} ${styles.skeletonLink}`}></div>
+                ))}
+              </Slider>
+            </div>
+          )}
+        </div>
+        <div className={styles.footer}>
+          <button className={styles.connectBtn}>Get Connected</button>
+          <div className={styles.logo}>
+            <div className={styles.logoImg}>
+              <img src="/images/Footer/chingari.png" alt="Spark" />
+              <div className={styles.dot}></div> 
+            </div>
+            <span className={styles.textWrapper}>
+              <span className={styles.sparktext}>SPARK<sup>TM</sup></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className={styles.phoneContainer}>
       <div style={{ backgroundColor: selectedTheme !== -1 ? themes[selectedTheme]?.backgroundColor : ""}} className={styles.phone}>
         {/* Rest of the code remains the same */}
