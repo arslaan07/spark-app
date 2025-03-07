@@ -14,13 +14,13 @@ require("dotenv").config();
 connectDB();
 
 const allowedOrigins = [
-  "http://localhost:5173", // Development 
-  "https://spark07.netlify.app"  //Production
+  process.env.VITE_URL_DEVELOPMENT, 
+  process.env.VITE_URL_PRODUCTION
 ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: allowedOrigins, 
     credentials: true,
     methods: "GET,POST,PUT,DELETE", 
   })
@@ -39,7 +39,7 @@ app.use("/api/profile", publicRoutes);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello my dear World!');
+  res.send('Welcome to Spark!');
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
