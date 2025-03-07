@@ -52,7 +52,7 @@ function PublicProfile() {
         fontColor={profileData?.fontColor ? profileData.fontColor : '#000'}
         selectedButtonStyle={profileData?.buttonStyle ? profileData.buttonStyle : 'Fill'}
         selectedButtonRadius={profileData?.buttonRadius ? profileData.buttonRadius : '30px'}
-        bio={{content: profileData?.bio || '' }}
+        bio={{content: profileData?.bio ?  profileData.bio : '' }}
         
       />
     </div>
