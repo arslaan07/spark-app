@@ -19,7 +19,7 @@ const SignUp = () => {
   const dispatch = useDispatch()
 
    useEffect(() => {
-      setTimeout(() => setIsLoading(false), 2000); // Simulate loading state
+      setTimeout(() => setIsLoading(false), 1000); // Simulate loading state
     }, []);
    
   // Toggle password visibility

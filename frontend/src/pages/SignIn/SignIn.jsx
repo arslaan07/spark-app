@@ -27,7 +27,7 @@ const SignIn = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 500); // Simulate loading state
+    setTimeout(() => setIsLoading(false), 1000); // Simulate loading state
   }, []);
 
   const validateField = (name, value) => {
