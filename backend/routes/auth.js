@@ -8,6 +8,10 @@ const upload = require('../middlewares/multer')
 const nodemailer = require('nodemailer');
 const crypto = require('crypto')
 const transporter = require('../config/nodemailer')
+const refreshSession = require('../middlewares/refreshSession')
+
+
+router.post('/refresh', refreshSession);
 // Signup Route
 router.post('/signup', async (req, res) => {
     try {
@@ -44,17 +48,33 @@ router.post('/signup', async (req, res) => {
             email,
             password: hashedPassword,
         });
-        const token = jwt.sign(
+        const sessionToken = jwt.sign(
             { id: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
+            process.env.SESSION_TOKEN_SECRET,
+            { expiresIn: '15m' }
         );
 
-        res.cookie('token', token, {
+        const refreshToken = jwt.sign(
+            { id: user._id },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d' }
+        );
+        user.refreshToken = refreshToken 
+        await user.save()
+
+        res.cookie('sessionToken', sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production'? true : false,
             sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 15 * 60 * 1000
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'? true : false,
+            sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
+            path: '/api/auth/refresh',
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         return res.status(201).json({
@@ -107,17 +127,32 @@ router.post('/signin', async (req, res) => {
             });
         }
 
-        const token = jwt.sign(
+        const sessionToken = jwt.sign(
             { id: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
+            process.env.SESSION_TOKEN_SECRET,
+            { expiresIn: '15m' }
         );
+        const refreshToken = jwt.sign(
+            { id: user._id },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d'}
+        )
+        user.refreshToken = refreshToken
+        await user.save()
 
-        res.cookie('token', token, {
+        res.cookie('sessionToken', sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production'? true : false,
             sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 15 * 60 * 1000
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'? true : false,
+            sameSite: process.env.NODE_ENV === 'production'? 'none' : 'lax',
+            path: 'api/auth/refresh',
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         return res.status(200).json({
@@ -408,12 +443,19 @@ router.put('/update-user-card', verifyToken, upload.single('profileImage'), asyn
     }
 });
 
-router.get('/logout', verifyToken, (req, res) => {
+router.get('/logout', verifyToken, async (req, res) => {
     try {
-        res.cookie('token', '', {
-            httpOnly: process.env.NODE_ENV === 'production',
-            expires: new Date(0)
-        });
+        const refreshToken = req.cookies.refreshToken;
+        if (refreshToken) {
+            // Find user with this refresh token and clear it
+            await User.findOneAndUpdate(
+              { refreshToken },
+              { refreshToken: null }
+            );
+          }
+        // Clear cookies
+        res.clearCookie('sessionToken');
+        res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
         res.json({
             success: true,
             message: "Logged out successfully"

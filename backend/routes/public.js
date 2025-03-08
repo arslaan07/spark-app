@@ -7,7 +7,7 @@ const Shop = require('../models/shop');
 router.get('/:username', async (req, res) => {
     try {
     const user = await User.findOne({ username: req.params.username })
-        .select('-firstName -lastName -email -password');
+        .select('-firstName -lastName -email -password -refreshToken -resetPasswordToken -resetPasswordExpires');
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }

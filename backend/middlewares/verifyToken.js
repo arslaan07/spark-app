@@ -1,17 +1,14 @@
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
-    const token = req.cookies.token;  
+    const sessionToken = req.cookies.sessionToken;  
 
-    if (!token) {
+    if (!sessionToken) {
         return res.status(401).json({ message: 'No token, authorization denied' });
     }
-  if (!token) {
-      return res.status(401).json({ message: 'No token, authorization denied' });
-  }
   
   try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(sessionToken, process.env.SESSION_TOKEN_SECRET);
       req.user = decoded;
       next();
   } catch (err) {
