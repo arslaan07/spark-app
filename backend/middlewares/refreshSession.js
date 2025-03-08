@@ -29,7 +29,7 @@ const refreshSession = async (req, res) => {
         res.cookie('sessionToken', sessionToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 15 * 60 * 1000,
           });
           res.status(200).json({ success: true });
