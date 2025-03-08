@@ -1,14 +1,15 @@
+// import dependencies
 import axios from 'axios';
 import MyToast from './src/Components/MyToast/MyToast';
-import { store } from './src/store/store'
+import { store } from './src/store/store';
 import { logout } from './src/store/slices/authSlice';
 import { setLinkCount } from './src/store/slices/linkSlice';
 import { setShopCount } from './src/store/slices/shopSlice';
-import { useNavigate } from 'react-router-dom'; 
+
 // Create axios instance
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true // Important for sending cookies
+  withCredentials: true, // Important for sending cookies
 });
 
 // Add response interceptor
@@ -17,40 +18,46 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
-    // If unauthorized and not already retrying
-    if (error.response?.status === 401 && 
-        !originalRequest._retry &&
-        originalRequest.url !== '/api/auth/refresh') {
-            originalRequest._retry = true;
-      
+    // Extract status code and error message
+    const status = error.response?.status;
+    const errorMessage = error.response?.data?.message || '';
+
+    // If unauthorized (401) but NOT from signin or signup, handle refresh
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.url !== '/api/auth/refresh' &&
+      !['Invalid credentials', 'User not found', 'Passwords do not match'].includes(errorMessage)
+    ) {
+      originalRequest._retry = true;
+
       try {
-        // Call refresh endpoint using async/await
+        // Attempt to refresh the session
         await api.post('/api/auth/refresh', {}, { withCredentials: true });
-        
-        // Retry the original request with async/await
-        const response = await api(originalRequest);
-        return response;
+
+        // Retry the original request
+        return await api(originalRequest);
       } catch (refreshError) {
-        try {
-            if (refreshError.response?.status === 401 || refreshError.response?.status === 403) {
-            store.dispatch(logout());
-            store.dispatch(setLinkCount(0));
-            store.dispatch(setShopCount(0));
-            const navigate = useNavigate(); 
-            navigate('/');
-            MyToast('Session Expired! Logout initiated ...', 'error')
-            }
-          } catch (logoutError) {
-            console.error('Logout failed:', logoutError);
-            MyToast(logoutError.message || 'Logout failed', 'error')
-          }
-        // Refresh failed, redirect to login
-        window.location.href = '/sign-in';
-        throw refreshError; // Re-throw to be caught by the calling function
+        // If refresh fails due to invalid refresh token or forbidden (403), log out
+        if (
+          refreshError.response?.status === 403 ||
+          (refreshError.response?.status === 401 && refreshError.response?.data?.message === 'Invalid refresh token')
+        ) {
+          store.dispatch(logout());
+          store.dispatch(setLinkCount(0));
+          store.dispatch(setShopCount(0));
+
+          MyToast('Session Expired! Logging out...', 'error');
+          window.location.href = '/';
+        } else {
+          MyToast('Connection issue. Please try again.', 'warning');
+        }
+
+        throw refreshError;
       }
     }
-    
-    // For other errors, just throw
+
+    // For all other errors, just throw it as is
     throw error;
   }
 );

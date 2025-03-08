@@ -367,12 +367,12 @@
       }
     
       .logo img {
-          width: 28px;
-          height: 34px;
+          width: 24px;
+          height: 32px;
         }
         .dot {
-          width: 7px;
-          height: 7px;
+          width: 5px;
+          height: 5px;
         }
   
     .formGroup input {

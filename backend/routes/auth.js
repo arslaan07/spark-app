@@ -11,7 +11,6 @@ const transporter = require('../config/nodemailer')
 const refreshSession = require('../middlewares/refreshSession')
 
 
-router.post('/refresh', refreshSession);
 // Signup Route
 router.post('/signup', async (req, res) => {
     try {
@@ -110,7 +109,7 @@ router.post('/signin', async (req, res) => {
                 message: "Email and password are required"
             });
         }
-
+        console.log('finding user ...')
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({
@@ -118,7 +117,7 @@ router.post('/signin', async (req, res) => {
                 message: "Invalid credentials"
             });
         }
-
+        console.log('user found')
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({
@@ -186,6 +185,10 @@ router.post('/signin', async (req, res) => {
         });
     }
 });
+
+router.post('/refresh', refreshSession);
+
+
 router.post('/set-username', verifyToken, async (req, res) => {
     try {
         const { username } = req.body;
@@ -484,14 +487,26 @@ router.post('/forgot-password', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000
         await user.save()
 
-        const resetUrl = `${process.env.VITE_API_URL}/reset-password/${resetToken}`
+        const resetUrl = `${process.env.VITE_URL_PRODUCTION}/reset-password/${resetToken}`
 
         const mailOptions = {
             from: 'mysparkapp18@gmail.com',
             to: user.email,
             subject: 'Password Reset Request',
-            text: `Dear ${user.username !== null ? user.username : user.firstName}, You requested a password reset. Please click the following link to reset your password: ${resetUrl}\n\nThis link expires in 1 hour.`
-        }
+            text: `Hi ${user.username !== null ? user.username : user.firstName},
+        
+        We received a request to reset your password for your account. If you did not make this request, you can safely ignore this email.
+        
+        To reset your password, please click the link below:
+        ${resetUrl}
+        
+        This link will expire in 1 hour for your security.
+        
+        If you have any issues or need further assistance, please contact our support team.
+        
+        Thank you,
+        The SparkApp Team`
+        };
 
         await transporter.sendMail(mailOptions)
 
