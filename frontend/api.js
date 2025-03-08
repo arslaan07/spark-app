@@ -32,12 +32,14 @@ api.interceptors.response.use(
         return response;
       } catch (refreshError) {
         try {
+            if (refreshError.response?.status === 401 || refreshError.response?.status === 403) {
             store.dispatch(logout());
             store.dispatch(setLinkCount(0));
             store.dispatch(setShopCount(0));
             const navigate = useNavigate(); 
             navigate('/');
             MyToast('Session Expired! Logout initiated ...', 'error')
+            }
           } catch (logoutError) {
             console.error('Logout failed:', logoutError);
             MyToast(logoutError.message || 'Logout failed', 'error')
