@@ -23,13 +23,9 @@ api.interceptors.response.use(
     const errorMessage = error.response?.data?.message || '';
 
     // If unauthorized (401) but NOT from signin or signup, handle refresh
-    if (
-      status === 401 &&
-      !originalRequest._retry &&
-      originalRequest.url !== '/api/auth/refresh' &&
-      !['Invalid credentials', 'User not found', 'Passwords do not match'].includes(errorMessage)
-    ) {
-      originalRequest._retry = true;
+    if (error.response?.status === 401 && !originalRequest._retry && error.response?.data.message === 'No token, authorization denied') {
+        console.log(error.response)
+        originalRequest._retry = true;
 
       try {
         // Attempt to refresh the session
@@ -38,28 +34,15 @@ api.interceptors.response.use(
         // Retry the original request
         return await api(originalRequest);
       } catch (refreshError) {
-        // If refresh fails due to invalid refresh token or forbidden (403), log out
-        if (
-          refreshError.response?.status === 403 ||
-          (refreshError.response?.status === 401 && refreshError.response?.data?.message === 'Invalid refresh token')
-        ) {
-          store.dispatch(logout());
-          store.dispatch(setLinkCount(0));
-          store.dispatch(setShopCount(0));
-
-          MyToast('Session Expired! Logging out...', 'error');
-          window.location.href = '/';
-        } else {
-          MyToast('Connection issue. Please try again.', 'warning');
-        }
-
-        throw refreshError;
-      }
-    }
-
-    // For all other errors, just throw it as is
-    throw error;
-  }
-);
+         // Refresh failed, redirect to login
+         window.location.href = '/sign-in';
+         throw refreshError; // Re-throw to be caught by the calling function
+       }
+     }
+     
+     // For other errors, just throw
+     throw error;
+   }
+ );
 
 export default api;

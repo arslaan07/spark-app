@@ -38,7 +38,7 @@ app.use("/api/shops", shopRoutes);
 app.use("/api/profile", publicRoutes);
 
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { 
   res.send('Welcome to Spark!');
 });
 const PORT = process.env.PORT || 3000;

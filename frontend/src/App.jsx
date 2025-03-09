@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Layout from "./Components/Layout/Layout";
 import Logout from "./Components/Logout/Logout";
@@ -10,6 +10,8 @@ import CustomCursor from "./Components/CustomCursor/CustomCursor";
 import { Toaster } from "sonner";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import { logout } from "./store/slices/authSlice";
+import MyToast from "./Components/MyToast/MyToast";
 
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -37,6 +39,12 @@ const PublicRoute = ({ children }) => {
   
   
 const App = () => {
+  const dispatch = useDispatch()
+  const { user, isAuthenticated } = useSelector((state) => state.auth)
+  if(Date.now() > user?.refreshToken) {
+    dispatch(logout())
+    MyToast('Session expired! Initiating Logout ...', 'error')
+  }
   return (
     <>
     {/* <Suspense fallback={<div className="loading-screen">Loading...</div>}> */}

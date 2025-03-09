@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
     user: 'mysparkapp18@gmail.com', 
     pass: process.env.GMAIL_PASSWORD 
   },
-  debug: true, // Enable debugging
-  logger: true  // Log errors
+  // debug: true, 
+  // logger: true  
 });
 
 

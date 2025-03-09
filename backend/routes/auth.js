@@ -85,6 +85,7 @@ router.post('/signup', async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                refreshToken: Date.now() + 7 * 24 * 60 * 60 * 1000
             }
         });
 
@@ -109,7 +110,6 @@ router.post('/signin', async (req, res) => {
                 message: "Email and password are required"
             });
         }
-        console.log('finding user ...')
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({
@@ -117,7 +117,6 @@ router.post('/signin', async (req, res) => {
                 message: "Invalid credentials"
             });
         }
-        console.log('user found')
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({
@@ -173,7 +172,8 @@ router.post('/signin', async (req, res) => {
                 font: user.font,
                 fontColor: user.fontColor,
                 buttonRadius: user.buttonRadius,
-                theme: user.theme
+                theme: user.theme,
+                refreshToken: Date.now() + 7 * 24 * 60 * 60 * 1000
             }
         });
 
@@ -477,7 +477,7 @@ router.post('/forgot-password', async (req, res) => {
         const { email } = req.body
         const user = await User.findOne({ email: email })
         if(!user) {
-            return res.json({
+            return res.status(401).json({
                 success: false,
                 message: 'user does not exist'
             })

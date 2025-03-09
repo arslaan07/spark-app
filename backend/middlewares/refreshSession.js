@@ -5,7 +5,7 @@ const refreshSession = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken 
         if(!refreshToken) {
-            return res.status(401).json({
+            return res.status(403).json({ 
                 success: false,
                 message: 'Refresh token not found'
             })
@@ -13,7 +13,7 @@ const refreshSession = async (req, res) => {
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         const user = await User.findById(decoded.id)
         if(!user || user.refreshToken !== refreshToken) {
-            return res.status(403).json({
+            return res.status(401).json({
                 success: false,
                 message: 'Invalid refresh token'
             })
